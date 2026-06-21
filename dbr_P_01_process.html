@@ -1,0 +1,646 @@
+﻿<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<script>if(localStorage.getItem('dbr_disclaimer_accepted')!=='yes'){window.location.href='dbr_P_01_index.html?redirect='+encodeURIComponent(location.pathname.split('/').pop()+location.search)}</script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TJNJTZQF1F"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-TJNJTZQF1F');
+</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>תהליך הבחירה | מערכת תומכת החלטה לפריימריז</title>
+  <style>
+    :root {
+      --blue-dark: #12355b;
+      --blue-main: #1d5fa7;
+      --blue-soft: #eaf3ff;
+      --blue-card: #f7fbff;
+      --green: #2e7d4f;
+      --green-soft: #e6f4eb;
+      --green-border: #b8dcc5;
+      --text-main: #1f2933;
+      --text-muted: #5f6b7a;
+      --border-soft: #d7e3f3;
+      --white: #ffffff;
+      --shadow: 0 16px 38px rgba(18,53,91,.13);
+      --shadow-soft: 0 4px 16px rgba(18,53,91,.07);
+      --radius-large: 24px;
+      --radius-medium: 18px;
+      --radius-small: 12px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, "Noto Sans Hebrew", sans-serif;
+      background: #f4f8ff;
+      color: var(--text-main);
+      line-height: 1.65;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .page { max-width: 960px; margin: 0 auto; padding: 0 24px 60px; }
+
+    /* ── Top bar ── */
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      padding: 8px 0 6px;
+      border-bottom: 1px solid var(--border-soft);
+      margin-bottom: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      color: var(--blue-dark);
+      font-size: 1.1rem;
+    }
+
+    .brand-mark {
+      height: 28px;
+      padding: 0 9px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #3730a3, #1e1b4b);
+      display: grid;
+      place-items: center;
+      color: white;
+      font-size: .84rem;
+      font-weight: 900;
+      letter-spacing: .06em;
+      box-shadow: 0 4px 14px rgba(55,48,163,.3);
+    }
+
+    .nav {
+      display: flex;
+      gap: 6px;
+      font-size: .9rem;
+    }
+
+    .nav a {
+      padding: 7px 14px;
+      border: 1px solid var(--border-soft);
+      border-radius: 999px;
+      background: white;
+      color: var(--text-muted);
+      font-weight: 600;
+      transition: border-color .15s, color .15s;
+    }
+
+    .nav a:hover { border-color: var(--blue-main); color: var(--blue-main); }
+    .nav a.active { background: var(--blue-main); color: white; border-color: var(--blue-main); }
+
+    /* ── Page title ── */
+    .page-title {
+      margin-bottom: 32px;
+    }
+
+    .page-title h1 {
+      margin: 0 0 8px;
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      color: var(--blue-dark);
+      letter-spacing: -.02em;
+      line-height: 1.25;
+    }
+
+    .page-title p {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 1rem;
+      max-width: 640px;
+    }
+
+    /* ── Status bar (when candidates exist) ── */
+    .status-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      background: white;
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-medium);
+      padding: 14px 20px;
+      margin-bottom: 28px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .status-pills {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: .9rem;
+      border: 1px solid var(--border-soft);
+      background: var(--blue-card);
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    .pill strong { font-weight: 900; font-size: 1.05rem; color: var(--blue-main); }
+    .pill.green { background: var(--green-soft); border-color: var(--green-border); }
+    .pill.green strong { color: var(--green); }
+    .pill.muted { background: white; }
+    .pill.muted strong { color: var(--text-muted); }
+
+    .manage-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 18px;
+      background: var(--blue-main);
+      color: white;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: .9rem;
+      border: none;
+      cursor: pointer;
+      transition: transform .15s, box-shadow .15s;
+      white-space: nowrap;
+    }
+
+    .manage-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(29,95,167,.25); }
+
+    /* ── Section header ── */
+    .section-label {
+      font-size: .78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+
+    /* ── Path cards ── */
+    .paths-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .path-card {
+      background: white;
+      border: 1.5px solid var(--border-soft);
+      border-radius: var(--radius-medium);
+      padding: 10px 12px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+      cursor: pointer;
+      position: relative;
+    }
+
+    /* אזור מגע גדול — השליש התחתון של התיבה לחיץ כמו הכפתור */
+    .card-tap-zone {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      height: 33%;
+      z-index: 1;
+      cursor: pointer;
+      border-radius: 0 0 var(--radius-medium) var(--radius-medium);
+    }
+    .card-tap-zone:hover { background: rgba(29,95,167,.05); }
+
+    /* כרטיסי מסלול בולטים */
+    a.path-card {
+      border: 2px solid var(--blue-main);
+      box-shadow: 0 4px 18px rgba(29,95,167,.1);
+    }
+
+    a.path-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow);
+      border-color: var(--blue-dark);
+    }
+
+    /* כרטיס סטטוס — עדין יותר */
+    div.path-card {
+      border: 1px solid var(--border-soft);
+      background: var(--blue-card);
+      box-shadow: none;
+    }
+
+    .path-icon {
+      font-size: 1.3rem;
+      display: inline;
+      margin-left: 6px;
+    }
+
+    .path-title {
+      font-size: 1.45rem;
+      font-weight: 900;
+      color: var(--blue-dark);
+      line-height: 1.3;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
+    .path-title .title-text { flex: 1; text-align: center; }
+    .card-zoom-btn {
+      background: none;
+      border: 2px solid var(--border-soft);
+      border-radius: 7px;
+      width: 34px; height: 34px;
+      font-size: 1.3rem;
+      font-weight: 900;
+      cursor: pointer;
+      color: var(--blue-main);
+      line-height: 1;
+      flex-shrink: 0;
+      padding: 0;
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color .15s, opacity .15s;
+    }
+    .card-zoom-btn:hover { border-color: var(--blue-main); }
+
+    .path-desc {
+      font-size: .96rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+      flex-grow: 1;
+    }
+
+    .path-cta { display: none; }
+
+    /* ── נבחרות וועדות (כרטיס התייחסות) ── */
+    .path-card.ref-card { border: 2px solid #b45309; background: white; box-shadow: 0 4px 18px rgba(180,83,9,.1); cursor: default; }
+    .path-card.method-card { border: 2px solid var(--blue-main); background: white; box-shadow: 0 4px 18px rgba(29,95,167,.1); cursor: default; }
+    .ref-list { display: flex; flex-direction: column; gap: 6px; margin-top: 2px; }
+    .ref-group { font-size: .72rem; font-weight: 800; color: var(--text-muted); margin: 7px 2px 1px; }
+    .ref-group:first-child { margin-top: 0; }
+    .ref-item { display: flex; align-items: center; gap: 8px; padding: 7px 9px; border: 1px solid var(--border-soft); border-radius: 9px; background: #fff; text-decoration: none; color: var(--blue-dark); font-size: .9rem; font-weight: 600; transition: background .15s ease, border-color .15s ease; }
+    .ref-card .ref-item:hover { background: #fff7ee; border-color: #b45309; }
+    .method-card .ref-item:hover { background: #eef4fc; border-color: var(--blue-main); }
+    .ref-badge { flex-shrink: 0; font-size: .68rem; font-weight: 800; padding: 2px 7px; border-radius: 999px; }
+    .ref-vaada { background: #fde7cf; color: #b45309; }
+    .ref-nivheret { background: #d8ecff; color: var(--blue-main); }
+    .ref-name { flex-grow: 1; line-height: 1.25; }
+    .ref-go { flex-shrink: 0; font-size: .8rem; color: var(--text-muted); font-weight: 700; }
+    .ref-item.ref-soon { opacity: .5; pointer-events: none; }
+
+    /* ── Empty hint ── */
+    .empty-hint {
+      background: white;
+      border: 1px dashed var(--border-soft);
+      border-radius: var(--radius-medium);
+      padding: 18px 22px;
+      color: var(--text-muted);
+      font-size: .95rem;
+      margin-bottom: 24px;
+    }
+
+    .empty-hint strong { color: var(--blue-dark); display: block; margin-bottom: 4px; }
+
+    /* ── Methodology link ── */
+    .methodology-link {
+      padding-top: 28px;
+      border-top: 1px solid var(--border-soft);
+      color: var(--text-muted);
+      font-size: .92rem;
+    }
+
+    .methodology-link a {
+      color: var(--blue-main);
+      font-weight: 700;
+    }
+
+    /* ── Footer ── */
+    .footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-soft);
+      color: var(--text-muted);
+      font-size: .85rem;
+      text-align: center;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 960px) {
+      .paths-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 620px) {
+      .topbar { flex-wrap: nowrap; }
+      .brand span:last-child { font-size: .85rem; }
+      .paths-grid { grid-template-columns: 1fr; }
+      .status-bar { flex-direction: column; align-items: stretch; }
+      .manage-btn { text-align: center; justify-content: center; }
+    }
+    @media (max-width: 480px) { .page { padding-inline: 8px; } }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TJNJTZQF1F"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-TJNJTZQF1F');
+</script>
+      <div style="display:flex;flex-direction:column;width:100%;gap:6px">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <a class="brand" href="dbr_P_01_index.html" style="min-width:0;flex-shrink:1">
+            <span class="brand-mark">ד.ב.ר</span>
+            <span>דמוקרטים בוחרים רציונלית</span>
+          </a>
+          <a href="dbr_P_01_index.html" style="font-size:1.8rem;text-decoration:none;line-height:1;flex-shrink:0">⬅️</a>
+        </div>
+        <div style="text-align:center;font-size:.72rem;color:var(--text-muted)">© 2026 Silvertel Online ltd | כל הזכויות שמורות</div>
+      </div>
+    </header>
+
+    <!-- Status bar — shown only when there are candidates -->
+
+    <!-- באנר איפוס — מוצג אם הפעילות האחרונה ישנה -->
+    <div id="reset-banner" style="display:none;background:#fff8e1;border:2px solid #f59e0b;border-radius:14px;padding:14px 18px;margin-bottom:20px;display:none;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+      <div style="font-size:.95rem;font-weight:700;color:#92400e;flex:1;">
+        עברו יותר מ־<span id="reset-hours-label"></span> שעות מאז הפעילות האחרונה. רוצה לאפס את כל הבחירות ולהתחיל מחדש?
+      </div>
+      <div style="display:flex;gap:10px;flex-shrink:0;">
+        <button onclick="resetAllSelections()" style="background:#f59e0b;border:none;border-radius:9px;padding:8px 18px;font-weight:900;font-size:.9rem;color:#fff;cursor:pointer;">אפס הכל</button>
+        <button onclick="document.getElementById('reset-banner').style.display='none'" style="background:none;border:2px solid #f59e0b;border-radius:9px;padding:8px 14px;font-weight:700;font-size:.9rem;color:#92400e;cursor:pointer;">המשך בלי לאפס</button>
+      </div>
+    </div>
+
+    <!-- Path cards -->
+    <div class="paths-grid">
+      <div class="path-card" style="cursor:default;border:2px solid #2e7d32;box-shadow:0 4px 20px rgba(46,125,50,.1);">
+        <div class="path-title">
+          <button class="card-zoom-btn" onclick="cardZoom('shiryun',-1)">−</button>
+          <span class="title-text">בחירה עצמאית ראשונית</span>
+          <button class="card-zoom-btn" onclick="cardZoom('shiryun',1)">+</button>
+        </div>
+        <div class="path-desc" id="shiryun-desc">כאן בוחרים את המועמדים/ות באופן עצמאי, ישירות מתוך הרשימה המלאה — על פי שיקול הדעת שלכם בלבד.<br>אין הנחיה, אין דירוג אוטומטי: מאתרים את המועמד שאתם מתכוונים לבחור בן, "מציצים" בפרופיל שלו ובתמונתו ומסמנים. את הבחירות האלו אפשר לשנות בכל שלב.<br>בסיום, הרשימה שבחרתם עוברת אתכם להמשך התהליך.</div>
+        <a href="dbr_P_01_shiryun.html" onclick="event.stopPropagation();trackPath('shiryun')" style="position:relative;z-index:2;display:inline-flex;align-items:center;justify-content:center;align-self:flex-end;margin-top:10px;width:36px;height:36px;background:var(--blue-soft);color:var(--blue-main);border:2px solid var(--blue-main);border-radius:50%;font-weight:900;font-size:1.2rem;text-decoration:none;box-shadow:0 2px 8px rgba(29,95,167,.18);transition:transform .15s,box-shadow .15s,background .15s;" onmouseover="this.style.transform='scale(1.12)';this.style.boxShadow='0 4px 14px rgba(29,95,167,.32)';this.style.background='#dceaff'" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 2px 8px rgba(29,95,167,.18)';this.style.background='var(--blue-soft)'">←</a>
+        <a href="dbr_P_01_shiryun.html" onclick="trackPath('shiryun')" class="card-tap-zone" aria-label="בחירה עצמאית ראשונית"></a>
+      </div>
+
+      <div class="path-card" id="rec-card" style="cursor:default;border:2px solid #1d5fa7;box-shadow:0 4px 20px rgba(29,95,167,.1);position:relative;">
+        <div class="path-title">
+          <button class="card-zoom-btn" onclick="cardZoom('dbr',-1)">−</button>
+          <span class="title-text">בחירה לפי המלצה</span>
+          <button class="card-zoom-btn" onclick="cardZoom('dbr',1)">+</button>
+        </div>
+        <div class="path-desc" id="dbr-card-desc">כאן יוצאים מנקודת מוצא מוכנה מראש: נושאים ( עם מועמדים מתאימים) או נבחרות שמערכות הבינה סיווגו על פי קריטריונים של אנשי הפרויקט ויועצים נוספים.<br>כל נבחרת/נושא מציגה את המועמדים המובילים שלה, כשאלה שבחרתם כבר ונמצאים בתצוגה - מודגשים. .<br>תוכלו לעבור בין הנבחרות או הנושאים השונים, כשהמועמדים שבחרתם עוברים אתכם. וכך ניתן לבחור מכל נבחרת או נושא את הראויים בעיניכם, ולבסוף להרכיב מהם את ה‑8 שלכם.</div>
+        <a href="#" onclick="event.preventDefault();event.stopPropagation();tryRecommendation()" style="position:relative;z-index:2;display:inline-flex;align-items:center;justify-content:center;align-self:flex-end;margin-top:10px;width:36px;height:36px;background:var(--blue-soft);color:var(--blue-main);border:2px solid var(--blue-main);border-radius:50%;font-weight:900;font-size:1.2rem;text-decoration:none;box-shadow:0 2px 8px rgba(29,95,167,.18);transition:transform .15s,box-shadow .15s,background .15s;" onmouseover="this.style.transform='scale(1.12)';this.style.boxShadow='0 4px 14px rgba(29,95,167,.32)';this.style.background='#dceaff'" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 2px 8px rgba(29,95,167,.18)';this.style.background='var(--blue-soft)'">←</a>
+        <a href="#" onclick="event.preventDefault();tryRecommendation()" class="card-tap-zone" aria-label="בחירה לפי המלצה"></a>
+        <!-- hint חץ לבחירה עצמאית -->
+        <div id="rec-hint" style="display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:82%;z-index:20;background:rgba(255,243,205,0.97);border:2px solid #f59e0b;border-radius:14px;padding:20px 16px 16px;text-align:center;pointer-events:none;box-shadow:0 4px 18px rgba(0,0,0,.15);flex-direction:column;align-items:center;justify-content:center;gap:8px;">
+          <div style="font-size:1.25rem;font-weight:900;color:#92400e;line-height:1.4;">התחילו בבחירה עצמאית</div>
+          <div id="rec-hint-arrow" style="font-size:2.2rem;color:#f59e0b;">→</div>
+          <div style="font-size:.82rem;color:#78350f;line-height:1.5;margin-top:4px;">(רצוי לבחור מועמדים בבחירה עצמאית ראשונית, הן כדי להבין מהר יותר את השלבים הבאים, והן כדי להתאים את המערכת אליכם.)</div>
+        </div>
+      </div>
+
+      <div class="path-card" style="cursor:default;opacity:.7;border:2px dashed #a0b4cc;">
+        <div class="path-title">
+          <button class="card-zoom-btn" onclick="cardZoom('summary',-1)">−</button>
+          <span class="title-text" style="color:var(--text-muted)">מסך סיכום</span>
+          <button class="card-zoom-btn" onclick="cardZoom('summary',1)">+</button>
+        </div>
+        <div id="summary-static-desc" class="path-desc" style="color:var(--text-muted)">
+          במסך זה יוצג פתק הבחירה המלא שלכם — מוכן להדפסה, לשמירה כקובץ, או לשליחה לאחרים.
+        </div>
+        <div id="summary-desc" style="display:none;margin-top:6px;color:var(--text-main)"></div>
+        <div style="margin-top:10px;padding:8px 12px;background:#fff8e1;border:1.5px solid #fbbf24;border-radius:8px;font-size:.88rem;color:#92400e;">
+          <strong>שלב זה עדיין בפיתוח</strong> — יהיה זמין בקרוב.
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-bottom:12px">
+      <button onclick="resetAllSelections()" style="background:none;border:none;color:var(--text-muted);font-size:.82rem;cursor:pointer;text-decoration:underline;font-family:inherit">איפוס כל הבחירות</button>
+    </div>
+
+
+
+    <footer class="footer">
+      מערכת תומכת החלטה לפריימריז של מפלגת הדמוקרטים · הנתונים נשמרים מקומית בדפדפן בלבד.
+    </footer>
+  </div>
+
+  <script>
+    // dbr_P_01_game.html removed from flow
+
+    const STATE_KEY = 'primeris_state_v1';
+
+    // ── app config ──────────────────────────────────────────────────────────
+    let appCfg = { reset_suggest_hours: 72, rec_hint_max_clicks: 3 };
+    fetch('app_config.json').then(r => r.json()).then(j => { appCfg = Object.assign(appCfg, j); }).catch(() => {});
+
+    let genderMap = {}; // name → 'נשים' | 'גברים' | 'ערבים'
+
+    async function loadGenderMap() {
+      try {
+        const resp = await fetch('data/candidates_master.json');
+        const data = await resp.json();
+        const arr  = Array.isArray(data) ? data : (data.candidates || []);
+        arr.forEach(c => { if (c['שם']) genderMap[c['שם']] = c['קטגוריה'] || ''; });
+      } catch(e) {}
+    }
+
+    function genderDot(name) {
+      const cat = genderMap[name] || '';
+      const color = cat === 'נשים' ? '#e879a0' : cat === 'גברים' ? '#3b82f6' : '#aaa';
+      return `<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${color};margin-inline-end:5px;vertical-align:middle;flex-shrink:0"></span>`;
+    }
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STATE_KEY);
+        if (!raw) return { selected: [], approved: [], meta: { path_visit_counts: {} } };
+        return JSON.parse(raw);
+      } catch(e) {
+        return { selected: [], approved: [], meta: { path_visit_counts: {} } };
+      }
+    }
+
+    function saveState(s) {
+      try {
+        s.meta = s.meta || {};
+        s.meta.last_updated = new Date().toISOString();
+        localStorage.setItem(STATE_KEY, JSON.stringify(s));
+      } catch(e) {}
+    }
+
+    let primState = loadState();
+
+    function selectionText(namesArr) {
+      const list = namesArr.map(n =>
+        `<div style="display:flex;align-items:center;font-weight:900;color:#12355b;font-size:.85rem;line-height:1.2;padding:1px 0">${genderDot(n)}${n}</div>`
+      ).join('');
+      return `אלה המועמדים/ות שבחרתם:<br><div style="display:grid;grid-template-columns:1fr 1fr;gap:0 10px;margin:4px 0">${list}</div>`;
+    }
+
+    function selectionTextWithShiryun(selectedArr, shiryunArr) {
+      const shiryunSet = new Set(shiryunArr);
+      const list = selectedArr.map(n => {
+        const isSh = shiryunSet.has(n);
+        return `<div style="display:flex;align-items:center;font-weight:${isSh ? '900' : '600'};color:${isSh ? '#2e7d4f' : '#12355b'};font-size:.85rem;line-height:1.2;padding:1px 0">${genderDot(n)}${n}${isSh ? ' ✓' : ''}</div>`;
+      }).join('');
+      return `נבחרו ${selectedArr.length} מועמדים/ות:<br><div style="display:grid;grid-template-columns:1fr 1fr;gap:0 10px;margin:4px 0">${list}</div>`;
+    }
+
+    function summaryText(selectedArr) {
+      const list = selectedArr.map(n =>
+        `<div style="display:flex;align-items:center;font-weight:700;color:#12355b;line-height:1.4;padding:2px 0">${genderDot(n)}${n}</div>`
+      ).join('');
+      return `נבחרו ${selectedArr.length} מועמדים/ות:<br><div style="display:grid;grid-template-columns:1fr 1fr;gap:2px 10px;margin:6px 0">${list}</div>`;
+    }
+
+    const SHIRYUN_DESC_HTML = 'כאן בוחרים את המועמדים/ות באופן עצמאי, ישירות מתוך הרשימה המלאה — על פי שיקול הדעת שלכם בלבד.<br>אין המלצה, ואין דירוג - מאתרים את המועמדים ומסמנים את מי שתרצו, כמובן שניתן לבטל את הבחירה בכל שלב.<br>בסיום, הרשימה שבחרתם עוברת אתכם להמשך התהליך ולכן רצוי שכן תבחרו מועמדים בטוחים או פונציאלים לבחירה הסופית.';
+    const DBR_DESC     = 'על פי שיקול דעתכם, קובעים את מאפיינים כלליים לסגל, מבין נושאי הליבה של המפלגה בוחרים את החשובים לדעתכם, מכוונים כל נושא ומקבלים את דירוג המועמדים.';
+
+    function renderAll() {
+      primState = loadState();
+      const shiryun   = primState.shiryun   || [];
+      const selected  = primState.selected  || [];
+      const dbrPicks  = primState.dbr_picks || [];
+      const nSel = selected.length;
+
+      // כרטיסית שריון — טקסט קבוע תמיד
+      const shiryunEl = document.getElementById('shiryun-desc');
+      if (shiryunEl) shiryunEl.innerHTML = SHIRYUN_DESC_HTML;
+      const btnRow = document.getElementById('shiryun-btn-row');
+      if (btnRow) btnRow.style.display = selected.length > 0 ? 'flex' : 'none';
+
+      // כרטיסית מסך סיכום — מציג נבחרים אם יש
+      const summaryEl = document.getElementById('summary-desc');
+      if (summaryEl) {
+        if (selected.length > 0) {
+          summaryEl.innerHTML = summaryText(selected);
+          summaryEl.style.display = '';
+        } else {
+          summaryEl.style.display = 'none';
+        }
+      }
+
+      // כרטיסית מושכלת
+      const dbrEl = document.getElementById('dbr-desc');
+      if (dbrEl) dbrEl.innerHTML = dbrPicks.length > 0
+        ? selectionText(dbrPicks)
+        : DBR_DESC;
+    }
+
+    let _recHintTimer = null;
+    const REC_HINT_KEY = 'dbr_rec_hint_count';
+    function getRecHintCount() { return parseInt(localStorage.getItem(REC_HINT_KEY) || '0', 10); }
+    function incRecHintCount() { localStorage.setItem(REC_HINT_KEY, getRecHintCount() + 1); }
+
+    function tryRecommendation() {
+      const picks = (primState.shiryun || []).length + (primState.selected || []).length;
+      const showHint = picks <= 1 && getRecHintCount() < appCfg.rec_hint_max_clicks;
+      if (!showHint) {
+        trackPath('committee');
+        window.location.href = 'dbr_P_01_state.html';
+        return;
+      }
+      incRecHintCount();
+      const hint = document.getElementById('rec-hint');
+      const arrow = document.getElementById('rec-hint-arrow');
+      if (!hint) return;
+      const twoCol = window.innerWidth > 600;
+      if (arrow) arrow.textContent = twoCol ? '→' : '↑';
+      hint.style.display = 'flex';
+      clearTimeout(_recHintTimer);
+      _recHintTimer = setTimeout(() => { hint.style.display = 'none'; }, 10500);
+    }
+
+    function trackPath(path) {
+      primState.meta = primState.meta || {};
+      primState.meta.path_visit_counts = primState.meta.path_visit_counts || {};
+      primState.meta.path_visit_counts[path] = (primState.meta.path_visit_counts[path] || 0) + 1;
+      saveState(primState);
+    }
+
+    function resetAllSelections() {
+      if (!confirm('לאפס את כל הבחירות?')) return;
+      const shared = loadState();
+      shared.shiryun   = [];
+      shared.dbr_picks = [];
+      shared.selected  = [];
+      saveState(shared);
+      renderAll();
+    }
+
+    const cardZoomLevels = { shiryun: 0, dbr: 0, summary: 0 };
+    const cardDescIds = {
+      shiryun: ['shiryun-desc'],
+      dbr:     ['dbr-card-desc'],
+      summary: ['summary-static-desc', 'summary-desc']
+    };
+    const zoomFonts = ['.96rem', '1.06rem', '1.18rem', '1.32rem'];
+    function cardZoom(card, dir) {
+      const cur = cardZoomLevels[card] || 0;
+      const next = Math.max(0, Math.min(3, cur + dir));
+      if (next === cur) { beepError(); return; }
+      cardZoomLevels[card] = next;
+      cardDescIds[card].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.fontSize = zoomFonts[next];
+      });
+    }
+    function beepError() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator(), gain = ctx.createGain();
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.frequency.value = 200; osc.type = 'square';
+        gain.gain.value = 0.12;
+        osc.start(); osc.stop(ctx.currentTime + 0.1);
+      } catch(e) {}
+    }
+
+    function checkResetSuggest() {
+      if (!appCfg.reset_suggest_hours) return;
+      const last = primState.meta && primState.meta.last_updated;
+      if (!last) return;
+      const hoursAgo = (Date.now() - new Date(last).getTime()) / 3600000;
+      if (hoursAgo < appCfg.reset_suggest_hours) return;
+      const banner = document.getElementById('reset-banner');
+      const label  = document.getElementById('reset-hours-label');
+      if (!banner) return;
+      if (label) label.textContent = Math.round(appCfg.reset_suggest_hours * 10) / 10;
+      banner.style.display = 'flex';
+    }
+
+    // טוען config ואז בודק איפוס
+    fetch('app_config.json').then(r => r.json()).then(j => {
+      appCfg = Object.assign(appCfg, j);
+      checkResetSuggest();
+    }).catch(() => { checkResetSuggest(); });
+
+    loadGenderMap().then(renderAll);
+    window.addEventListener('focus', renderAll);
+    window.addEventListener('pageshow', renderAll);
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') renderAll();
+    });
+  </script>
+</body>
+</html>
+
