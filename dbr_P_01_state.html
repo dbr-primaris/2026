@@ -3148,7 +3148,7 @@
       fetch('data/candidates_master.json').then(r => r.ok ? r.json() : {}),
       fetch('main_teams.csv').then(r => r.ok ? r.text() : ''),
       fetch('main_teams_config.csv').then(r => r.ok ? r.text() : ''),
-      fetch('data/candidate_profiles.json').then(r => r.ok ? r.json() : {}).catch(() => ({}))
+      fetch('candits/101.json').then(r => r.ok ? r.json() : {}).catch(() => ({}))
     ]).then(([csvTxt, jsonData, teamsTxt, cfgTxt, profilesJson]) => {
       // CSV → flatDB
       for (const row of parseCsv(csvTxt)) {
@@ -3161,11 +3161,12 @@
       for (const r of parseCsv(teamsTxt)) {
         if (r['id1']) squadData[r['id1']] = r;
       }
-      // פרופילים מורחבים — מפה לפי שם, עם נרמול רווחים/קווים תחתונים
-      const loadedProfiles = profilesJson.profiles || profilesJson || {};
+      // פרופילים מורחבים מ-101.json — מפה לפי שם
       candidateProfiles = {};
-      for (const [profileName, profile] of Object.entries(loadedProfiles)) {
-        candidateProfiles[normalizeCandidateLookupName(profileName)] = profile;
+      for (const [code, profile] of Object.entries(profilesJson)) {
+        if (profile && profile.name) {
+          candidateProfiles[normalizeCandidateLookupName(profile.name)] = profile;
+        }
       }
       // JSON → מפה לפי שם
       const moachMap = {};
