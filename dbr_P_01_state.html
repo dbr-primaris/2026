@@ -2972,6 +2972,7 @@
       var row = '<div class="rank-row' + (picked ? ' is-picked' : '') + '" onclick="togglePick(\'' + eName + '\')">'
         + '<span style="display:inline-flex;align-items:center;gap:2px;flex-shrink:0">' + gDot + (picked ? '' : '<span class="rank-num">' + rank + '</span>') + '</span>'
         + '<span class="rank-name' + (picked ? ' picked' : ' unpicked') + '"' + (picked ? ' style="color:' + (c._origRank > rankSlots() ? '#111' : 'var(--blue-main)') + '"' : '') + '>' + eName + targetHtml + '</span>'
+        + (c.manualFix ? '<span title="מיקום שתוקן ידנית — הנוסחה לא שקללה ביטחון/מגורים בצפון" style="flex-shrink:0;font-size:.62rem;font-weight:700;color:#b45309;background:#fef3c7;border:1px solid #fcd34d;border-radius:6px;padding:1px 5px;margin-inline-start:6px">תיקון ידני</span>' : '')
         + reasonToggleHtml
         + (filterShiryun || filterPicked || shiryuned ? '' : '<span class="' + pickCls + '" onclick="event.stopPropagation();toggleShiryunState(\'' + eName + '\')" title="' + pickTitle + '">' + pickIcon + '</span>')
         + (filterShiryun || filterPicked || picked ? '' : '<span class="rank-card" onclick="event.stopPropagation();openProfile(\'' + eName + '\')" title="כרטיס ועדה מסדרת">📋</span>')
@@ -3224,6 +3225,24 @@
           zccsrc:   srcRaw !== undefined && srcRaw !== '' ? parseInt(srcRaw) : null
         };
       });
+      // ── תיקון ידני — נבחרת הצפון בלבד ──
+      // נוסחת ציון הכשירות (רזומה+מוטיבציה) מתעלמת מ-s61 וממגורים בצפון, ולכן מועמדי
+      // שיקום-דרום (רם שפע, מהרטה) דורגו מעל נציגי מגזר צפוניים עם קשר/ביטחון אמיתי
+      // (איהאב — s61=7.5, אומיימה — מגורים בנצרת). מחליפים מיקומי דירוג בלבד;
+      // ציון הכרטיס (computeCommitteeScore) נשאר האמיתי.
+      if (activeCommittee === 'north') {
+        const NORTH_MANUAL_SWAPS = [['איהאב שליאן','רם שפע'], ['אומיימה חאמד','מהרטה ברוך רון']];
+        for (const [up, down] of NORTH_MANUAL_SWAPS) {
+          const u = rankList.find(c => c.name === up);
+          const d = rankList.find(c => c.name === down);
+          if (u && d) {
+            const upScore = u.scoreC;   // ציון המקודם המקורי (נמוך, ~71)
+            u.scoreC = d.scoreC;        // המקודם מקבל את הציון הגבוה של המורד → נכנס
+            d.scoreC = upScore - 1;     // המורד יורד בבירור מתחת לאשכול ה-71 → יוצא
+            u.manualFix = true; d.manualFix = true;
+          }
+        }
+      }
       rankList.sort((a,b) => (b.scoreC??-1) - (a.scoreC??-1));
     }
 
