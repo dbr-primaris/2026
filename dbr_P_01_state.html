@@ -1473,7 +1473,7 @@
           <div class="team-card-status active">✓ זמינה</div>
         </div>
         <div class="team-card team-card--imitation" data-rec-type="imitation" onclick="selectTeam('north')">
-          <div class="team-card-name">הנבחרת של הצפון</div>
+          <div class="team-card-name">נבחרת בוחרי הצפון</div>
           <div style="font-size:.72rem;color:var(--text-muted);font-weight:700;margin-top:1px">(סימולציה)</div>
           <div class="team-card-desc">דגש על הצרכים הספציפים של תושבי הצפון שנשכחו</div>
           <div class="team-card-status active">✓ זמינה</div>
@@ -2176,7 +2176,7 @@
       dbr2: 'ד.ב.ר (2)', dbr3: 'ד.ב.ר (3)', meretz: 'נבחרת הקוף של המונדיאל',
       lochemet: 'נבחרת לוחמת', coalition: 'נבחרת מותאמת קואליציה',
       opposition: 'נבחרת מותאמת אופוזיציה', yair: 'נבחרת החלומות של יאיר גולן',
-      bonot: 'בונות אלטרנטיבה', north: 'נבחרת פיתוח הפריפריה',
+      bonot: 'בונות אלטרנטיבה', north: 'נבחרת בוחרי הצפון',
       hosen: 'נבחרת חוסן חברתי', security: 'נבחרת ביטחון לאומי',
       environment: 'נבחרת צדק סביבתי', future: 'נבחרת דור העתיד'
     };
@@ -2185,7 +2185,7 @@
       meretz: 'נבחרת הקוף של המונדיאל',
       lochemet: 'נבחרת לוחמת', coalition: 'נבחרת מותאמת קואליציה',
       opposition: 'נבחרת מותאמת אופוזיציה', yair: 'נבחרת יאיר גולן',
-      bonot: 'בונות אלטרנטיבה', north: 'נבחרת פיתוח הפריפריה',
+      bonot: 'בונות אלטרנטיבה', north: 'נבחרת בוחרי הצפון',
       hosen: 'נבחרת חוסן חברתי', security: 'נבחרת ביטחון לאומי',
       environment: 'נבחרת צדק סביבתי', future: 'נבחרת דור העתיד',
       // נבחרות נושאיות (השם הסופי נטען מ-main_teams_config.csv)
@@ -3070,8 +3070,12 @@
 
     function openProfile(name) {
       const row = flatDB[name];
-      document.getElementById('m-name').textContent = `כרטיס ועדה מסדרת — ${name}`;
-      document.getElementById('m-sub').textContent = '';
+      // ייחוס הכרטיס לנבחרת הפעילה — כדי שיהיה ברור שהציונים שייכים לוועדה הזו
+      const COMMITTEE_TITLE = { '': 'נבחרת מטבח המפלגה', 'm': 'נבחרת הקוף של המונדיאל', 'north': 'נבחרת בוחרי הצפון' };
+      const cTitle = COMMITTEE_TITLE[activeCommittee] || 'ועדה מסדרת';
+      const cSub = activeCommittee === 'north' ? 'סימולציה · כרטיס כשירות לנבחרת זו' : 'כרטיס כשירות לנבחרת זו';
+      document.getElementById('m-name').textContent = `${cTitle} — ${name}`;
+      document.getElementById('m-sub').textContent = cSub;
       if (!row) {
         document.getElementById('m-body').innerHTML = '<p style="color:var(--text-muted)">אין נתוני ועדה מסדרת למועמד/ת.</p>';
         document.getElementById('modal').classList.add('open');
