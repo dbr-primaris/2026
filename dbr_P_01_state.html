@@ -2557,7 +2557,7 @@
           combined: parseFloat(r[squadId + '_combined'] || '0') || 0,
           rank:     parseInt(r[squadId + '_rank'] || '0', 10)
         }))
-        .filter(c => c.value > 0)
+        .filter(c => c.value > 0 && !droppedSet.has(c.name))
         .sort((a, b) => {
           // combined קיים → מיון לפי combined יורד; אחרת → rank עולה → value יורד
           if (a.combined > 0 || b.combined > 0) return b.combined - a.combined;
@@ -2688,7 +2688,7 @@
           combined: parseFloat(r[squadId + '_combined'] || '0') || 0,
           rank:     parseInt(r[squadId + '_rank'] || '0', 10)
         }))
-        .filter(c => c.value > 0)
+        .filter(c => c.value > 0 && !droppedSet.has(c.name))
         .sort((a, b) => {
           if (a.combined > 0 || b.combined > 0) return b.combined - a.combined;
           const aHas = a.rank > 0, bHas = b.rank > 0;
@@ -3151,13 +3151,16 @@
     }
 
     // ── טעינת המקורות במקביל ──
+    let droppedSet = new Set();
     Promise.all([
       fetch('dbr_P_01_data.csv').then(r => r.ok ? r.text() : ''),
       fetch('data/candidates_master.json').then(r => r.ok ? r.json() : {}),
       fetch('main_teams.csv').then(r => r.ok ? r.text() : ''),
       fetch('main_teams_config.csv').then(r => r.ok ? r.text() : ''),
-      fetch('candits/101.json').then(r => r.ok ? r.json() : {}).catch(() => ({}))
-    ]).then(([csvTxt, jsonData, teamsTxt, cfgTxt, profilesJson]) => {
+      fetch('candits/101.json').then(r => r.ok ? r.json() : {}).catch(() => ({})),
+      fetch('dropped.json').then(r => r.ok ? r.json() : []).catch(() => [])
+    ]).then(([csvTxt, jsonData, teamsTxt, cfgTxt, profilesJson, droppedList]) => {
+      droppedSet = new Set(droppedList);
       // CSV → flatDB
       for (const row of parseCsv(csvTxt)) {
         if (row['id1']) flatDB[row['id1']] = row;
@@ -3194,7 +3197,7 @@
     function buildRankList() {
       const moachMap = window._moachMap || {};
       const names = new Set([...Object.keys(flatDB), ...Object.keys(moachMap)]);
-      const activeNames = [...names].filter(n => (flatDB[n]?.['id5'] || '') !== 'dropped');
+      const activeNames = [...names].filter(n => (flatDB[n]?.['id5'] || '') !== 'dropped' && !droppedSet.has(n));
       rankList = activeNames.map(name => {
         const bd = getResumeBreakdown(name);
         const srcRaw = flatDB[name]?.[cField('zccsrc')];

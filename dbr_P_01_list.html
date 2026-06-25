@@ -361,7 +361,12 @@ function renderContent(c) {
 
 async function init() {
   try {
-    allCandidates = await loadAll();
+    const [allRaw, droppedList] = await Promise.all([
+      loadAll(),
+      fetch('dropped.json').then(r => r.ok ? r.json() : []).catch(() => [])
+    ]);
+    const dropped = new Set(droppedList);
+    allCandidates = allRaw.filter(c => !dropped.has(c['שם']));
     // מיפוי שם -> קוד דף 101 (מתוך נתוני הדיוקנים)
     try {
       const rd = await fetch('candits/101.json');
