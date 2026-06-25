@@ -361,7 +361,7 @@ function renderContent(c) {
 
 async function init() {
   try {
-    allCandidates = await loadAll();
+    allCandidates = (await loadAll()).filter(c => !c['dropped']);
     // מיפוי שם -> קוד דף 101 (מתוך נתוני הדיוקנים)
     try {
       const rd = await fetch('candits/101.json');

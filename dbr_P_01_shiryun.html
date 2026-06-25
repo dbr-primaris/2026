@@ -1078,7 +1078,7 @@
     fetch('data/candidates_master.json')
       .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
       .then(data => {
-        candidates = (data.candidates || []).map(c => ({
+        candidates = (data.candidates || []).filter(c => !c['dropped']).map(c => ({
           id: c['שם'], name: c['שם'], image: c['תמונה'] || '', gender: c['קטגוריה'] || '',
           search: buildSearchBlob(c), raw: c
         }));
