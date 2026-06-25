@@ -2685,10 +2685,18 @@
         .map(r => ({
           name:     r.id1,
           value:    parseInt(r[squadId] || '0', 10),
-          combined: parseFloat(r[squadId + '_combined'] || '0') || 0
+          combined: parseFloat(r[squadId + '_combined'] || '0') || 0,
+          rank:     parseInt(r[squadId + '_rank'] || '0', 10)
         }))
         .filter(c => c.value > 0)
-        .sort((a, b) => (a.combined > 0 || b.combined > 0) ? b.combined - a.combined : b.value - a.value)
+        .sort((a, b) => {
+          if (a.combined > 0 || b.combined > 0) return b.combined - a.combined;
+          const aHas = a.rank > 0, bHas = b.rank > 0;
+          if (aHas && bHas) return a.rank - b.rank;
+          if (aHas) return -1;
+          if (bHas) return 1;
+          return b.value - a.value;
+        })
         .slice(0, squadSize)
         .map(c => c.name));
     }
