@@ -1656,8 +1656,17 @@
     // ── נבחרות ועדה מסדרת — כל נבחרת = suffix בעמודות ה-CSV ──
     // '' = ברירת מחדל (דמוקרטים/דבר1), 'p' = פיתוח הפריפריה, וכו'
     let activeCommittee = '';
-    // שם עמודה לפי הנבחרת הפעילה: cField('zccc') → 'zccc' או 'zccc_p'
-    function cField(base) { return activeCommittee ? base + '_' + activeCommittee : base; }
+    // נבחרת צפון: שמות עמודות ברורים (north_resume, north_mot, ...)
+    const NORTH_FIELDS = {
+      zccc: 'north_resume', zccd: 'north_mot', zcce: 'north_mot_conf',
+      zccf: 'north_reasoning', zccg: 'north_anchor',
+      zs61: 'north_s61', zs62: 'north_s62', zccsrc: 'north_src'
+    };
+    // שם עמודה לפי הנבחרת הפעילה
+    function cField(base) {
+      if (activeCommittee === 'north') return NORTH_FIELDS[base] ?? base;
+      return activeCommittee ? base + '_' + activeCommittee : base;
+    }
 
     // ── ציון ועדה מסדרת (80% רזומה + 20% מוטיבציה) ──
     const BASE_W   = { resume: 0.80, motivation: 0.20 };
@@ -2161,7 +2170,7 @@
       hosen: 'building', security: 'building', environment: 'building', future: 'building'
     };
     // מיפוי נבחרת → suffix בעמודות ה-CSV. נבחרת שאינה כאן משתמשת ב-'' (דבר1).
-    const TEAM_SUFFIX = { dbr1: '', meretz: 'm', north: 'p' };
+    const TEAM_SUFFIX = { dbr1: '', meretz: 'm', north: 'north' };
     const TEAM_LABELS = {
       dbr2: 'ד.ב.ר (2)', dbr3: 'ד.ב.ר (3)', meretz: 'נבחרת הקוף של המונדיאל',
       lochemet: 'נבחרת לוחמת', coalition: 'נבחרת מותאמת קואליציה',
