@@ -1779,14 +1779,15 @@
       if (changed) saveState(state);
     }
 
-    /* 20 הראשונים תמיד מוצגים; נבחרים (shiryun) מעבר ל-20 מתווספים עם קו מפריד, ללא מספר. */
-    const RANK_SLOTS = 20;
+    /* גודל הנבחרת המוצגת. נבחרת הצפון = 12, שאר הנבחרות = 20.
+       נבחרים (shiryun) מעבר לגודל מתווספים עם קו מפריד, ללא מספר. */
+    function rankSlots() { return activeCommittee === 'north' ? 14 : 20; }
     function buildSlots(sorted, allPicks) {
       if (showAll) return sorted;
-      const top = sorted.slice(0, RANK_SLOTS);
+      const top = sorted.slice(0, rankSlots());
       /* רק נבחרים (בחר/shiryun) מעבר ל-20 מצטרפים — לא מתנדנדים. מתווספים אחרי תא 20, ללא החלפה */
       const shiryunSet = new Set(state.shiryun || []);
-      const beyondPicks = sorted.slice(RANK_SLOTS).filter(c => shiryunSet.has(c.name));
+      const beyondPicks = sorted.slice(rankSlots()).filter(c => shiryunSet.has(c.name));
       return [...top, ...beyondPicks];
     }
 
@@ -1795,11 +1796,11 @@
       let html = '';
       let separatorInserted = false;
       for (const c of items) {
-        if (!separatorInserted && c._origRank > RANK_SLOTS) {
+        if (!separatorInserted && c._origRank > rankSlots()) {
           html += '<hr class="beyond-separator">';
           separatorInserted = true;
         }
-        const rank = c._origRank <= RANK_SLOTS ? c._origRank : '';
+        const rank = c._origRank <= rankSlots() ? c._origRank : '';
         html += rankRow(c, rank, allPicks);
       }
       return html;
@@ -1860,8 +1861,8 @@
       if (sfBtn) sfBtn.style.display = shiryunCount > 0 ? '' : 'none';
 
       // טקסט מידע — כמה נבחרים בתוך/מחוץ ל-20
-      const inTop = sorted.slice(0, RANK_SLOTS).filter(c => allPicks.has(c.name)).length;
-      const outTop = sorted.slice(RANK_SLOTS).filter(c => allPicks.has(c.name)).length;
+      const inTop = sorted.slice(0, rankSlots()).filter(c => allPicks.has(c.name)).length;
+      const outTop = sorted.slice(rankSlots()).filter(c => allPicks.has(c.name)).length;
       const infoEl = document.getElementById('rank-info-text');
       if (infoEl) {
         if (filterPicked) {
@@ -1924,8 +1925,8 @@
       document.getElementById('rank-col-1').innerHTML = renderCol(display, allPicks);
       document.getElementById('show-more-bar').style.display = isTruncated ? '' : 'none';
 
-      const inTop  = sorted.slice(0, RANK_SLOTS).filter(c => allPicks.has(c.name)).length;
-      const outTop = sorted.slice(RANK_SLOTS).filter(c => allPicks.has(c.name)).length;
+      const inTop  = sorted.slice(0, rankSlots()).filter(c => allPicks.has(c.name)).length;
+      const outTop = sorted.slice(rankSlots()).filter(c => allPicks.has(c.name)).length;
       const infoEl = document.getElementById('rank-info-text');
       if (infoEl) {
         if (filterPicked) {
@@ -2970,7 +2971,7 @@
 
       var row = '<div class="rank-row' + (picked ? ' is-picked' : '') + '" onclick="togglePick(\'' + eName + '\')">'
         + '<span style="display:inline-flex;align-items:center;gap:2px;flex-shrink:0">' + gDot + (picked ? '' : '<span class="rank-num">' + rank + '</span>') + '</span>'
-        + '<span class="rank-name' + (picked ? ' picked' : ' unpicked') + '"' + (picked ? ' style="color:' + (c._origRank > RANK_SLOTS ? '#111' : 'var(--blue-main)') + '"' : '') + '>' + eName + targetHtml + '</span>'
+        + '<span class="rank-name' + (picked ? ' picked' : ' unpicked') + '"' + (picked ? ' style="color:' + (c._origRank > rankSlots() ? '#111' : 'var(--blue-main)') + '"' : '') + '>' + eName + targetHtml + '</span>'
         + reasonToggleHtml
         + (filterShiryun || filterPicked || shiryuned ? '' : '<span class="' + pickCls + '" onclick="event.stopPropagation();toggleShiryunState(\'' + eName + '\')" title="' + pickTitle + '">' + pickIcon + '</span>')
         + (filterShiryun || filterPicked || picked ? '' : '<span class="rank-card" onclick="event.stopPropagation();openProfile(\'' + eName + '\')" title="כרטיס ועדה מסדרת">📋</span>')
@@ -3019,7 +3020,7 @@
       } else {
         // נבחר → ביטול
         const candidate = rankList.find(c => c.name === name);
-        const isOutside = candidate && (candidate._origRank > RANK_SLOTS);
+        const isOutside = candidate && (candidate._origRank > rankSlots());
         if (isOutside) {
           const ok = window.confirm(name + ' נמצא/ת מחוץ ל-20 המועמדים המובילים.\nביטול הבחירה יסיר אותו/ה מהרשימה לחלוטין.\nלהמשיך?');
           if (!ok) return;
@@ -3097,9 +3098,11 @@
           <span style="font-weight:800;font-size:.88rem;min-width:28px;text-align:center">${val}</span>
         </div>` : '';
 
+      // השוואת ג'מיני↔GPT קיימת רק לנבחרת דבר1 (אין ריצת GPT לוועדות הצפון/מרצ).
+      // לכן מציגים את הבלוק רק כשהנבחרת הפעילה היא דבר1 (activeCommittee ריק).
       const gptResume = row['zccc_o'] ? parseFloat(row['zccc_o']) : null;
       const gptMot = row['zccd_o'] || '';
-      const hasGpt = gptResume !== null && !isNaN(gptResume);
+      const hasGpt = activeCommittee === '' && gptResume !== null && !isNaN(gptResume);
 
       const srcWarn = parseInt(src) < 3 ? ' <span title="מידע חלקי" style="cursor:help">⚠️</span>' : '';
 
