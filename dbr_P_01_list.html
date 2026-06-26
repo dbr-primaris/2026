@@ -38,8 +38,10 @@
 
     /* picker */
     .picker-box{background:#fff;border:1px solid var(--border);border-radius:16px;padding:14px 16px;margin-bottom:16px;box-shadow:var(--shadow-s)}
-    .cat-btn{padding:6px 12px;border:1.5px solid var(--border);border-radius:999px;background:#fff;color:var(--muted);font-weight:700;font-size:.8rem;cursor:pointer;font-family:inherit;white-space:nowrap;flex-shrink:0;transition:.12s}
-    .cat-btn:hover,.cat-btn.active{border-color:var(--blue-main);color:var(--blue-main);background:var(--blue-soft)}
+    .search-box{position:relative;margin-bottom:4px}
+    .search-input{width:100%;padding:9px 16px 9px 38px;border:1.5px solid var(--border);border-radius:999px;background:#fff;font-family:inherit;font-size:.92rem;color:var(--blue-dark);box-sizing:border-box;outline:none;direction:rtl;transition:border-color .15s}
+    .search-input:focus{border-color:var(--blue-main);box-shadow:0 0 0 3px rgba(29,95,167,.12)}
+    .search-clear{position:absolute;left:10px;top:50%;transform:translateY(-50%);border:none;background:none;font-size:1.05rem;font-weight:900;line-height:1;cursor:pointer;padding:4px 6px;color:var(--blue-main)}
     .picker-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
     .c-card{background:#fff;border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:var(--shadow-s);cursor:pointer;transition:.12s;text-decoration:none;display:block}
     .c-card:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
@@ -123,20 +125,12 @@
     <h1 style="color:var(--blue-dark);font-size:1.5rem;margin-bottom:6px">הכר/י את המועמדים</h1>
     <p style="color:var(--muted);margin-bottom:16px">לחץ על מועמד/ת לצפייה בפרופיל המלא</p>
     <div class="picker-box">
-      <input id="search-box" type="text" placeholder="חיפוש לפי שם…"
-        oninput="filterCandidates()"
-        style="width:100%;padding:9px 16px;border:1.5px solid var(--border);border-radius:999px;font-size:.92rem;font-family:inherit;outline:none;direction:rtl;margin-bottom:10px">
-      <div style="display:flex;flex-direction:column;gap:7px">
-        <div style="display:flex;flex-wrap:wrap;gap:6px">
-          <button class="cat-btn" data-group="cat" data-val="נשים" onclick="radioFilter(this)">נשים</button>
-          <button class="cat-btn" data-group="cat" data-val="גברים" onclick="radioFilter(this)">גברים</button>
-          <button class="cat-btn" data-group="cat" data-val="בני מיעוטים" onclick="radioFilter(this)">בני מיעוטים</button>
-        </div>
-        <div style="display:flex;flex-wrap:wrap;gap:6px">
-          <button class="cat-btn" data-group="fam" data-val="מוכרים" onclick="radioFilter(this)">מוכרים</button>
-          <button class="cat-btn" data-group="fam" data-val="פחות מוכרים" onclick="radioFilter(this)">פחות מוכרים</button>
-          <button class="cat-btn" data-group="fam" data-val="מועט מידע" onclick="radioFilter(this)">מועט מידע</button>
-        </div>
+      <div class="search-box">
+        <input type="text" class="search-input" id="search-box"
+          placeholder="חיפוש חופשי: שם, מאפיין, תחום, מפלגה…"
+          autocomplete="off"
+          oninput="filterCandidates()">
+        <button class="search-clear" id="search-clear" onclick="clearSearch()" title="ניקוי חיפוש">⟳</button>
       </div>
     </div>
     <hr style="border:none;border-top:1px solid var(--border);margin-bottom:16px">
@@ -238,24 +232,31 @@ function renderPickerGrid(list) {
   }).join('');
 }
 
+function buildSearchBlob(c) {
+  const fields = ['שם','קטגוריה','תפקיד','תעודת_זהות_פוליטית','נושאים','נושאים_מכוסים','תחומי_חוזק','סגנון'];
+  return fields.map(f => Array.isArray(c[f]) ? c[f].join(' ') : (c[f]||'')).join(' ');
+}
+
 function filterCandidates() {
   const q = (document.getElementById('search-box')?.value||'').trim();
+  const btn = document.getElementById('search-clear');
+  if (btn) { btn.textContent = q ? '✕' : '⟳'; btn.style.color = q ? '#e53935' : 'var(--blue-main)'; }
   let list = allCandidates;
-  if (activeFilters.cat) list = list.filter(c=>c['קטגוריה']===activeFilters.cat);
-  if (activeFilters.fam) list = list.filter(c=>famLevel(c)===activeFilters.fam);
-  if (q) list = list.filter(c=>c['שם'].includes(q));
+  if (q) {
+    const tokens = q.split(/\s+/).filter(Boolean);
+    list = list.filter(c => {
+      const blob = buildSearchBlob(c);
+      return tokens.every(t => blob.includes(t));
+    });
+  }
   renderPickerGrid(list);
 }
 
-function radioFilter(btn) {
-  const group=btn.dataset.group, val=btn.dataset.val;
-  if (activeFilters[group]===val) {
-    activeFilters[group]=''; btn.classList.remove('active');
-  } else {
-    document.querySelectorAll(`.cat-btn[data-group="${group}"]`).forEach(b=>b.classList.remove('active'));
-    activeFilters[group]=val; btn.classList.add('active');
-  }
+function clearSearch() {
+  const el = document.getElementById('search-box');
+  if (el) { el.value = ''; }
   filterCandidates();
+  el && el.focus();
 }
 
 function showPicker() {

@@ -210,14 +210,13 @@
       position: relative;
     }
 
-    /* אזור מגע גדול — השליש התחתון של התיבה לחיץ כמו הכפתור */
+    /* אזור מגע — כל התיבה לחיצה */
     .card-tap-zone {
       position: absolute;
-      left: 0; right: 0; bottom: 0;
-      height: 33%;
+      inset: 0;
       z-index: 1;
       cursor: pointer;
-      border-radius: 0 0 var(--radius-medium) var(--radius-medium);
+      border-radius: var(--radius-medium);
     }
     .card-tap-zone:hover { background: rgba(29,95,167,.05); }
 
