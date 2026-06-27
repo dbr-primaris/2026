@@ -1507,7 +1507,7 @@
           <div class="team-card-status active">✓ זמינה</div>
         </div>
         <!-- נבחרות ייחודיות — מוסתרות, יופעלו בשלב הבא -->
-        <div class="team-card team-card--special" data-rec-type="special_topics" onclick="notReady(this)">
+        <div class="team-card team-card--special" data-rec-type="special_topics" onclick="selectTeam('human_rights_territories')">
           <div class="team-card-name">זכויות אדם בשטחים</div>
           <div class="team-card-desc">נוכחות מגינה, הגנה משפטית וציבורית על פלסטינים, תיעוד והתייצבות מול אלימות מתנחלים ופגיעות בזכויות אדם.</div>
           <div class="team-card-status active">✓ זמינה</div>
@@ -2625,11 +2625,13 @@
           return b.value - a.value;
         });
 
+      const splitAt = cfg.band_split ? parseInt(cfg.band_split) : 0;
       const inSquad = sorted.slice(0, squadSize).map((c, i) => ({
         ...c,
         inSquad: true,
         picked:  allPicks.has(c.name),
-        bandIdx: Math.min(3, Math.floor(i / bandSize))  // 0=ליבה 1=חזקה 2=משמעותית 3=נגיעה
+        // band_split: 2 קבוצות לפי ערך (≥split=רצועת ליבה, <split=נגיעה); אחרת חלוקה לפי מיקום
+        bandIdx: splitAt ? (c.value >= splitAt ? 2 : 3) : Math.min(3, Math.floor(i / bandSize))
       }));
 
       const inNames = new Set(inSquad.map(c => c.name));
@@ -2945,12 +2947,15 @@
       const v = row ? parseInt(row[activeSquad] || '0', 10) : 0;
       const note = row ? (row[activeSquad + '_note'] || '') : '';
       document.getElementById('m-name').textContent = name;
+      const bandKey = ['label_100','label_80','label_60','label_40'][squadBandIndex(v)];
+      const bandWord = cfg ? (cfg[bandKey] || '') : '';
       document.getElementById('m-sub').textContent =
-        (cfg ? cfg.title : '') + (v ? ' — ' + (cfg['label_' + v] || '') : '');
+        (cfg ? cfg.title : '') + (bandWord ? ' — ' + bandWord : '');
 
+      const kickerLabel = (activeSquad === 'human_rights_territories') ? 'סוג הפעולה בשטח' : 'הנימוק לדירוג';
       const reasonHtml = note
-        ? '<section class="modal-reason-card"><div class="modal-section-kicker">הנימוק לדירוג</div><p>' + escapeHtml(note) + '</p></section>'
-        : '<section class="modal-reason-card"><div class="modal-section-kicker">הנימוק לדירוג</div><p style="color:var(--text-muted)">🐒: אין נימוק זמין למועמד/ת זו בנבחרת/דירוג זה.</p></section>';
+        ? '<section class="modal-reason-card"><div class="modal-section-kicker">' + kickerLabel + '</div><p>' + escapeHtml(note) + '</p></section>'
+        : '<section class="modal-reason-card"><div class="modal-section-kicker">' + kickerLabel + '</div><p style="color:var(--text-muted)">🐒: אין נימוק זמין למועמד/ת זו בנבחרת/דירוג זה.</p></section>';
 
       document.getElementById('m-body').innerHTML =
         reasonHtml + renderCandidateProfileExpansion(name);
