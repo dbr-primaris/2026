@@ -1496,6 +1496,11 @@
           <div class="team-card-desc">חינוך, דיור והזדמנויות לדור הצעיר ולמשפחות צעירות.</div>
           <div class="team-card-status active">✓ זמינה</div>
         </div>
+        <div class="team-card team-card--ai" data-rec-type="ai_squads" onclick="selectTeam('education')">
+          <div class="team-card-name">חינוך ואזרחות</div>
+          <div class="team-card-desc">מדיניות חינוך, ליבה משותפת ואזרחות — מי מוביל בשטח ובמדיניות.</div>
+          <div class="team-card-status active">✓ זמינה</div>
+        </div>
         <div class="team-card team-card--ai" data-rec-type="ai_squads" onclick="selectTeam('directors')">
           <div class="team-card-name">דירקטורים / הנהגה / יכולת ניהול ציבורית</div>
           <div class="team-card-desc">דגש על ניסיון ניהולי, יכולת ביצוע והנהגה ציבורית.</div>
@@ -1541,6 +1546,7 @@
               <option value="peace_security">שלום וביטחון לאומי</option>
               <option value="negev_galil">פיתוח הנגב והגליל</option>
               <option value="next_generation">הדור הבא והצעירים</option>
+              <option value="education">חינוך ואזרחות</option>
               <option value="human_rights_territories">זכויות אדם בשטחים</option>
             </select>
           </div>
@@ -2189,7 +2195,8 @@
       meretz: 'active',
       yair: 'building', bonot: 'building', north: 'active',
       hosen: 'building', security: 'building', environment: 'building', future: 'building',
-      human_rights_territories: 'active'
+      human_rights_territories: 'active',
+      education: 'active'
     };
     // מיפוי נבחרת → suffix בעמודות ה-CSV. נבחרת שאינה כאן משתמשת ב-'' (דבר1).
     const TEAM_SUFFIX = { dbr1: '', meretz: 'm', north: 'north' };
@@ -2215,6 +2222,7 @@
       jewish_arab: 'שותפות יהודית-ערבית', cost_of_living: 'יוקר המחיה והביטחון הכלכלי',
       peace_security: 'שלום וביטחון לאומי', negev_galil: 'פיתוח הנגב והגליל',
       next_generation: 'הדור הבא והצעירים',
+      education: 'חינוך ואזרחות',
       human_rights_territories: 'זכויות אדם בשטחים',
       welfare_social_democracy: 'רווחה וסוציאל-דמוקרטיה'
     };
