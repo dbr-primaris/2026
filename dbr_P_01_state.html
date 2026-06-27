@@ -2350,24 +2350,50 @@
       if (recType === 'ai_squads') rs.classList.add('rank-section--ai');
       else if (recType === 'imitation') rs.classList.add('rank-section--imitation');
     }
-    // סדר מחדש את הדרופדאון: קבוצה נוכחית ראשון, מפריד, קבוצה שנייה
+    // נבחרות "העמקה בנושאים ייחודיים" — מופרדות בתוך קבוצת הנושאיות בקו מקווקו
+    const SPECIAL_SQUADS = new Set(['human_rights_territories', 'welfare_social_democracy']);
+    function isSpecialSquad(val) { return SPECIAL_SQUADS.has(val); }
+
+    // סדר מחדש את הדרופדאון: ליבה → קו מקווקו → העמקה → קו מלא → סימולציות
     function filterTeamOptions(activeVal) {
       const sel = document.getElementById('team-select');
-      const type = teamType(activeVal);
+      const activeIsSquad = teamType(activeVal) === 'squad';
       const allOpts = Array.from(sel.options).filter(o => !o.disabled);
-      // הסר מפריד קיים
+      // הסר מפרידים קיימים
       Array.from(sel.options).filter(o => o.disabled && o.value === '').forEach(o => sel.removeChild(o));
-      const sameGroup = allOpts.filter(o => teamType(o.value) === type);
-      const otherGroup = allOpts.filter(o => teamType(o.value) !== type);
-      // בנה מחדש את הסדר
-      sameGroup.forEach(o => sel.appendChild(o));
-      if (otherGroup.length) {
+
+      const coreOpts    = allOpts.filter(o => teamType(o.value) === 'squad' && !isSpecialSquad(o.value));
+      const specialOpts = allOpts.filter(o => teamType(o.value) === 'squad' &&  isSpecialSquad(o.value));
+      const simOpts     = allOpts.filter(o => teamType(o.value) !== 'squad');
+
+      const mkSep = (text) => {
         const sep = document.createElement('option');
-        sep.disabled = true;
-        sep.value = '';
-        sep.textContent = '──────────────';
-        sel.appendChild(sep);
-        otherGroup.forEach(o => sel.appendChild(o));
+        sep.disabled = true; sep.value = ''; sep.textContent = text;
+        return sep;
+      };
+      const SOLID  = '──────────────';
+      const DASHED = '┄┄┄ העמקה בנושאים ┄┄┄';
+
+      // קבוצת הנושאיות: ליבה → קו מקווקו → העמקה
+      const appendSquadBlock = () => {
+        coreOpts.forEach(o => sel.appendChild(o));
+        if (specialOpts.length) {
+          if (coreOpts.length) sel.appendChild(mkSep(DASHED));
+          specialOpts.forEach(o => sel.appendChild(o));
+        }
+      };
+      const appendSimBlock = () => simOpts.forEach(o => sel.appendChild(o));
+
+      if (activeIsSquad) {
+        appendSquadBlock();
+        if (simOpts.length && (coreOpts.length || specialOpts.length)) sel.appendChild(mkSep(SOLID));
+        appendSimBlock();
+      } else {
+        appendSimBlock();
+        if (coreOpts.length || specialOpts.length) {
+          if (simOpts.length) sel.appendChild(mkSep(SOLID));
+          appendSquadBlock();
+        }
       }
     }
 
