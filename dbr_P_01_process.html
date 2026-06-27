@@ -401,12 +401,12 @@
       <div class="path-card" id="rec-card" style="cursor:default;border:2px solid #1d5fa7;box-shadow:0 4px 20px rgba(29,95,167,.1);position:relative;">
         <div class="path-title">
           <button class="card-zoom-btn" onclick="cardZoom('dbr',-1)">−</button>
-          <span class="title-text">בחירה לפי המלצה</span>
+          <span class="title-text">משחק הבחירה</span>
           <button class="card-zoom-btn" onclick="cardZoom('dbr',1)">+</button>
         </div>
         <div class="path-desc" id="dbr-card-desc">כאן יוצאים מנקודת מוצא מוכנה מראש: נושאים ( עם מועמדים מתאימים) או נבחרות שמערכות הבינה סיווגו על פי קריטריונים של אנשי הפרויקט ויועצים נוספים.<br>כל נבחרת/נושא מציגה את המועמדים המובילים שלה, כשאלה שבחרתם כבר ונמצאים בתצוגה - מודגשים. .<br>תוכלו לעבור בין הנבחרות או הנושאים השונים, כשהמועמדים שבחרתם עוברים אתכם. וכך ניתן לבחור מכל נבחרת או נושא את הראויים בעיניכם, ולבסוף להרכיב מהם את ה‑8 שלכם.</div>
         <a href="#" onclick="event.preventDefault();event.stopPropagation();tryRecommendation()" style="position:relative;z-index:2;display:inline-flex;align-items:center;justify-content:center;align-self:flex-end;margin-top:10px;width:36px;height:36px;background:var(--blue-soft);color:var(--blue-main);border:2px solid var(--blue-main);border-radius:50%;font-weight:900;font-size:1.2rem;text-decoration:none;box-shadow:0 2px 8px rgba(29,95,167,.18);transition:transform .15s,box-shadow .15s,background .15s;" onmouseover="this.style.transform='scale(1.12)';this.style.boxShadow='0 4px 14px rgba(29,95,167,.32)';this.style.background='#dceaff'" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 2px 8px rgba(29,95,167,.18)';this.style.background='var(--blue-soft)'">←</a>
-        <a href="#" onclick="event.preventDefault();tryRecommendation()" class="card-tap-zone" aria-label="בחירה לפי המלצה"></a>
+        <a href="#" onclick="event.preventDefault();tryRecommendation()" class="card-tap-zone" aria-label="משחק הבחירה"></a>
         <!-- hint חץ לבחירה עצמאית -->
         <div id="rec-hint" style="display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:82%;z-index:20;background:rgba(255,243,205,0.97);border:2px solid #f59e0b;border-radius:14px;padding:20px 16px 16px;text-align:center;pointer-events:none;box-shadow:0 4px 18px rgba(0,0,0,.15);flex-direction:column;align-items:center;justify-content:center;gap:8px;">
           <div style="font-size:1.25rem;font-weight:900;color:#92400e;line-height:1.4;">התחילו בבחירה עצמאית</div>

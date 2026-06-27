@@ -12,7 +12,7 @@
 </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>הרשימה שלי | מערכת תומכת החלטה לפריימריז</title>
+  <title>הרשימה שלי | משחק הבחירה של פריימריז הדמוקרטים</title>
   <style>
     :root {
       --blue-dark: #12355b;
@@ -1124,6 +1124,14 @@
     .team-card--imitation:hover { box-shadow: 0 8px 20px rgba(124,58,237,.18); }
     .rank-section--ai { border-color: var(--blue-main); border-width: 2px; border-radius: 20px; }
     .rank-section--ai .rank-section-header { border-radius: 18px 18px 0 0; }
+    .rec-type-card--special { border-radius: 14px; border-color: #b45309; border-left: 5px solid #b45309; background: #fffaf0; }
+    .rec-type-card--special .rec-type-title { color: #92400e; }
+    .rec-type-card--special .rec-type-arrow { color: #b45309; }
+    .rec-type-card--special:hover { border-color: #92400e; box-shadow: 0 12px 28px rgba(180,83,9,.18); }
+    .team-card--special { border-radius: 14px; border-color: #b45309; border-left: 4px solid #b45309; background: #fffaf0; }
+    .team-card--special .team-card-name { color: #92400e; }
+    .team-card--special:hover { box-shadow: 0 8px 20px rgba(180,83,9,.18); }
+    .rank-section--special { border-color: #b45309; border-width: 2px; border-radius: 14px; }
     .rank-section--imitation { border-color: #7c3aed; border-width: 2px; border-radius: 4px; border-left: 5px solid #7c3aed; }
 
     /* ── Modal ── */
@@ -1374,9 +1382,9 @@
     <!-- Intro overlay — first visit -->
     <div id="intro-overlay" class="intro-overlay" style="display:none">
       <div class="intro-card">
-        <h2>בחירה לפי המלצה</h2>
-        <p>במסך הזה אתם בונים את רשימת המועמדים שלכם מתוך נבחרת מומלצת.</p>
-        <p>כל נבחרת מציגה את 20 המועמדים המובילים שלה לפי דירוג — דירוג המבוסס על דיוקנאות המועמדים, על פי הרזומה שלהם והמוטיבציה שלהם לתפקידם הציבורי הבכיר. תוכלו להחליף בין נבחרות באמצעות הרשימה הנפתחת שבראש המסך.</p>
+        <h2>משחק הבחירה</h2>
+        <p>במסך הזה אתם בונים את רשימת המועמדים שלכם דרך נבחרות פתיחה שונות.</p>
+        <p>כל נבחרת מציגה עד 20 מועמדים לפי זווית בחירה מסוימת — המבוססת על דיוקנאות המועמדים, על פי הרזומה שלהם והמוטיבציה שלהם לתפקידם הציבורי הבכיר. תוכלו להחליף בין נבחרות באמצעות הרשימה הנפתחת שבראש המסך.</p>
         <p>איך עובדים במסך:</p>
         <ul>
           <li>להוספת מועמד מהנבחרת — לחצו על שמו. שמו יופיע בכחול כהה ומודגש.</li>
@@ -1385,14 +1393,14 @@
           <li>לצפייה בכרטיס המועמד של הנבחרת — לחצו על 📋.</li>
         </ul>
         <p>בכל רגע תוכלו ללחוץ על «הצגת פתק הבחירה» כדי לראות כיצד תיראה הרשימה שבניתם.</p>
-        <div class="intro-note">הדירוג של ד.ב.ר הוא נקודת ייחוס בלבד.<br>ההחלטה הסופית נשארת שלכם.</div>
+        <div class="intro-note">הנבחרות הן נקודת פתיחה למשחק הבחירה.<br>ההחלטה הסופית נשארת שלכם.</div>
         <button class="intro-btn" onclick="dismissIntro()">הבנתי, נתחיל</button>
       </div>
     </div>
 
     <section class="page-title">
-      <h1>בחירה לפי המלצה <button id="desc-toggle-btn" onclick="toggleScreenDesc()" title="הסבר על המסך" style="display:none;background:none;border:none;cursor:pointer;font-size:1.3rem;vertical-align:middle;padding:0 2px;line-height:1;color:#f59e0b;transition:color .2s">ⓘ</button></h1>
-      <p id="screen-desc">בחרו מאיזה אוסף המלצות תרצו להתחיל — כל אוסף מציע זווית ראייה שונה על המועמדים.</p>
+      <h1>בחרו זווית התחלה <button id="desc-toggle-btn" onclick="toggleScreenDesc()" title="הסבר על המסך" style="display:none;background:none;border:none;cursor:pointer;font-size:1.3rem;vertical-align:middle;padding:0 2px;line-height:1;color:#f59e0b;transition:color .2s">ⓘ</button></h1>
+      <p id="screen-desc">בחרו זווית התחלה — כל מסלול מציג דרך אחרת להכיר את המועמדים ו"לשחק" עם בחירתכם.</p>
     </section>
 
     <!-- בחירת סוג המלצה -->
@@ -1401,32 +1409,32 @@
 
         <div class="rec-type-card rec-type-card--ai" onclick="selectRecType('ai_squads')">
           <div class="rec-type-icon">🧠</div>
-          <div class="rec-type-title">המלצות AI לפי נושאים</div>
-          <div class="rec-type-desc">דירוגים שהכינו מערכות הבינה לפי תחומי ליבה — שלטון החוק, כלכלה, ביטחון ועוד. בחרו נושא וראו את המועמדים המובילים בו.</div>
-          <div style="font-size:.78rem;font-weight:800;color:var(--blue-main);margin-top:2px">9 נבחרות זמינות</div>
+          <div class="rec-type-title">מסלול נושאי הליבה</div>
+          <div class="rec-type-desc">תשעה נושאי ליבה של המפלגה — דמוקרטיה, כלכלה, ביטחון ועוד. בכל נושא מדורגים המועמדים לפי זיקתם לנושא — כמה הוא מרכזי בדרכם הציבורית — לצד היכרות כללית עם הרקע שלהם.</div>
           <div class="rec-type-arrow">←</div>
         </div>
 
         <div class="rec-type-card rec-type-card--imitation" onclick="selectRecType('imitation')">
           <div class="rec-type-icon">👥</div>
-          <div class="rec-type-title">המלצות חיקוי מוכרות</div>
-          <div class="rec-type-desc">נבחרות שמערכות הבינה הכינו כחיקוי לישויות פוליטיות מוכרות.</div>
+          <div class="rec-type-title">סימולציית נבחרות</div>
+          <div class="rec-type-desc">מסלולים המדמים נקודות מבט שונות — מטבח המפלגה, בוחרי הצפון, או בחירה אקראית-משחקית.</div>
           <div style="font-size:.78rem;font-weight:800;color:var(--blue-main);margin-top:2px">3 נבחרות זמינות</div>
           <div class="rec-type-arrow">←</div>
         </div>
 
         <div class="rec-type-card soon">
           <div class="rec-type-icon">🌟</div>
-          <div class="rec-type-title">המלצות משפיענים אנושיים</div>
-          <div class="rec-type-desc">נבחרות שהרכיבו משפיענים ואנשי ציבור — עקבו אחרי ההמלצות של מי שאתם סומכים עליו.</div>
+          <div class="rec-type-title">נבחרות מהשטח</div>
+          <div class="rec-type-desc">נבחרות שירכיבו בהמשך אנשים, קבוצות או גורמים ציבוריים מזוהים.</div>
           <div class="rec-type-badge">בקרוב</div>
         </div>
 
-        <div class="rec-type-card soon">
-          <div class="rec-type-icon">✨</div>
-          <div class="rec-type-title">עוד בדרך</div>
-          <div class="rec-type-desc">סוג המלצה נוסף יתווסף בקרוב.</div>
-          <div class="rec-type-badge">בקרוב</div>
+        <div class="rec-type-card rec-type-card--special" onclick="selectRecType('special_topics')">
+          <div class="rec-type-icon">🎯</div>
+          <div class="rec-type-title">העמקה בנושאים ייחודיים</div>
+          <div class="rec-type-desc">מסלולי עומק סביב סוגיות ציבוריות מסוימות, שאינן תמיד מקבלות ביטוי מלא בחלוקה הכללית לנושאים.</div>
+          <div style="font-size:.78rem;font-weight:800;color:#b45309;margin-top:2px">1 נבחרת זמינה</div>
+          <div class="rec-type-arrow">←</div>
         </div>
 
       </div>
@@ -1498,6 +1506,17 @@
           <div class="team-card-desc">שילוב של צדק סביבתי, אקלים וצדק חברתי.</div>
           <div class="team-card-status active">✓ זמינה</div>
         </div>
+        <!-- נבחרות ייחודיות — מוסתרות, יופעלו בשלב הבא -->
+        <div class="team-card team-card--special" data-rec-type="special_topics" onclick="notReady(this)">
+          <div class="team-card-name">זכויות אדם בשטחים</div>
+          <div class="team-card-desc">נוכחות מגינה, הגנה משפטית וציבורית על פלסטינים, תיעוד והתייצבות מול אלימות מתנחלים ופגיעות בזכויות אדם.</div>
+          <div class="team-card-status active">✓ זמינה</div>
+        </div>
+        <div class="team-card team-card--special" data-rec-type="special_topics" onclick="selectTeam('welfare_social_democracy')" style="display:none">
+          <div class="team-card-name">רווחה וסוציאל-דמוקרטיה</div>
+          <div class="team-card-desc">מחויבות למדינת רווחה, צמצום פערים, עבודה מאורגנת, שירותים ציבוריים וביטחון חברתי.</div>
+          <div class="team-card-status active">✓ זמינה</div>
+        </div>
       </div>
     </div>
 
@@ -1508,7 +1527,7 @@
         <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;">
           <div id="squad-hdr-title" class="squad-hdr-title"></div>
           <div class="squad-change-wrap">
-            <button class="squad-change-btn" type="button">↕ החלף נושא</button>
+            <button class="squad-change-btn" type="button">↕ החלף מסלול</button>
             <select id="team-select" onchange="onTeamChange()">
               <option value="dbr1">נבחרת מטבח המפלגה</option>
               <option value="meretz">נבחרת הקוף של המונדיאל</option>
@@ -1522,6 +1541,7 @@
               <option value="peace_security">שלום וביטחון לאומי</option>
               <option value="negev_galil">פיתוח הנגב והגליל</option>
               <option value="next_generation">הדור הבא והצעירים</option>
+              <option value="human_rights_territories">זכויות אדם בשטחים</option>
             </select>
           </div>
         </div>
@@ -2168,7 +2188,8 @@
       lochemet: 'building', coalition: 'building', opposition: 'building',
       meretz: 'active',
       yair: 'building', bonot: 'building', north: 'active',
-      hosen: 'building', security: 'building', environment: 'building', future: 'building'
+      hosen: 'building', security: 'building', environment: 'building', future: 'building',
+      human_rights_territories: 'active'
     };
     // מיפוי נבחרת → suffix בעמודות ה-CSV. נבחרת שאינה כאן משתמשת ב-'' (דבר1).
     const TEAM_SUFFIX = { dbr1: '', meretz: 'm', north: 'north' };
@@ -2193,7 +2214,9 @@
       directors: 'דירקטורים / הנהגה', green_social: 'ירוק-חברתי / סביבה וחברה',
       jewish_arab: 'שותפות יהודית-ערבית', cost_of_living: 'יוקר המחיה והביטחון הכלכלי',
       peace_security: 'שלום וביטחון לאומי', negev_galil: 'פיתוח הנגב והגליל',
-      next_generation: 'הדור הבא והצעירים'
+      next_generation: 'הדור הבא והצעירים',
+      human_rights_territories: 'זכויות אדם בשטחים',
+      welfare_social_democracy: 'רווחה וסוציאל-דמוקרטיה'
     };
 
     // ── נבחרות נושאיות — קונפיג + נתונים נטענים מ-main_teams ──
@@ -2230,6 +2253,30 @@
 
     let inRecTypePicker = true;  // true = מסך בחירת סוג המלצה מוצג
 
+    function notReady(el) {
+      // ביפ שגיאה קצר
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
+        o.connect(g); g.connect(ctx.destination);
+        o.frequency.value = 220;
+        o.type = 'sine';
+        g.gain.setValueAtTime(0.25, ctx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.25);
+        o.start(ctx.currentTime);
+        o.stop(ctx.currentTime + 0.25);
+      } catch(e) {}
+      // רעידה קצרה של הכרטיס
+      if (el) {
+        el.style.transition = 'transform .07s';
+        el.style.transform = 'translateX(-6px)';
+        setTimeout(() => { el.style.transform = 'translateX(5px)'; }, 70);
+        setTimeout(() => { el.style.transform = 'translateX(-4px)'; }, 140);
+        setTimeout(() => { el.style.transform = 'translateX(0)'; }, 210);
+      }
+    }
+
     function selectRecType(type) {
       inRecTypePicker = false;
       // הצג רק כרטיסי נבחרת מהסוג שנבחר
@@ -2250,9 +2297,9 @@
         document.getElementById('team-picker').style.display = '';
         activeSquad = null;
         const h1 = document.querySelector('.page-title h1');
-        if (h1) h1.childNodes[0].textContent = 'בחירה לפי המלצה ';
+        if (h1) h1.childNodes[0].textContent = 'בחרו זווית התחלה ';
         const desc = document.getElementById('screen-desc');
-        if (desc) desc.textContent = 'בחרו נבחרת מהתיבות למטה.';
+        if (desc) desc.textContent = 'בחרו זווית התחלה — כל מסלול מציג דרך אחרת להכיר את המועמדים ו"לשחק" עם בחירתכם.';
       } else if (!inRecTypePicker) {
         inRecTypePicker = true;
         document.getElementById('team-picker').style.display = 'none';
@@ -2657,8 +2704,8 @@
         cols.parentNode.insertBefore(el, cols);
       }
       el.style.display = '';
-      let txt = heMembers(nIn) + ' בנבחרת · ' + heChosen(nPicked) + ' · לחיצה על שם מוסיפה/מבטלת בחירה';
-      if (nExtra > 0) txt += '<br><span style="opacity:.8">(מי שבחרת ואינו בנבחרת — בתיבה המקווקוות למטה)</span>';
+      let txt = heMembers(nIn) + ' בנבחרת/דירוג · ' + heChosen(nPicked) + ' · לחיצה על שם מוסיפה/מבטלת בחירה';
+      if (nExtra > 0) txt += '<br><span style="opacity:.8">(מי שבחרת ואינו בנבחרת/דירוג — בתיבה המקווקוות למטה)</span>';
       el.innerHTML = txt;
     }
 
@@ -2902,8 +2949,8 @@
         (cfg ? cfg.title : '') + (v ? ' — ' + (cfg['label_' + v] || '') : '');
 
       const reasonHtml = note
-        ? '<section class="modal-reason-card"><div class="modal-section-kicker">הנימוק לדירוג בנבחרת</div><p>' + escapeHtml(note) + '</p></section>'
-        : '<section class="modal-reason-card"><div class="modal-section-kicker">הנימוק לדירוג בנבחרת</div><p style="color:var(--text-muted)">🐒: אין נימוק זמין למועמד/ת זו בנבחרת זו.</p></section>';
+        ? '<section class="modal-reason-card"><div class="modal-section-kicker">הנימוק לדירוג</div><p>' + escapeHtml(note) + '</p></section>'
+        : '<section class="modal-reason-card"><div class="modal-section-kicker">הנימוק לדירוג</div><p style="color:var(--text-muted)">🐒: אין נימוק זמין למועמד/ת זו בנבחרת/דירוג זה.</p></section>';
 
       document.getElementById('m-body').innerHTML =
         reasonHtml + renderCandidateProfileExpansion(name);
