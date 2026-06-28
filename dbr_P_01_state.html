@@ -1354,6 +1354,47 @@
       .finish-bar { flex-direction: column; align-items: stretch; }
       .btn-primary { text-align: center; justify-content: center; }
     }
+  /* ══ הדגשת נושאים — נבחרים עצמאיים ══ */
+  .team-card.topic-star {
+    border: 2px solid #1d5fa7;
+    background: #f0f6ff;
+  }
+  .topic-my-badge {
+    display: inline-flex;
+    align-items: center;
+    font-size: .72rem;
+    font-weight: 800;
+    color: #fff;
+    background: #1d5fa7;
+    border-radius: 20px;
+    padding: 2px 8px;
+    margin-bottom: 5px;
+  }
+  .topic-my-names {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+    margin: 4px 0 6px;
+  }
+  .topic-my-name-chip {
+    font-size: .7rem;
+    background: #eaf3ff;
+    color: #12355b;
+    border-radius: 12px;
+    padding: 2px 7px;
+    font-weight: 700;
+  }
+  .topic-present-badge {
+    font-size: .7rem;
+    color: #5f6b7a;
+    background: #f4f8ff;
+    border-radius: 20px;
+    padding: 2px 8px;
+    font-weight: 600;
+    border: 1px solid #d7e3f3;
+    margin-bottom: 5px;
+    display: inline-block;
+  }
   </style>
 </head>
 <body>
@@ -1629,7 +1670,7 @@
     </div>
 
     <footer class="footer">
-      יישום תומך החלטה אישי, הנתונים נשמרים בדפדפן שלך בלבד.
+      יישום תומך החלטה אישי, הנתונים נשמרים בדפדפן שלך בלבד. · v1.1
     </footer>
   </div>
 
@@ -3363,6 +3404,93 @@
       if (activeSquad) { renderSquad(activeSquad); }
       else if (rankList.length) renderRanking();
     });
+
+    // ══ הדגשת נושאים שנבחרי-העצמאית מככבים בהם ══
+    let _teamsCSV = null;
+    const AI_SQUAD_IDS = [
+      'law_democracy','religion_state','directors','green_social',
+      'jewish_arab','cost_of_living','peace_security','negev_galil',
+      'next_generation','education'
+    ];
+
+    function _loadTeamsCSV() {
+      if (_teamsCSV) return Promise.resolve(_teamsCSV);
+      return fetch('main_teams.csv').then(r => r.text()).then(txt => {
+        const rows = parseCsv(txt);
+        _teamsCSV = {};
+        rows.forEach(r => { if (r['id1']) _teamsCSV[r['id1']] = r; });
+        return _teamsCSV;
+      }).catch(() => ({}));
+    }
+
+    function highlightMyTopics() {
+      const myPicks = (loadState().shiryun || []);
+      if (!myPicks.length) return;
+
+      _loadTeamsCSV().then(db => {
+        const topicHits = {};
+        AI_SQUAD_IDS.forEach(sq => { topicHits[sq] = []; });
+
+        myPicks.forEach(name => {
+          const row = db[name]; if (!row) return;
+          AI_SQUAD_IDS.forEach(sq => {
+            const score = parseFloat(row[sq + '_combined'] || 0);
+            if (score >= 60) topicHits[sq].push({ name, score });
+          });
+        });
+        AI_SQUAD_IDS.forEach(sq => topicHits[sq].sort((a, b) => b.score - a.score));
+
+        const grid = document.querySelector('#team-picker .team-grid');
+        if (!grid) return;
+
+        grid.querySelectorAll('.team-card[data-rec-type="ai_squads"]').forEach(card => {
+          const m = (card.getAttribute('onclick') || '').match(/selectTeam\('([^']+)'\)/);
+          const sq = m ? m[1] : '';
+          const hits = topicHits[sq] || [];
+
+          card.classList.remove('topic-star');
+          card.querySelectorAll('.topic-my-badge,.topic-my-names,.topic-present-badge').forEach(e => e.remove());
+          if (!hits.length) return;
+
+          const nameEl = card.querySelector('.team-card-name');
+          if (!nameEl) return;
+
+          if (hits.length >= 2) {
+            card.classList.add('topic-star');
+            nameEl.insertAdjacentHTML('beforebegin',
+              '<div class="topic-my-badge">\u2605 ' + hits.length + ' \u05de\u05e0\u05d1\u05d7\u05e8\u05d9\u05da \u05db\u05d0\u05df</div>');
+            const chips = hits
+              .map(h => '<span class="topic-my-name-chip">' + shortName(h.name) + '</span>').join('');
+            nameEl.insertAdjacentHTML('afterend', '<div class="topic-my-names">' + chips + '</div>');
+          } else {
+            nameEl.insertAdjacentHTML('beforebegin',
+              '<div class="topic-present-badge">' + shortName(hits[0].name) + ' \u05db\u05d0\u05df</div>');
+          }
+        });
+
+        const allCards = [...grid.querySelectorAll('.team-card[data-rec-type="ai_squads"]')];
+        allCards.sort((a, b) => {
+          const ma = (a.getAttribute('onclick') || '').match(/selectTeam\('([^']+)'\)/);
+          const mb = (b.getAttribute('onclick') || '').match(/selectTeam\('([^']+)'\)/);
+          const ca = ma ? (topicHits[ma[1]] || []).length : 0;
+          const cb = mb ? (topicHits[mb[1]] || []).length : 0;
+          return cb - ca;
+        });
+        allCards.forEach(c => grid.appendChild(c));
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+
+    (function() {
+      const _orig = window.selectRecType;
+      if (typeof _orig !== 'function') return;
+      window.selectRecType = function(type) {
+        _orig.call(this, type);
+        if (type === 'ai_squads') setTimeout(highlightMyTopics, 150);
+      };
+    })();
+
   </script>
 </body>
 </html>
