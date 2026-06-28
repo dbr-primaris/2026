@@ -1433,7 +1433,7 @@
           <div class="rec-type-icon">🎯</div>
           <div class="rec-type-title">העמקה בנושאים ייחודיים</div>
           <div class="rec-type-desc">מסלולי עומק סביב סוגיות ציבוריות מסוימות, שאינן תמיד מקבלות ביטוי מלא בחלוקה הכללית לנושאים.</div>
-          <div style="font-size:.78rem;font-weight:800;color:#b45309;margin-top:2px">1 נבחרת זמינה</div>
+          <div style="font-size:.78rem;font-weight:800;color:#b45309;margin-top:2px">2 נבחרות זמינות</div>
           <div class="rec-type-arrow">←</div>
         </div>
 
@@ -1517,10 +1517,15 @@
           <div class="team-card-desc">נוכחות מגינה, הגנה משפטית וציבורית על פלסטינים, תיעוד והתייצבות מול אלימות מתנחלים ופגיעות בזכויות אדם.</div>
           <div class="team-card-status active">✓ זמינה</div>
         </div>
-        <div class="team-card team-card--special" data-rec-type="special_topics" onclick="selectTeam('welfare_social_democracy')" style="display:none">
+        <div class="team-card team-card--special" data-rec-type="special_topics" onclick="selectTeam('gender_equality')">
+          <div class="team-card-name">שוויון מגדרי</div>
+          <div class="team-card-desc">מי לקח/ה את המשימה הרחבה של שוויון מגדרי — בדיבור ובמעשה: חקיקה, ארגון, מאבק ציבורי עקבי.</div>
+          <div class="team-card-status active">✓ זמינה</div>
+        </div>
+        <div class="team-card team-card--special" data-rec-type="special_topics" style="opacity:.55;cursor:default;pointer-events:none">
           <div class="team-card-name">רווחה וסוציאל-דמוקרטיה</div>
           <div class="team-card-desc">מחויבות למדינת רווחה, צמצום פערים, עבודה מאורגנת, שירותים ציבוריים וביטחון חברתי.</div>
-          <div class="team-card-status active">✓ זמינה</div>
+          <div class="team-card-status">בקרוב</div>
         </div>
       </div>
     </div>
@@ -1548,6 +1553,7 @@
               <option value="next_generation">הדור הבא והצעירים</option>
               <option value="education">חינוך ואזרחות</option>
               <option value="human_rights_territories">זכויות אדם בשטחים</option>
+              <option value="gender_equality">שוויון מגדרי</option>
             </select>
           </div>
         </div>
@@ -2196,6 +2202,7 @@
       yair: 'building', bonot: 'building', north: 'active',
       hosen: 'building', security: 'building', environment: 'building', future: 'building',
       human_rights_territories: 'active',
+      gender_equality: 'active',
       education: 'active'
     };
     // מיפוי נבחרת → suffix בעמודות ה-CSV. נבחרת שאינה כאן משתמשת ב-'' (דבר1).
@@ -2224,7 +2231,8 @@
       next_generation: 'הדור הבא והצעירים',
       education: 'חינוך ואזרחות',
       human_rights_territories: 'זכויות אדם בשטחים',
-      welfare_social_democracy: 'רווחה וסוציאל-דמוקרטיה'
+      welfare_social_democracy: 'רווחה וסוציאל-דמוקרטיה',
+      gender_equality: 'שוויון מגדרי'
     };
 
     // ── נבחרות נושאיות — קונפיג + נתונים נטענים מ-main_teams ──
@@ -2359,7 +2367,7 @@
       else if (recType === 'imitation') rs.classList.add('rank-section--imitation');
     }
     // נבחרות "העמקה בנושאים ייחודיים" — מופרדות בתוך קבוצת הנושאיות בקו מקווקו
-    const SPECIAL_SQUADS = new Set(['human_rights_territories', 'welfare_social_democracy']);
+    const SPECIAL_SQUADS = new Set(['human_rights_territories', 'welfare_social_democracy', 'gender_equality']);
     function isSpecialSquad(val) { return SPECIAL_SQUADS.has(val); }
 
     // סדר מחדש את הדרופדאון: ליבה → קו מקווקו → העמקה → קו מלא → סימולציות
@@ -2986,7 +2994,9 @@
       document.getElementById('m-sub').textContent =
         (cfg ? cfg.title : '') + (bandWord ? ' — ' + bandWord : '');
 
-      const kickerLabel = (activeSquad === 'human_rights_territories') ? 'סוג הפעולה בשטח' : 'הנימוק לדירוג';
+      const kickerLabel = (activeSquad === 'human_rights_territories') ? 'סוג הפעולה בשטח'
+        : (activeSquad === 'gender_equality') ? 'סוג המעורבות המגדרית'
+        : 'הנימוק לדירוג';
       const reasonHtml = note
         ? '<section class="modal-reason-card"><div class="modal-section-kicker">' + kickerLabel + '</div><p>' + escapeHtml(note) + '</p></section>'
         : '<section class="modal-reason-card"><div class="modal-section-kicker">' + kickerLabel + '</div><p style="color:var(--text-muted)">🐒: אין נימוק זמין למועמד/ת זו בנבחרת/דירוג זה.</p></section>';
