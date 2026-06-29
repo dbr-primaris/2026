@@ -564,6 +564,7 @@ function selectAllChk() {
 
 function acceptDisclaimer() {
   localStorage.setItem(CHK_DONE_KEY, 'yes');
+  sessionStorage.setItem('dbr_session_accepted', 'yes');
   if (document.getElementById('chk-skip').checked) {
     localStorage.setItem('dbr_disclaimer_accepted', 'yes');
   }
