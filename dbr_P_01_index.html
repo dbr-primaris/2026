@@ -553,21 +553,13 @@ function allMainChecked() {
 }
 
 function collapseToSkipOnly() {
-  // מסתיר את כל סעיפי המלל
   document.querySelectorAll('.dsc-fold').forEach(function(el) { el.style.display = 'none'; });
-  document.querySelector('p[style*="לחצו על כל סעיף"]') && (document.querySelector('p[style*="לחצו על כל סעיף"]').style.display = 'none');
-  // מסתיר שורות chk1-5 ולחצן בחר הכל
+  document.querySelectorAll('#disclaimer-overlay p').forEach(function(el) { el.style.display = 'none'; });
   ['chk1-row','chk2-row','chk3-row','chk4-row','chk5-row'].forEach(function(id) {
     var el = document.getElementById(id); if (el) el.style.display = 'none';
   });
   var selectBtn = document.querySelector('[onclick="selectAllChk()"]');
   if (selectBtn) selectBtn.style.display = 'none';
-  // מסתיר כפתור האישור הגדול
-  var btn = document.getElementById('btn-disclaimer');
-  if (btn) btn.parentElement.style.display = 'none';
-  // כותרת אישור — מחליף לטקסט פשוט
-  var title = document.querySelector('#disclaimer-overlay [style*="font-size:.92rem"]');
-  if (title) title.textContent = 'כדי לא להציג הודעה זו שוב — סמן:';
 }
 
 function checkDisclaimer() {
@@ -588,25 +580,24 @@ function selectAllChk() {
   checkDisclaimer();
 }
 
-function onSkipChange() {
-  if (document.getElementById('chk-skip').checked && allMainChecked()) {
-    acceptDisclaimer();
-  }
-}
+function onSkipChange() { /* מטופל ב-acceptDisclaimer */ }
 
 function acceptDisclaimer() {
-  localStorage.setItem('dbr_disclaimer_accepted', 'yes');
+  if (document.getElementById('chk-skip').checked) {
+    localStorage.setItem('dbr_disclaimer_accepted', 'yes');
+  }
   window.location.href = _disclaimerTarget;
 }
 
-// כניסה חוזרת: אם chk1-5 כבר סומנו — עבור ישר למצב "רק chk-skip"
+// כניסה חוזרת: chk1-5 כבר סומנו בעבר → הצג רק chk-skip + כפתור הבנתי
 (function applyReturnVisit() {
   if (localStorage.getItem(CHK_DONE_KEY) === 'yes') {
     ['chk1','chk2','chk3','chk4','chk5'].forEach(function(id) {
       document.getElementById(id).checked = true;
     });
-    // מחכה ל-DOM להתייצב לפני הקריסה
     setTimeout(collapseToSkipOnly, 0);
+    var btn = document.getElementById('btn-disclaimer');
+    if (btn) { btn.disabled = false; btn.style.opacity = '1'; }
   }
 }());
 
