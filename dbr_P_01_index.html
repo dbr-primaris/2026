@@ -546,16 +546,39 @@ function openDisclaimer(url) {
 
 const CHK_DONE_KEY = 'dbr_chk_done';
 
+function allMainChecked() {
+  return ['chk1','chk2','chk3','chk4','chk5'].every(function(id) {
+    return document.getElementById(id).checked;
+  });
+}
+
+function collapseToSkipOnly() {
+  // מסתיר את כל סעיפי המלל
+  document.querySelectorAll('.dsc-fold').forEach(function(el) { el.style.display = 'none'; });
+  document.querySelector('p[style*="לחצו על כל סעיף"]') && (document.querySelector('p[style*="לחצו על כל סעיף"]').style.display = 'none');
+  // מסתיר שורות chk1-5 ולחצן בחר הכל
+  ['chk1-row','chk2-row','chk3-row','chk4-row','chk5-row'].forEach(function(id) {
+    var el = document.getElementById(id); if (el) el.style.display = 'none';
+  });
+  var selectBtn = document.querySelector('[onclick="selectAllChk()"]');
+  if (selectBtn) selectBtn.style.display = 'none';
+  // מסתיר כפתור האישור הגדול
+  var btn = document.getElementById('btn-disclaimer');
+  if (btn) btn.parentElement.style.display = 'none';
+  // כותרת אישור — מחליף לטקסט פשוט
+  var title = document.querySelector('#disclaimer-overlay [style*="font-size:.92rem"]');
+  if (title) title.textContent = 'כדי לא להציג הודעה זו שוב — סמן:';
+}
+
 function checkDisclaimer() {
-  const ok = document.getElementById('chk1').checked
-          && document.getElementById('chk2').checked
-          && document.getElementById('chk3').checked
-          && document.getElementById('chk4').checked
-          && document.getElementById('chk5').checked;
+  const ok = allMainChecked();
   const btn = document.getElementById('btn-disclaimer');
   btn.disabled = !ok;
   btn.style.opacity = ok ? '1' : '.45';
-  if (ok) localStorage.setItem(CHK_DONE_KEY, 'yes');
+  if (ok) {
+    localStorage.setItem(CHK_DONE_KEY, 'yes');
+    collapseToSkipOnly();
+  }
 }
 
 function selectAllChk() {
@@ -566,37 +589,24 @@ function selectAllChk() {
 }
 
 function onSkipChange() {
-  // אם chk-skip סומן וכל האחרים כבר סומנו — אשר אוטומטית
-  const allDone = localStorage.getItem(CHK_DONE_KEY) === 'yes';
-  if (document.getElementById('chk-skip').checked && allDone) {
+  if (document.getElementById('chk-skip').checked && allMainChecked()) {
     acceptDisclaimer();
   }
 }
 
 function acceptDisclaimer() {
-  if (document.getElementById('chk-skip').checked) {
-    localStorage.setItem('dbr_disclaimer_accepted', 'yes');
-  }
   localStorage.setItem('dbr_disclaimer_accepted', 'yes');
   window.location.href = _disclaimerTarget;
 }
 
-// כניסה חוזרת: אם chk1-5 כבר סומנו בעבר — הסתר אותם, הצג רק chk-skip
+// כניסה חוזרת: אם chk1-5 כבר סומנו — עבור ישר למצב "רק chk-skip"
 (function applyReturnVisit() {
   if (localStorage.getItem(CHK_DONE_KEY) === 'yes') {
-    ['chk1-row','chk2-row','chk3-row','chk4-row','chk5-row'].forEach(function(id) {
-      var el = document.getElementById(id);
-      if (el) el.style.display = 'none';
-    });
-    // סמן את כולם מאחורי הקלעים כדי שהכפתור יהיה פעיל
     ['chk1','chk2','chk3','chk4','chk5'].forEach(function(id) {
-      var el = document.getElementById(id);
-      if (el) el.checked = true;
+      document.getElementById(id).checked = true;
     });
-    checkDisclaimer();
-    // הסתר גם לחצן "בחר הכל" ושורת ההסבר
-    var selectBtn = document.querySelector('[onclick="selectAllChk()"]');
-    if (selectBtn) selectBtn.style.display = 'none';
+    // מחכה ל-DOM להתייצב לפני הקריסה
+    setTimeout(collapseToSkipOnly, 0);
   }
 }());
 
