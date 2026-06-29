@@ -546,31 +546,13 @@ function openDisclaimer(url) {
 
 const CHK_DONE_KEY = 'dbr_chk_done';
 
-function allMainChecked() {
-  return ['chk1','chk2','chk3','chk4','chk5'].every(function(id) {
+function checkDisclaimer() {
+  const ok = ['chk1','chk2','chk3','chk4','chk5'].every(function(id) {
     return document.getElementById(id).checked;
   });
-}
-
-function collapseToSkipOnly() {
-  document.querySelectorAll('.dsc-fold').forEach(function(el) { el.style.display = 'none'; });
-  document.querySelectorAll('#disclaimer-overlay p').forEach(function(el) { el.style.display = 'none'; });
-  ['chk1-row','chk2-row','chk3-row','chk4-row','chk5-row'].forEach(function(id) {
-    var el = document.getElementById(id); if (el) el.style.display = 'none';
-  });
-  var selectBtn = document.querySelector('[onclick="selectAllChk()"]');
-  if (selectBtn) selectBtn.style.display = 'none';
-}
-
-function checkDisclaimer() {
-  const ok = allMainChecked();
   const btn = document.getElementById('btn-disclaimer');
   btn.disabled = !ok;
   btn.style.opacity = ok ? '1' : '.45';
-  if (ok) {
-    localStorage.setItem(CHK_DONE_KEY, 'yes');
-    collapseToSkipOnly();
-  }
 }
 
 function selectAllChk() {
@@ -580,25 +562,27 @@ function selectAllChk() {
   checkDisclaimer();
 }
 
-function onSkipChange() { /* מטופל ב-acceptDisclaimer */ }
-
 function acceptDisclaimer() {
+  localStorage.setItem(CHK_DONE_KEY, 'yes');
   if (document.getElementById('chk-skip').checked) {
     localStorage.setItem('dbr_disclaimer_accepted', 'yes');
   }
   window.location.href = _disclaimerTarget;
 }
 
-// כניסה חוזרת: chk1-5 כבר סומנו בעבר → הצג רק chk-skip + כפתור הבנתי
+// כניסה חוזרת: chk1-5 כבר סומנו בעבר → הסתר אותם, הצג רק chk-skip + הבנתי
 (function applyReturnVisit() {
-  if (localStorage.getItem(CHK_DONE_KEY) === 'yes') {
-    ['chk1','chk2','chk3','chk4','chk5'].forEach(function(id) {
-      document.getElementById(id).checked = true;
-    });
-    setTimeout(collapseToSkipOnly, 0);
-    var btn = document.getElementById('btn-disclaimer');
-    if (btn) { btn.disabled = false; btn.style.opacity = '1'; }
-  }
+  if (localStorage.getItem(CHK_DONE_KEY) !== 'yes') return;
+  ['chk1','chk2','chk3','chk4','chk5'].forEach(function(id) {
+    document.getElementById(id).checked = true;
+  });
+  ['chk1-row','chk2-row','chk3-row','chk4-row','chk5-row'].forEach(function(id) {
+    var el = document.getElementById(id); if (el) el.style.display = 'none';
+  });
+  var selectBtn = document.querySelector('[onclick="selectAllChk()"]');
+  if (selectBtn) selectBtn.style.display = 'none';
+  var btn = document.getElementById('btn-disclaimer');
+  if (btn) { btn.disabled = false; btn.style.opacity = '1'; }
 }());
 
 // אם הגיעו עם redirect מדף פנימי — פתח הסכמה עם היעד
