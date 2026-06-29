@@ -2890,7 +2890,7 @@
       state.shiryun  = state.shiryun  || [];
       const inShiryun = state.shiryun.indexOf(name) >= 0;
       if (!inShiryun) {
-        if (state.shiryun.length >= MAX_SHIRYUN) { beepError(); return; }
+        if (state.shiryun.length >= MAX_SHIRYUN) { maxReached(); return; }
         if (state.selected.indexOf(name) < 0) state.selected.push(name);
         state.shiryun.push(name);
         autoLog(name, 'נבחר');
@@ -3141,6 +3141,26 @@
       } catch(e) {}
     }
 
+    // הגבלת המקסימום הגיעה — צליל + הודעת toast מסבירה
+    function maxReached() {
+      beepError();
+      showStateToast('הגעת למקסימום ' + MAX_SHIRYUN + ' נבחרים. בטל בחירה קיימת כדי להוסיף אחר.');
+    }
+
+    function showStateToast(msg) {
+      let t = document.getElementById('state-toast');
+      if (!t) {
+        t = document.createElement('div');
+        t.id = 'state-toast';
+        t.style.cssText = 'position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#1f2933;color:#fff;padding:11px 24px;border-radius:12px;font-weight:700;font-size:.95rem;z-index:999;opacity:0;transition:opacity .2s;pointer-events:none;max-width:90vw;text-align:center;box-shadow:0 8px 28px rgba(0,0,0,.25)';
+        document.body.appendChild(t);
+      }
+      t.textContent = msg;
+      t.style.opacity = '1';
+      clearTimeout(t._timer);
+      t._timer = setTimeout(() => { t.style.opacity = '0'; }, 2800);
+    }
+
     function togglePick(name) {
       if (filterPicked && !expanded) return;
       state = loadState();
@@ -3151,7 +3171,7 @@
 
       if (!inShiryun) {
         // ריק / מתלבט → נבחר
-        if (state.shiryun.length >= MAX_SHIRYUN) { beepError(); return; }
+        if (state.shiryun.length >= MAX_SHIRYUN) { maxReached(); return; }
         if (!inSelected) state.selected.push(name);
         state.shiryun.push(name);
         autoLog(name, 'נבחר');
@@ -3194,7 +3214,7 @@
         autoLog(name, 'בוטל שריון');
       } else {
         if (state.shiryun.length >= MAX_SHIRYUN) {
-          beepError();
+          maxReached();
           return;
         }
         if (state.selected.indexOf(name) < 0) state.selected.push(name);
