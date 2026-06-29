@@ -395,7 +395,7 @@ strong { color: #142f50; }
 
 <p style="font-size:.82rem;color:#5f6b7a;text-align:center;margin:0 0 4px">לחצו על כל סעיף כדי לקרוא. תיבת האישור מופיעה בתחתית.</p>
 
-<details class="dsc-fold" open>
+<details class="dsc-fold">
 <summary>על היוזמה — מאת אמנון זוסמן</summary>
 <p>שמי אמנון זוסמן. אני מגיע מעולם ההיי־טק, עם ניסיון של עשרות שנים בפיתוח, ניהול, יזמות, הקמת מערכות, הובלת פרויקטים והתמודדות עם בעיות מורכבות.</p>
 <p>כמו רבים אחרים, גם אני מודאג ממצבה של מדינת ישראל. מבחינתי, אחד מתנאי היסוד לתיקון הוא איכות האנשים שמגיעים להנהגה. לכן הבחירה במועמדים שיכהנו כחברי כנסת, ישפיעו על עתיד המדינה ועל חיי ילדינו ונכדינו — איננה עניין טכני או שולי. זו החלטה אזרחית כבדה.</p>
@@ -475,35 +475,38 @@ strong { color: #142f50; }
 </details>
 
 <div style="background:#f4f8ff;border:1.5px solid #d7e3f3;border-radius:14px;padding:16px 18px;margin:20px 0">
-<p style="font-size:.92rem;font-weight:800;color:#12355b;margin:0 0 12px">אישור המשתמש</p>
+<p style="font-size:.92rem;font-weight:800;color:#12355b;margin:0 0 10px">אישור המשתמש</p>
 
-<label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:4px;font-size:.88rem">
+<!-- לחצן בחר הכל -->
+<button onclick="selectAllChk()" style="margin-bottom:12px;background:#eaf3ff;border:1.5px solid #1d5fa7;border-radius:9px;padding:7px 18px;font-weight:800;font-size:.88rem;color:#1d5fa7;cursor:pointer;font-family:inherit;">✓ בחר הכל</button>
+
+<div id="chk1-row"><label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:4px;font-size:.88rem">
 <input type="checkbox" id="chk1" onchange="checkDisclaimer()" style="margin-top:4px;flex-shrink:0;width:18px;height:18px">
 קראתי והבנתי את האמור לעיל.
-</label>
+</label></div>
 
-<label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:4px;font-size:.88rem">
+<div id="chk2-row"><label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:4px;font-size:.88rem">
 <input type="checkbox" id="chk2" onchange="checkDisclaimer()" style="margin-top:4px;flex-shrink:0;width:18px;height:18px">
 אני מבין/ה שמדובר במשחק סימולציה ניסיוני, עצמאי ולא רשמי.
-</label>
+</label></div>
 
-<label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:4px;font-size:.88rem">
+<div id="chk3-row"><label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:4px;font-size:.88rem">
 <input type="checkbox" id="chk3" onchange="checkDisclaimer()" style="margin-top:4px;flex-shrink:0;width:18px;height:18px">
 אני מבין/ה שהמידע במשחק עשוי להיות חלקי, לא מעודכן או שגוי.
-</label>
+</label></div>
 
-<label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:4px;font-size:.88rem">
+<div id="chk4-row"><label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:4px;font-size:.88rem">
 <input type="checkbox" id="chk4" onchange="checkDisclaimer()" style="margin-top:4px;flex-shrink:0;width:18px;height:18px">
 אני מבין/ה שאין לראות בתוצאות המשחק המלצה, דירוג מוסמך או הוראה למי להצביע.
-</label>
+</label></div>
 
-<label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:4px;font-size:.88rem">
+<div id="chk5-row"><label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:4px;font-size:.88rem">
 <input type="checkbox" id="chk5" onchange="checkDisclaimer()" style="margin-top:4px;flex-shrink:0;width:18px;height:18px">
 אני מבין/ה שהשימוש במשחק הוא באחריותי בלבד, וששיקול הדעת הסופי הוא שלי.
-</label>
+</label></div>
 
-<label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:0;font-size:.84rem;color:#5f6b7a">
-<input type="checkbox" id="chk-skip" style="margin-top:4px;flex-shrink:0;width:18px;height:18px">
+<label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:0;font-size:.84rem;color:#5f6b7a;margin-top:8px">
+<input type="checkbox" id="chk-skip" onchange="onSkipChange()" style="margin-top:4px;flex-shrink:0;width:18px;height:18px">
 אל תציג לי הודעה זו שוב בדפדפן זה.
 </label>
 </div>
@@ -541,6 +544,8 @@ function openDisclaimer(url) {
   document.getElementById('disclaimer-overlay').scrollTop = 0;
 }
 
+const CHK_DONE_KEY = 'dbr_chk_done';
+
 function checkDisclaimer() {
   const ok = document.getElementById('chk1').checked
           && document.getElementById('chk2').checked
@@ -550,12 +555,50 @@ function checkDisclaimer() {
   const btn = document.getElementById('btn-disclaimer');
   btn.disabled = !ok;
   btn.style.opacity = ok ? '1' : '.45';
+  if (ok) localStorage.setItem(CHK_DONE_KEY, 'yes');
+}
+
+function selectAllChk() {
+  ['chk1','chk2','chk3','chk4','chk5'].forEach(function(id) {
+    document.getElementById(id).checked = true;
+  });
+  checkDisclaimer();
+}
+
+function onSkipChange() {
+  // אם chk-skip סומן וכל האחרים כבר סומנו — אשר אוטומטית
+  const allDone = localStorage.getItem(CHK_DONE_KEY) === 'yes';
+  if (document.getElementById('chk-skip').checked && allDone) {
+    acceptDisclaimer();
+  }
 }
 
 function acceptDisclaimer() {
+  if (document.getElementById('chk-skip').checked) {
+    localStorage.setItem('dbr_disclaimer_accepted', 'yes');
+  }
   localStorage.setItem('dbr_disclaimer_accepted', 'yes');
   window.location.href = _disclaimerTarget;
 }
+
+// כניסה חוזרת: אם chk1-5 כבר סומנו בעבר — הסתר אותם, הצג רק chk-skip
+(function applyReturnVisit() {
+  if (localStorage.getItem(CHK_DONE_KEY) === 'yes') {
+    ['chk1-row','chk2-row','chk3-row','chk4-row','chk5-row'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.style.display = 'none';
+    });
+    // סמן את כולם מאחורי הקלעים כדי שהכפתור יהיה פעיל
+    ['chk1','chk2','chk3','chk4','chk5'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.checked = true;
+    });
+    checkDisclaimer();
+    // הסתר גם לחצן "בחר הכל" ושורת ההסבר
+    var selectBtn = document.querySelector('[onclick="selectAllChk()"]');
+    if (selectBtn) selectBtn.style.display = 'none';
+  }
+}());
 
 // אם הגיעו עם redirect מדף פנימי — פתח הסכמה עם היעד
 (function() {
