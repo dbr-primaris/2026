@@ -391,27 +391,6 @@
     <!-- Path cards -->
     <div class="paths-grid">
 
-      <!-- מלבן: מפת המידע הרשמי -->
-      <div class="path-card" style="cursor:default;border:2px solid #0f766e;box-shadow:0 4px 20px rgba(15,118,110,.1);position:relative;">
-        <div class="path-title">
-          <button class="card-zoom-btn" onclick="cardZoom('official',-1)">−</button>
-          <span class="title-text" style="color:#0f4c43;">מפת המידע הרשמי</span>
-          <button class="card-zoom-btn" onclick="cardZoom('official',1)">+</button>
-        </div>
-        <div class="path-desc" id="official-desc" style="color:var(--text-muted)">
-          קישורים, רשתות חברתיות, קבוצות וואטסאפ ונושאים שהמועמדים בחרו להציג באתר הרשמי.<br><br>
-          לא מידע — אלא מפת נגישות מידע לבוחר/ת.
-        </div>
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px;">
-          <a href="dbr_P_01_official.html" onclick="event.stopPropagation();trackPath('official')" style="position:relative;z-index:2;display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:#e6f4f3;color:#0f766e;border:2px solid #0f766e;border-radius:10px;font-weight:800;font-size:.9rem;text-decoration:none;transition:transform .15s,box-shadow .15s;" onmouseover="this.style.transform='translateY(-1px)';this.style.boxShadow='0 4px 14px rgba(15,118,110,.28)'" onmouseout="this.style.transform='none';this.style.boxShadow='none'">⬅ להמשך למפת המידע הרשמי</a>
-        </div>
-        <div style="position:relative;z-index:2;margin-top:10px;padding:7px 10px;border-top:1px solid #c0ddd9;font-size:.82rem;color:#4a7d79;">
-          צפייה ישירה:
-          <a href="dbr_P_01_official_frame.html" onclick="event.stopPropagation();trackPath('official_frame')" style="color:#0f766e;font-weight:700;text-decoration:underline;">אתר המועמדים הרשמי של המפלגה ↗</a>
-        </div>
-        <a href="dbr_P_01_official.html" onclick="trackPath('official')" class="card-tap-zone" aria-label="מפת המידע הרשמי"></a>
-      </div>
-
       <div class="path-card" style="cursor:default;border:2px solid #2e7d32;box-shadow:0 4px 20px rgba(46,125,50,.1);">
         <div class="path-title">
           <button class="card-zoom-btn" onclick="cardZoom('shiryun',-1)">−</button>
@@ -452,6 +431,21 @@
         <div id="summary-desc" style="display:none;margin-top:6px;color:var(--text-main)"></div>
         <div style="margin-top:10px;padding:8px 12px;background:#fff8e1;border:1.5px solid #fbbf24;border-radius:8px;font-size:.88rem;color:#92400e;">
           <strong>שלב זה עדיין בפיתוח</strong> — יהיה זמין בקרוב.
+        </div>
+      </div>
+
+      <!-- מלבן: אתר המועמדים הרשמי -->
+      <div class="path-card" style="cursor:default;border:2px solid #0f766e;box-shadow:0 4px 20px rgba(15,118,110,.1);">
+        <div class="path-title">
+          <button class="card-zoom-btn" onclick="cardZoom('official',-1)">−</button>
+          <span class="title-text" style="color:#0f4c43;">אתר המועמדים הרשמי</span>
+          <button class="card-zoom-btn" onclick="cardZoom('official',1)">+</button>
+        </div>
+        <div class="path-desc" id="official-desc" style="color:var(--text-muted)">
+          מפלגת הדמוקרטים מציעה לכל חברה וחבר להכריע מי יהיו המועמדים שלה לכנסת הבאה. כל מי שיתפקדו עד ליום 12.7.2026 בשעה 24:00 יוכלו להצביע.<br><br>
+          אם ברצונכם לראות את המועמדים כפי שהם מציגים את עצמם באתר המפלגה, כנסו לאתר שם, הכירו את המועמדים. כנסו לקישורים, קראו והכירו את המועמדים המגוונים והמצוינים שהחליטו לקחת צעד אמיץ ולהציע את עצמם לרשימה. אנו שמחים וגאים בכולם.<br><br>
+          יחד נבנה דמוקרטיה חזקה וטובה יותר!<br><br>
+          <a href="dbr_P_01_official_frame.html" onclick="event.stopPropagation();trackPath('official_frame')" style="position:relative;z-index:2;color:#0f766e;font-weight:800;text-decoration:underline;">לצפייה באתר המפלגה — לחץ כאן</a>
         </div>
       </div>
 
