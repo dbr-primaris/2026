@@ -809,7 +809,11 @@
         savePrimerisState(primState);
         updateCard(id);
       } else {
-        // בחירה — עדכון הכרטיס במקומו, בלי סידור מחדש וקפיצת מסך
+        // בחירה — בדיקת מגבלה
+        if (primState.shiryun.length >= MAX_SHIRYUN) {
+          showToast('הגעת למקסימום ' + MAX_SHIRYUN + ' מועמדים');
+          return;
+        }
         primState.shiryun.unshift(id);
         recomputeSelected();
         savePrimerisState(primState);
@@ -833,9 +837,36 @@
       renderCounters();
     }
 
+    const MAX_SHIRYUN = 12;
+    const REQUIRED_SHIRYUN = 8;
+
     function saveAndReturn() {
+      const n = primState.shiryun.length;
+      if (n > REQUIRED_SHIRYUN) {
+        showOverLimitWarning(n);
+        return;
+      }
       savePrimerisState(primState);
       window.location.href = 'dbr_P_01_process.html';
+    }
+
+    function showOverLimitWarning(n) {
+      const extra = n - REQUIRED_SHIRYUN;
+      const el = document.getElementById('overlimit-modal');
+      document.getElementById('overlimit-msg').innerHTML =
+        `עד עתה בחרת <strong>${n} מועמדים</strong>, ${extra} יותר מעבר לשמונה הנדרשים.<br><br>` +
+        `בשלבים מאוחרים יותר בתהליך, תוכל לשנות ולהחליף, אבל בשלב הסיום תחזור לשמונה בלבד, על פי הנחיית הפריימריז.`;
+      el.style.display = 'flex';
+    }
+
+    function overlimitContinue() {
+      document.getElementById('overlimit-modal').style.display = 'none';
+      savePrimerisState(primState);
+      window.location.href = 'dbr_P_01_process.html';
+    }
+
+    function overlimitBack() {
+      document.getElementById('overlimit-modal').style.display = 'none';
     }
 
     const JPEG_NAMES = new Set([]);
@@ -908,7 +939,9 @@
       ]).size;
       const elSummary = document.getElementById('counter-summary');
       if (elSummary) {
-        elSummary.innerHTML = shiryunN > 0 ? `נבחרו <strong style="color:#2e7d4f">${shiryunN}</strong> מועמדים` : '';
+        elSummary.innerHTML = shiryunN > 0
+          ? `נבחרו <strong style="color:#2e7d4f">${shiryunN}</strong><span style="color:#5f6b7a;font-weight:600">/${MAX_SHIRYUN}</span> מועמדים`
+          : '';
       }
       const elFooter = document.getElementById('footer-selected');
       if (elFooter) elFooter.textContent = totalN;
@@ -1220,7 +1253,39 @@
       }
     }
 
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeCandModal(); });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        closeCandModal();
+        document.getElementById('overlimit-modal').style.display = 'none';
+      }
+    });
+
+    // ── Toast ──
+    function showToast(msg) {
+      let t = document.getElementById('shiryun-toast');
+      if (!t) {
+        t = document.createElement('div');
+        t.id = 'shiryun-toast';
+        t.style.cssText = 'position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#1f2933;color:#fff;padding:10px 22px;border-radius:12px;font-weight:700;font-size:.95rem;z-index:999;opacity:0;transition:opacity .2s;pointer-events:none;white-space:nowrap';
+        document.body.appendChild(t);
+      }
+      t.textContent = msg;
+      t.style.opacity = '1';
+      clearTimeout(t._timer);
+      t._timer = setTimeout(() => { t.style.opacity = '0'; }, 2400);
+    }
   </script>
+
+  <!-- ── מודל חריגת מגבלה ── -->
+  <div id="overlimit-modal" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(18,53,91,.55);align-items:center;justify-content:center;padding:20px">
+    <div style="max-width:480px;width:100%;background:#fff;border-radius:20px;box-shadow:0 24px 60px rgba(18,53,91,.28);padding:28px 26px 22px;text-align:center">
+      <div style="font-size:2rem;margin-bottom:12px">⚠️</div>
+      <div id="overlimit-msg" style="font-size:1rem;color:#1f2933;line-height:1.75;margin-bottom:22px"></div>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+        <button onclick="overlimitBack()" style="flex:1;min-width:130px;padding:11px 18px;border-radius:12px;border:1.5px solid #d7e3f3;background:#fff;color:#12355b;font-weight:800;font-size:.95rem;cursor:pointer;font-family:inherit">חזרה לעריכה</button>
+        <button onclick="overlimitContinue()" style="flex:1;min-width:130px;padding:11px 18px;border-radius:12px;border:none;background:#1d5fa7;color:#fff;font-weight:800;font-size:.95rem;cursor:pointer;font-family:inherit">המשך בכל זאת ←</button>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
