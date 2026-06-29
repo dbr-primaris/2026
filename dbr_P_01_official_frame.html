@@ -9,7 +9,11 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: Arial, "Noto Sans Hebrew", sans-serif; background: #f4f8ff; display: flex; flex-direction: column; height: 100dvh; }
 
+  /* ── סרגל עליון קבוע ── */
   .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -28,6 +32,7 @@
     color: #12355b;
     font-size: 1rem;
     text-decoration: none;
+    flex-shrink: 0;
   }
 
   .brand-mark {
@@ -50,6 +55,8 @@
     font-size: .8rem;
     color: #5f6b7a;
     font-weight: 600;
+    flex: 1;
+    justify-content: center;
   }
 
   .source-badge a {
@@ -58,10 +65,10 @@
     text-decoration: underline;
   }
 
-  .back-btn {
+  .close-btn {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 5px;
     padding: 6px 14px;
     background: #eaf3ff;
     color: #1d5fa7;
@@ -74,6 +81,7 @@
     flex-shrink: 0;
   }
 
+  /* ── iframe ── */
   .frame-wrap {
     flex: 1;
     position: relative;
@@ -87,6 +95,40 @@
     display: block;
   }
 
+  /* ── סרגל תחתון קבוע ── */
+  .bottombar {
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 16px;
+    background: white;
+    border-top: 1px solid #d7e3f3;
+    flex-shrink: 0;
+    gap: 12px;
+  }
+
+  .bottom-close-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 11px 32px;
+    background: #1d5fa7;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 900;
+    font-size: 1rem;
+    text-decoration: none;
+    cursor: pointer;
+    width: 100%;
+    max-width: 400px;
+  }
+
+  /* ── שגיאת iframe ── */
   .frame-error {
     display: none;
     position: absolute;
@@ -113,35 +155,47 @@
     text-decoration: none;
     font-size: .95rem;
   }
+
+  /* ── מובייל: הסתר טקסט המותג ── */
+  @media (max-width: 480px) {
+    .brand span:last-child { display: none; }
+    .source-badge { font-size: .75rem; }
+  }
 </style>
 </head>
 <body>
 
+  <!-- סרגל עליון -->
   <div class="topbar">
-    <a class="brand" href="dbr_P_01_index.html">
+    <a class="brand" href="dbr_P_01_process.html">
       <span class="brand-mark">ד.ב.ר</span>
       <span>דמוקרטים בוחרים רציונלית</span>
     </a>
     <div class="source-badge">
-      אתר רשמי:
-      <a href="https://democrats.org.il/candidates/" target="_blank" rel="noopener noreferrer">democrats.org.il ↗</a>
+      אתר רשמי:&nbsp;<a href="https://democrats.org.il/candidates/" target="_blank" rel="noopener noreferrer">democrats.org.il ↗</a>
     </div>
-    <a class="back-btn" href="dbr_P_01_index.html">⬅ חזרה</a>
+    <a class="close-btn" href="dbr_P_01_process.html">✕ סגור</a>
   </div>
 
+  <!-- iframe -->
   <div class="frame-wrap">
     <iframe
       id="official-frame"
       src="https://democrats.org.il/candidates/"
       title="אתר המועמדים הרשמי של מפלגת הדמוקרטים"
       loading="lazy"
-      onerror="showError()"
     ></iframe>
 
     <div class="frame-error" id="frame-error">
       <p>האתר הרשמי אינו נטען בתצוגה מוטמעת.<br>ניתן לפתוח אותו ישירות בלשונית חדשה.</p>
       <a href="https://democrats.org.il/candidates/" target="_blank" rel="noopener noreferrer">פתח את אתר המועמדים ↗</a>
+      <a href="dbr_P_01_process.html" style="background:#eaf3ff;color:#1d5fa7;border:1.5px solid #1d5fa7;margin-top:4px;">⬅ חזרה לד.ב.ר</a>
     </div>
+  </div>
+
+  <!-- סרגל תחתון קבוע -->
+  <div class="bottombar">
+    <a class="bottom-close-btn" href="dbr_P_01_process.html">⬅ חזרה למשחק ד.ב.ר</a>
   </div>
 
   <script>
@@ -149,11 +203,9 @@
       document.getElementById('frame-error').style.display = 'flex';
     }
 
-    // זיהוי אם ה-iframe נחסם (X-Frame-Options) — לא תמיד ניתן לזהות, אבל ננסה
     const iframe = document.getElementById('official-frame');
     iframe.addEventListener('load', function() {
       try {
-        // אם הדפדפן חסם, contentDocument יהיה null
         if (!iframe.contentDocument && !iframe.contentWindow) showError();
       } catch(e) {
         showError();
