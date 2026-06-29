@@ -210,13 +210,16 @@
       position: relative;
     }
 
-    /* אזור מגע — כל התיבה לחיצה */
+    /* אזור מגע — מתחת לשורת הכותרת (לא מכסה כפתורי זום) */
     .card-tap-zone {
       position: absolute;
-      inset: 0;
+      top: 52px;
+      left: 0;
+      right: 0;
+      bottom: 0;
       z-index: 1;
       cursor: pointer;
-      border-radius: var(--radius-medium);
+      border-radius: 0 0 var(--radius-medium) var(--radius-medium);
     }
     .card-tap-zone:hover { background: rgba(29,95,167,.05); }
 
@@ -387,6 +390,28 @@
 
     <!-- Path cards -->
     <div class="paths-grid">
+
+      <!-- מלבן: מפת המידע הרשמי -->
+      <div class="path-card" style="cursor:default;border:2px solid #0f766e;box-shadow:0 4px 20px rgba(15,118,110,.1);position:relative;">
+        <div class="path-title">
+          <button class="card-zoom-btn" onclick="cardZoom('official',-1)">−</button>
+          <span class="title-text" style="color:#0f4c43;">מפת המידע הרשמי</span>
+          <button class="card-zoom-btn" onclick="cardZoom('official',1)">+</button>
+        </div>
+        <div class="path-desc" id="official-desc" style="color:var(--text-muted)">
+          קישורים, רשתות חברתיות, קבוצות וואטסאפ ונושאים שהמועמדים בחרו להציג באתר הרשמי.<br><br>
+          לא מידע — אלא מפת נגישות מידע לבוחר/ת.
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px;">
+          <a href="dbr_P_01_official.html" onclick="event.stopPropagation();trackPath('official')" style="position:relative;z-index:2;display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:#e6f4f3;color:#0f766e;border:2px solid #0f766e;border-radius:10px;font-weight:800;font-size:.9rem;text-decoration:none;transition:transform .15s,box-shadow .15s;" onmouseover="this.style.transform='translateY(-1px)';this.style.boxShadow='0 4px 14px rgba(15,118,110,.28)'" onmouseout="this.style.transform='none';this.style.boxShadow='none'">⬅ להמשך למפת המידע הרשמי</a>
+        </div>
+        <div style="margin-top:10px;padding:7px 10px;border-top:1px solid #c0ddd9;font-size:.82rem;color:#4a7d79;">
+          מקור:
+          <a href="https://democrats.org.il/candidates/" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" style="color:#0f766e;font-weight:700;text-decoration:underline;">אתר המועמדים הרשמי של המפלגה ↗</a>
+        </div>
+        <a href="dbr_P_01_official.html" onclick="trackPath('official')" class="card-tap-zone" aria-label="מפת המידע הרשמי"></a>
+      </div>
+
       <div class="path-card" style="cursor:default;border:2px solid #2e7d32;box-shadow:0 4px 20px rgba(46,125,50,.1);">
         <div class="path-title">
           <button class="card-zoom-btn" onclick="cardZoom('shiryun',-1)">−</button>
@@ -401,12 +426,12 @@
       <div class="path-card" id="rec-card" style="cursor:default;border:2px solid #1d5fa7;box-shadow:0 4px 20px rgba(29,95,167,.1);position:relative;">
         <div class="path-title">
           <button class="card-zoom-btn" onclick="cardZoom('dbr',-1)">−</button>
-          <span class="title-text">משחק הבחירה</span>
+          <span class="title-text">משחקי סימולציה</span>
           <button class="card-zoom-btn" onclick="cardZoom('dbr',1)">+</button>
         </div>
         <div class="path-desc" id="dbr-card-desc">כאן יוצאים מנקודת מוצא מוכנה מראש: נושאים ( עם מועמדים מתאימים) או נבחרות שמערכות הבינה סיווגו על פי קריטריונים של אנשי הפרויקט ויועצים נוספים.<br>כל נבחרת/נושא מציגה את המועמדים המובילים שלה, כשאלה שבחרתם כבר ונמצאים בתצוגה - מודגשים. .<br>תוכלו לעבור בין הנבחרות או הנושאים השונים, כשהמועמדים שבחרתם עוברים אתכם. וכך ניתן לבחור מכל נבחרת או נושא את הראויים בעיניכם, ולבסוף להרכיב מהם את ה‑8 שלכם.</div>
         <a href="#" onclick="event.preventDefault();event.stopPropagation();tryRecommendation()" style="position:relative;z-index:2;display:inline-flex;align-items:center;justify-content:center;align-self:flex-end;margin-top:10px;width:36px;height:36px;background:var(--blue-soft);color:var(--blue-main);border:2px solid var(--blue-main);border-radius:50%;font-weight:900;font-size:1.2rem;text-decoration:none;box-shadow:0 2px 8px rgba(29,95,167,.18);transition:transform .15s,box-shadow .15s,background .15s;" onmouseover="this.style.transform='scale(1.12)';this.style.boxShadow='0 4px 14px rgba(29,95,167,.32)';this.style.background='#dceaff'" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 2px 8px rgba(29,95,167,.18)';this.style.background='var(--blue-soft)'">←</a>
-        <a href="#" onclick="event.preventDefault();tryRecommendation()" class="card-tap-zone" aria-label="משחק הבחירה"></a>
+        <a href="#" onclick="event.preventDefault();tryRecommendation()" class="card-tap-zone" aria-label="משחקי סימולציה"></a>
         <!-- hint חץ לבחירה עצמאית -->
         <div id="rec-hint" style="display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:82%;z-index:20;background:rgba(255,243,205,0.97);border:2px solid #f59e0b;border-radius:14px;padding:20px 16px 16px;text-align:center;pointer-events:none;box-shadow:0 4px 18px rgba(0,0,0,.15);flex-direction:column;align-items:center;justify-content:center;gap:8px;">
           <div style="font-size:1.25rem;font-weight:900;color:#92400e;line-height:1.4;">התחילו בבחירה עצמאית</div>
@@ -429,6 +454,7 @@
           <strong>שלב זה עדיין בפיתוח</strong> — יהיה זמין בקרוב.
         </div>
       </div>
+
     </div>
 
     <div style="text-align:center;margin-bottom:12px">
@@ -586,11 +612,12 @@
       renderAll();
     }
 
-    const cardZoomLevels = { shiryun: 0, dbr: 0, summary: 0 };
+    const cardZoomLevels = { shiryun: 0, dbr: 0, summary: 0, official: 0 };
     const cardDescIds = {
-      shiryun: ['shiryun-desc'],
-      dbr:     ['dbr-card-desc'],
-      summary: ['summary-static-desc', 'summary-desc']
+      shiryun:  ['shiryun-desc'],
+      dbr:      ['dbr-card-desc'],
+      summary:  ['summary-static-desc', 'summary-desc'],
+      official: ['official-desc']
     };
     const zoomFonts = ['.96rem', '1.06rem', '1.18rem', '1.32rem'];
     function cardZoom(card, dir) {
