@@ -2306,6 +2306,22 @@
       return '<span class="squad-dot" style="background:' + ramp[idx] + ';border:' + border + '"></span>';
     }
 
+    // ── חישוב combined בזמן ריצה (מקור אמת יחיד) ──
+    // combined = (1−weight) × זיקה + weight × (zccc×10)
+    // weight = resume_weight מהקונפיג · זיקה = main_teams · zccc = dbr_P_01_data.csv
+    // אופציה B: אם למועמד אין zccc — דירוג לפי הזיקה בלבד (weight אפקטיבי 0),
+    // כדי לא לקבור מועמד שעוד לא הורצה לו ריצת רזומה.
+    function computeCombined(squadId, row) {
+      const cfg  = squadConfig[squadId] || {};
+      let   w    = parseFloat(cfg.resume_weight || '0') || 0;
+      const aff  = parseInt(row[squadId] || '0', 10) || 0;
+      const zRaw = (flatDB[row.id1] || {})['zccc'];
+      const z    = parseFloat(zRaw);
+      if (w > 0 && (zRaw === undefined || zRaw === '' || isNaN(z))) w = 0;
+      const zc   = isNaN(z) ? 0 : z;
+      return (1 - w) * aff + w * (zc * 10);
+    }
+
     let inRankingView = false;
 
     let inRecTypePicker = true;  // true = מסך בחירת סוג המלצה מוצג
@@ -2357,6 +2373,10 @@
         if (h1) h1.childNodes[0].textContent = 'בחרו זווית התחלה ';
         const desc = document.getElementById('screen-desc');
         if (desc) desc.textContent = 'בחרו זווית התחלה — כל מסלול מציג דרך אחרת להכיר את המועמדים ו"לשחק" עם בחירתכם.';
+        // רענון שמות הבחירות בכרטיסי הנושאים — ייתכן שהבחירה השתנתה בתוך הטבלה
+        const _aiVisible = [...document.querySelectorAll('.team-card[data-rec-type="ai_squads"]')]
+          .some(c => c.style.display !== 'none');
+        if (_aiVisible && typeof highlightMyTopics === 'function') setTimeout(highlightMyTopics, 0);
       } else if (!inRecTypePicker) {
         inRecTypePicker = true;
         document.getElementById('team-picker').style.display = 'none';
@@ -2694,7 +2714,7 @@
         .map(r => ({
           name:     r.id1,
           value:    parseInt(r[squadId] || '0', 10),
-          combined: parseFloat(r[squadId + '_combined'] || '0') || 0,
+          combined: computeCombined(squadId, r),
           rank:     parseInt(r[squadId + '_rank'] || '0', 10)
         }))
         .filter(c => c.value > 0 && !droppedSet.has(c.name))
@@ -2827,7 +2847,7 @@
         .map(r => ({
           name:     r.id1,
           value:    parseInt(r[squadId] || '0', 10),
-          combined: parseFloat(r[squadId + '_combined'] || '0') || 0,
+          combined: computeCombined(squadId, r),
           rank:     parseInt(r[squadId + '_rank'] || '0', 10)
         }))
         .filter(c => c.value > 0 && !droppedSet.has(c.name))
@@ -3444,62 +3464,63 @@
     }
 
     function highlightMyTopics() {
+      const grid = document.querySelector('#team-picker .team-grid');
+      if (!grid) return;
       const myPicks = (loadState().shiryun || []);
-      if (!myPicks.length) return;
 
-      _loadTeamsCSV().then(db => {
-        const topicHits = {};
-        AI_SQUAD_IDS.forEach(sq => { topicHits[sq] = []; });
-
-        myPicks.forEach(name => {
-          const row = db[name]; if (!row) return;
-          AI_SQUAD_IDS.forEach(sq => {
-            const score = parseFloat(row[sq + '_combined'] || 0);
-            if (score >= 60) topicHits[sq].push({ name, score });
-          });
-        });
-        AI_SQUAD_IDS.forEach(sq => topicHits[sq].sort((a, b) => b.score - a.score));
-
-        const grid = document.querySelector('#team-picker .team-grid');
-        if (!grid) return;
-
-        grid.querySelectorAll('.team-card[data-rec-type="ai_squads"]').forEach(card => {
-          const m = (card.getAttribute('onclick') || '').match(/selectTeam\('([^']+)'\)/);
-          const sq = m ? m[1] : '';
-          const hits = topicHits[sq] || [];
-
-          card.classList.remove('topic-star');
-          card.querySelectorAll('.topic-my-badge,.topic-my-names,.topic-present-badge').forEach(e => e.remove());
-          if (!hits.length) return;
-
-          const nameEl = card.querySelector('.team-card-name');
-          if (!nameEl) return;
-
-          if (hits.length >= 2) {
-            card.classList.add('topic-star');
-            nameEl.insertAdjacentHTML('beforebegin',
-              '<div class="topic-my-badge">\u2605 ' + hits.length + ' \u05de\u05e0\u05d1\u05d7\u05e8\u05d9\u05da \u05db\u05d0\u05df</div>');
-            const chips = hits
-              .map(h => '<span class="topic-my-name-chip">' + shortName(h.name) + '</span>').join('');
-            nameEl.insertAdjacentHTML('afterend', '<div class="topic-my-names">' + chips + '</div>');
-          } else {
-            nameEl.insertAdjacentHTML('beforebegin',
-              '<div class="topic-present-badge">' + shortName(hits[0].name) + ' \u05db\u05d0\u05df</div>');
-          }
-        });
-
-        const allCards = [...grid.querySelectorAll('.team-card[data-rec-type="ai_squads"]')];
-        allCards.sort((a, b) => {
-          const ma = (a.getAttribute('onclick') || '').match(/selectTeam\('([^']+)'\)/);
-          const mb = (b.getAttribute('onclick') || '').match(/selectTeam\('([^']+)'\)/);
-          const ca = ma ? (topicHits[ma[1]] || []).length : 0;
-          const cb = mb ? (topicHits[mb[1]] || []).length : 0;
-          return cb - ca;
-        });
-        allCards.forEach(c => grid.appendChild(c));
-
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+      // \u05d7\u05d1\u05e8\u05d5\u05ea \u05d1\u05e0\u05d5\u05e9\u05d0 = \u05de\u05d9 \u05e9\u05d1\u05d0\u05de\u05ea \u05d1\u05d8\u05d1\u05dc\u05ea \u05d4\u05e0\u05d5\u05e9\u05d0 (top squad_size \u05dc\u05e4\u05d9 combined \u05d7\u05d9),
+      // \u05d6\u05d4\u05d4 \u05dc-renderSquad \u2014 \u05dc\u05d0 \u05e1\u05e3 \u226560 \u05d5\u05dc\u05d0 \u05d4\u05e2\u05de\u05d5\u05d3\u05d4 \u05d4\u05e7\u05e4\u05d5\u05d0\u05d4.
+      const topicHits = {};
+      const membersBySquad = {};
+      AI_SQUAD_IDS.forEach(sq => {
+        topicHits[sq] = [];
+        membersBySquad[sq] = squadInNames(sq);
       });
+      myPicks.forEach(name => {
+        const row = squadData[name]; if (!row) return;
+        AI_SQUAD_IDS.forEach(sq => {
+          if (!membersBySquad[sq].has(name)) return;   // \u05dc\u05d0 \u05d1\u05d8\u05d1\u05dc\u05ea \u05d4\u05e0\u05d5\u05e9\u05d0 \u2192 \u05dc\u05d0 \u05de\u05d5\u05e4\u05d9\u05e2
+          topicHits[sq].push({ name, score: computeCombined(sq, row) });
+        });
+      });
+      AI_SQUAD_IDS.forEach(sq => topicHits[sq].sort((a, b) => b.score - a.score));
+
+      grid.querySelectorAll('.team-card[data-rec-type="ai_squads"]').forEach(card => {
+        const m = (card.getAttribute('onclick') || '').match(/selectTeam\('([^']+)'\)/);
+        const sq = m ? m[1] : '';
+        const hits = topicHits[sq] || [];
+
+        card.classList.remove('topic-star');
+        card.querySelectorAll('.topic-my-badge,.topic-my-names,.topic-present-badge').forEach(e => e.remove());
+        if (!hits.length) return;
+
+        const nameEl = card.querySelector('.team-card-name');
+        if (!nameEl) return;
+
+        if (hits.length >= 2) {
+          card.classList.add('topic-star');
+          nameEl.insertAdjacentHTML('beforebegin',
+            '<div class="topic-my-badge">\u2605 ' + hits.length + ' \u05de\u05e0\u05d1\u05d7\u05e8\u05d9\u05da \u05db\u05d0\u05df</div>');
+          const chips = hits
+            .map(h => '<span class="topic-my-name-chip">' + shortName(h.name) + '</span>').join('');
+          nameEl.insertAdjacentHTML('afterend', '<div class="topic-my-names">' + chips + '</div>');
+        } else {
+          nameEl.insertAdjacentHTML('beforebegin',
+            '<div class="topic-present-badge">' + shortName(hits[0].name) + ' \u05db\u05d0\u05df</div>');
+        }
+      });
+
+      const allCards = [...grid.querySelectorAll('.team-card[data-rec-type="ai_squads"]')];
+      allCards.sort((a, b) => {
+        const ma = (a.getAttribute('onclick') || '').match(/selectTeam\('([^']+)'\)/);
+        const mb = (b.getAttribute('onclick') || '').match(/selectTeam\('([^']+)'\)/);
+        const ca = ma ? (topicHits[ma[1]] || []).length : 0;
+        const cb = mb ? (topicHits[mb[1]] || []).length : 0;
+        return cb - ca;
+      });
+      allCards.forEach(c => grid.appendChild(c));
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     (function() {
