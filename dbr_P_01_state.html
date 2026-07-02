@@ -1574,10 +1574,15 @@
           <div class="team-card-desc">מי לקח/ה את המשימה הרחבה של שוויון מגדרי — בדיבור ובמעשה: חקיקה, ארגון, מאבק ציבורי עקבי.</div>
           <div class="team-card-status active">✓ זמינה</div>
         </div>
-        <div class="team-card team-card--special" data-rec-type="special_topics" style="opacity:.55;cursor:default;pointer-events:none">
-          <div class="team-card-name">רווחה וסוציאל-דמוקרטיה</div>
-          <div class="team-card-desc">מחויבות למדינת רווחה, צמצום פערים, עבודה מאורגנת, שירותים ציבוריים וביטחון חברתי.</div>
-          <div class="team-card-status">בקרוב</div>
+        <div class="team-card team-card--special" data-rec-type="special_topics" onclick="selectTeam('democratic_protest')">
+          <div class="team-card-name">המחאה הדמוקרטית</div>
+          <div class="team-card-desc">מי לקח/ה חלק ממשי במחאה הדמוקרטית — ברחוב, בכנסת, בבתי המשפט ובחברה האזרחית — מאז ינואר 2023 ועד היום.</div>
+          <div class="team-card-status active">✓ זמינה</div>
+        </div>
+        <div class="team-card team-card--special" data-rec-type="special_topics" onclick="selectTeam('health_and_welfare')">
+          <div class="team-card-name">בריאות ורווחה</div>
+          <div class="team-card-desc">מומחיות ומעורבות ממשית בבריאות ורווחה — מערכת הבריאות, בריאות הנפש, סיעוד, מוגבלויות, עוני וביטחון סוציאלי.</div>
+          <div class="team-card-status active">✓ זמינה</div>
         </div>
       </div>
     </div>
@@ -1606,6 +1611,8 @@
               <option value="education">חינוך ואזרחות</option>
               <option value="human_rights_territories">זכויות אדם בשטחים</option>
               <option value="gender_equality">שוויון מגדרי</option>
+              <option value="democratic_protest">המחאה הדמוקרטית</option>
+              <option value="health_and_welfare">בריאות ורווחה</option>
             </select>
           </div>
         </div>
@@ -2255,6 +2262,8 @@
       hosen: 'building', security: 'building', environment: 'building', future: 'building',
       human_rights_territories: 'active',
       gender_equality: 'active',
+      democratic_protest: 'active',
+      health_and_welfare: 'active',
       education: 'active'
     };
     // מיפוי נבחרת → suffix בעמודות ה-CSV. נבחרת שאינה כאן משתמשת ב-'' (דבר1).
@@ -2283,8 +2292,9 @@
       next_generation: 'הדור הבא והצעירים',
       education: 'חינוך ואזרחות',
       human_rights_territories: 'זכויות אדם בשטחים',
-      welfare_social_democracy: 'רווחה וסוציאל-דמוקרטיה',
-      gender_equality: 'שוויון מגדרי'
+      health_and_welfare: 'בריאות ורווחה',
+      gender_equality: 'שוויון מגדרי',
+      democratic_protest: 'המחאה הדמוקרטית'
     };
 
     // ── נבחרות נושאיות — קונפיג + נתונים נטענים מ-main_teams ──
@@ -2439,7 +2449,7 @@
       else if (recType === 'imitation') rs.classList.add('rank-section--imitation');
     }
     // נבחרות "העמקה בנושאים ייחודיים" — מופרדות בתוך קבוצת הנושאיות בקו מקווקו
-    const SPECIAL_SQUADS = new Set(['human_rights_territories', 'welfare_social_democracy', 'gender_equality']);
+    const SPECIAL_SQUADS = new Set(['human_rights_territories', 'health_and_welfare', 'gender_equality', 'democratic_protest']);
     function isSpecialSquad(val) { return SPECIAL_SQUADS.has(val); }
 
     // סדר מחדש את הדרופדאון: ליבה → קו מקווקו → העמקה → קו מלא → סימולציות
@@ -3068,6 +3078,8 @@
 
       const kickerLabel = (activeSquad === 'human_rights_territories') ? 'סוג הפעולה בשטח'
         : (activeSquad === 'gender_equality') ? 'סוג המעורבות המגדרית'
+        : (activeSquad === 'democratic_protest') ? 'עומק המעורבות במחאה'
+        : (activeSquad === 'health_and_welfare') ? 'עומק המעורבות בבריאות ורווחה'
         : 'הנימוק לדירוג';
       const reasonHtml = note
         ? '<section class="modal-reason-card"><div class="modal-section-kicker">' + kickerLabel + '</div><p>' + escapeHtml(note) + '</p></section>'
