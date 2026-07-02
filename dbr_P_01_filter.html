@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<script>if(localStorage.getItem('dbr_disclaimer_accepted')!=='yes'){window.location.href='dbr_P_01_index.html?redirect='+encodeURIComponent(location.pathname.split('/').pop()+location.search)}</script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TJNJTZQF1F"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-TJNJTZQF1F');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>סינון סופי | ד.ב.ר</title>
+<style>
+  :root {
+    --blue-dark: #12355b;
+    --blue-main: #1d5fa7;
+    --blue-soft: #eaf3ff;
+    --blue-card: #f7fbff;
+    --green: #2e7d4f;
+    --green-soft: #e6f4eb;
+    --amber: #b45309;
+    --amber-soft: #fef3c7;
+    --text-main: #1f2933;
+    --text-muted: #5f6b7a;
+    --border-soft: #d7e3f3;
+    --white: #fff;
+    --shadow: 0 16px 38px rgba(18,53,91,.13);
+    --shadow-soft: 0 4px 16px rgba(18,53,91,.07);
+    --radius-large: 24px;
+    --radius-medium: 18px;
+    --radius-small: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: Arial, "Noto Sans Hebrew", sans-serif;
+    background: linear-gradient(180deg, #f4f8ff 0%, #fff 60%);
+    color: var(--text-main);
+    line-height: 1.6;
+    min-height: 100vh;
+    padding-bottom: 80px;
+  }
+
+  /* ── Topbar ── */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px 8px;
+    border-bottom: 1px solid var(--border-soft);
+    background: var(--white);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    gap: 12px;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--blue-dark);
+    font-weight: 800;
+    font-size: 1rem;
+    flex-shrink: 1;
+    min-width: 0;
+  }
+  .brand-mark {
+    flex-shrink: 0;
+    height: 28px;
+    padding: 0 9px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #3730a3, #1e1b4b);
+    display: grid;
+    place-items: center;
+    color: white;
+    font-size: .84rem;
+    font-weight: 900;
+    letter-spacing: .06em;
+    box-shadow: 0 4px 14px rgba(55,48,163,.3);
+  }
+  .brand-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* ── Progress bar (sticky below topbar) ── */
+  .progress-bar {
+    background: var(--white);
+    border-bottom: 1px solid var(--border-soft);
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    position: sticky;
+    top: 53px;
+    z-index: 40;
+    box-shadow: 0 2px 8px rgba(18,53,91,.06);
+  }
+  .progress-label {
+    font-size: .95rem;
+    font-weight: 700;
+    color: var(--blue-dark);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .vadai-count {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--blue-main);
+    color: white;
+    border-radius: 999px;
+    padding: 2px 14px;
+    font-size: 1rem;
+    font-weight: 900;
+    min-width: 70px;
+    justify-content: center;
+    transition: background .2s;
+  }
+  .vadai-count.full { background: #16a34a; }
+  .vadai-count.over { background: #dc2626; }
+  .done-btn {
+    flex-shrink: 0;
+    background: var(--blue-main);
+    color: white;
+    border: none;
+    border-radius: 999px;
+    padding: 8px 22px;
+    font-size: .95rem;
+    font-weight: 800;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background .15s, transform .1s;
+    box-shadow: 0 4px 14px rgba(29,95,167,.3);
+  }
+  .done-btn:hover { background: var(--blue-dark); transform: translateY(-1px); }
+  .done-btn:disabled { background: #94a3b8; box-shadow: none; cursor: default; transform: none; }
+
+  /* ── Page layout ── */
+  .page { max-width: 600px; margin: 0 auto; padding: 0 16px; }
+
+  /* ── Section headers ── */
+  .zone-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 18px 0 10px;
+  }
+  .zone-title {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--blue-dark);
+  }
+  .zone-badge {
+    font-size: .78rem;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .zone-badge.vadai-badge { background: var(--blue-soft); color: var(--blue-main); }
+  .zone-badge.pending-badge { background: #f1f5f9; color: var(--text-muted); }
+
+  /* ── Candidate cards ── */
+  .candidate-slot {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-radius: var(--radius-small);
+    border: 1.5px solid var(--border-soft);
+    background: var(--white);
+    margin-bottom: 8px;
+    transition: border-color .15s, background .15s, box-shadow .15s, transform .15s;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    position: relative;
+    overflow: hidden;
+  }
+  .candidate-slot:active { transform: scale(.985); }
+  .candidate-slot:hover { box-shadow: var(--shadow-soft); border-color: #b0c8e8; }
+
+  /* Vadai state */
+  .candidate-slot.is-vadai {
+    border-color: var(--blue-main);
+    background: var(--blue-soft);
+  }
+  .candidate-slot.is-vadai:hover { border-color: var(--blue-dark); box-shadow: 0 4px 16px rgba(29,95,167,.18); }
+
+  /* Slot number */
+  .slot-num {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 2px solid var(--border-soft);
+    background: #f8fafc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .78rem;
+    font-weight: 900;
+    color: var(--text-muted);
+    transition: border-color .15s, background .15s, color .15s;
+  }
+  .is-vadai .slot-num {
+    border-color: var(--blue-main);
+    background: var(--blue-main);
+    color: white;
+  }
+
+  /* Photo */
+  .slot-photo {
+    flex-shrink: 0;
+    width: 52px;
+    height: 64px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid var(--border-soft);
+    background: #e8eff8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    line-height: 1;
+    transition: border-color .15s;
+  }
+  .slot-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .is-vadai .slot-photo { border-color: var(--blue-main); }
+
+  /* Name & meta */
+  .slot-info { flex: 1; min-width: 0; }
+  .slot-name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--blue-dark);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color .15s;
+  }
+  .is-vadai .slot-name { font-weight: 800; }
+  .slot-tags {
+    display: flex;
+    gap: 5px;
+    margin-top: 4px;
+    flex-wrap: wrap;
+  }
+  .tag {
+    font-size: .72rem;
+    font-weight: 700;
+    padding: 1px 8px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .tag-shiryun { background: var(--amber-soft); color: var(--amber); }
+  .tag-dbr     { background: var(--blue-soft);  color: var(--blue-main); }
+
+  /* Action icon */
+  .slot-action {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.05rem;
+    font-weight: 900;
+    transition: transform .12s, box-shadow .12s;
+    pointer-events: none;
+  }
+  .slot-action.promote {
+    border-color: var(--blue-main);
+    color: var(--blue-main);
+    background: var(--blue-soft);
+  }
+  .slot-action.demote {
+    border-color: #94a3b8;
+    color: #64748b;
+    background: #f1f5f9;
+  }
+  .candidate-slot:hover .slot-action { transform: scale(1.15); box-shadow: 0 2px 8px rgba(0,0,0,.12); }
+
+  /* ── Dividing line ── */
+  .cut-line {
+    position: relative;
+    margin: 6px 0 4px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .cut-line::before, .cut-line::after {
+    content: '';
+    flex: 1;
+    height: 2px;
+    background: var(--blue-main);
+    opacity: .35;
+    border-radius: 2px;
+  }
+  .cut-label {
+    flex-shrink: 0;
+    font-size: .78rem;
+    font-weight: 800;
+    color: var(--blue-main);
+    opacity: .7;
+    white-space: nowrap;
+    letter-spacing: .04em;
+  }
+
+  /* ── Empty states ── */
+  .empty-zone {
+    text-align: center;
+    padding: 22px 16px;
+    border: 2px dashed var(--border-soft);
+    border-radius: var(--radius-small);
+    color: var(--text-muted);
+    font-size: .9rem;
+    margin-bottom: 8px;
+  }
+
+  /* ── Toast ── */
+  #toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--blue-dark);
+    color: white;
+    padding: 10px 22px;
+    border-radius: 999px;
+    font-size: .92rem;
+    font-weight: 700;
+    opacity: 0;
+    transition: opacity .2s, transform .2s;
+    z-index: 200;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ── Empty-list screen (no candidates at all) ── */
+  .no-picks-screen {
+    max-width: 400px;
+    margin: 60px auto;
+    text-align: center;
+    padding: 0 24px;
+  }
+  .no-picks-screen h2 { font-size: 1.4rem; color: var(--blue-dark); margin-bottom: 12px; }
+  .no-picks-screen p { color: var(--text-muted); font-size: .95rem; line-height: 1.7; }
+  .back-link {
+    display: inline-block;
+    margin-top: 24px;
+    padding: 10px 28px;
+    background: var(--blue-main);
+    color: white;
+    border-radius: 999px;
+    font-weight: 800;
+    text-decoration: none;
+    font-size: .95rem;
+  }
+
+  /* ── Info hint ── */
+  .page-intro {
+    padding: 14px 0 4px;
+    font-size: .88rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 480px) {
+    .brand-label { display: none; }
+    .slot-name { font-size: .92rem; }
+    .slot-photo { width: 44px; height: 56px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── Topbar ── -->
+<header class="topbar">
+  <a class="brand" href="dbr_P_01_index.html">
+    <span class="brand-mark">ד.ב.ר</span>
+    <span class="brand-label">דמוקרטים בוחרים רציונלית</span>
+  </a>
+  <a href="dbr_P_01_process.html" style="font-size:1.8rem;text-decoration:none;line-height:1;flex-shrink:0" title="חזרה">⬅️</a>
+</header>
+
+<!-- ── Progress bar ── -->
+<div class="progress-bar">
+  <div class="progress-label">
+    <span>פתק הבחירה שלי:</span>
+    <span class="vadai-count" id="vadai-count">0/8</span>
+  </div>
+  <button class="done-btn" id="done-btn" onclick="finishAndGo()" disabled>סיום ←</button>
+</div>
+
+<!-- ── Main content ── -->
+<div class="page">
+
+  <!-- no-picks fallback (hidden by default, shown via JS) -->
+  <div class="no-picks-screen" id="no-picks-screen" style="display:none">
+    <div style="font-size:3rem;margin-bottom:16px">🗳️</div>
+    <h2>עוד לא בחרת מועמדים</h2>
+    <p>כדי להגיע לשלב הסינון, קודם כל בחרי מועמדים בשלב הבחירה העצמאית או במשחקי הסימולציה.</p>
+    <a class="back-link" href="dbr_P_01_process.html">חזרה לתהליך</a>
+  </div>
+
+  <!-- main filter UI (hidden until JS populates it) -->
+  <div id="filter-ui" style="display:none">
+
+    <p class="page-intro">
+      סמני עד 8 מועמדים לפתק הבחירה הסופי. לחצי על מועמד/ת להוסיף או להוציא.
+    </p>
+
+    <!-- ── Zone A: ודאיים ── -->
+    <div class="zone-header">
+      <span class="zone-title">בפתק הבחירה שלי</span>
+      <span class="zone-badge vadai-badge" id="vadai-zone-badge">0 מועמדים</span>
+    </div>
+    <div id="vadai-list"></div>
+
+    <!-- ── Dividing line ── -->
+    <div class="cut-line">
+      <span class="cut-label">— קו ההכרעה —</span>
+    </div>
+
+    <!-- ── Zone B: עדיין שוקל/ת ── -->
+    <div class="zone-header" style="padding-top:12px">
+      <span class="zone-title">עדיין שוקל/ת</span>
+      <span class="zone-badge pending-badge" id="pending-zone-badge">0 מועמדים</span>
+    </div>
+    <div id="pending-list"></div>
+
+  </div>
+</div>
+
+<!-- ── Toast ── -->
+<div id="toast"></div>
+
+<script>
+  // ═══════════════════════════════════════════
+  //  State
+  // ═══════════════════════════════════════════
+  const STATE_KEY = 'primeris_state_v1';
+  const MAX_VADAI = 8;
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(STATE_KEY);
+      return raw ? JSON.parse(raw) : {};
+    } catch(e) { return {}; }
+  }
+
+  function saveState(s) {
+    try {
+      s.meta = s.meta || {};
+      s.meta.last_updated = new Date().toISOString();
+      localStorage.setItem(STATE_KEY, JSON.stringify(s));
+    } catch(e) {}
+  }
+
+  let primState = loadState();
+
+  // ═══════════════════════════════════════════
+  //  Image helpers (copied from shiryun page)
+  // ═══════════════════════════════════════════
+  const JPEG_NAMES = new Set([]);
+  const IMAGE_OVERRIDE = {
+    'אבתיסאם מראענה-מנוחין': 'אבתיסאם_מראענה-מנוחין',
+    'מהרטה ברוך רון':        'מהרטה_ברוך-רון',
+    'ענבל וורטמן שהם':      'ענבל_וורטמן_שהם',
+    'לי הופמן אגיב':         'לי_הופמן-אגיב',
+    'אמיר חניפס':            "אמיר_ח'ניפס",
+    'איילת השחר סיידוף':    'איילת-השחר_סיידוף',
+    'ענבר בזק':              'ענבר_בזק',
+    'רותם סיון הופמן':       'רותם_סיון_הופמן',
+  };
+  const WIKI_PHOTOS = {
+    'גלעד קריב': 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Gilad_Kariv_%28SHL_9093%29.jpg/250px-Gilad_Kariv_%28SHL_9093%29.jpg',
+    'מיכל רוזין': 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Michal_Rozin_%D7%9E%D7%99%D7%9B%D7%9C_%D7%A8%D7%95%D7%96%D7%99%D7%9F.jpg/250px-Michal_Rozin_%D7%9E%D7%99%D7%9B%D7%9C_%D7%A8%D7%95%D7%96%D7%99%D7%9F.jpg',
+    'מוסי רז': 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Mossi_Raz_%28SHL_9237%29.jpg/250px-Mossi_Raz_%28SHL_9237%29.jpg',
+    'יעל כהן-פארן': 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Yael_Cohen_Paran_%28IMG_0412%29.jpg/250px-Yael_Cohen_Paran_%28IMG_0412%29.jpg',
+    'אמילי מואטי': 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Emilie_Moatti_%28SHL_8044%29.jpg/250px-Emilie_Moatti_%28SHL_8044%29.jpg',
+    'אבתיסאם מראענה-מנוחין': 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Ibtisam_Maraana_MK_2022.jpg/250px-Ibtisam_Maraana_MK_2022.jpg',
+    'אורי זכי': 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/UriZaki_125.jpg/250px-UriZaki_125.jpg',
+    'ערן עציון': 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Eran_Etzion.jpg/250px-Eran_Etzion.jpg',
+    'נמרוד שפר': 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Tat-Aluf_Nimrod_Shefer_1.jpg/250px-Tat-Aluf_Nimrod_Shefer_1.jpg',
+    'תומר אביטל': 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Tomer_Avital_-_Israeli_Journalist_-_2024.jpg/250px-Tomer_Avital_-_Israeli_Journalist_-_2024.jpg',
+  };
+
+  function localImageUrl(name) {
+    const base = IMAGE_OVERRIDE[name] || name.replace(/ /g, '_');
+    const ext = JPEG_NAMES.has(name) ? '.jpg' : '.webp';
+    return 'images_new/' + base + ext;
+  }
+
+  function imgSrc(name) {
+    return localImageUrl(name);
+  }
+
+  function imgFallback(name) {
+    if (WIKI_PHOTOS[name]) {
+      return `this.src='${WIKI_PHOTOS[name]}';this.onerror=function(){this.outerHTML='<span style="font-size:2rem">👤</span>'}`;
+    }
+    return `this.outerHTML='<span style="font-size:2rem">👤</span>'`;
+  }
+
+  function escapeHtml(s) {
+    return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  // ═══════════════════════════════════════════
+  //  Build candidate list from state
+  // ═══════════════════════════════════════════
+  function buildCandidateList() {
+    const shiryun  = Array.isArray(primState.shiryun)   ? primState.shiryun   : [];
+    const dbrPicks = Array.isArray(primState.dbr_picks)  ? primState.dbr_picks : [];
+
+    // Union: shiryun first, then dbr-only
+    const seen = new Set();
+    const all  = [];
+    shiryun.forEach(n  => { if (!seen.has(n))  { seen.add(n);  all.push(n); } });
+    dbrPicks.forEach(n => { if (!seen.has(n))  { seen.add(n);  all.push(n); } });
+
+    return all;   // array of names in original pick order
+  }
+
+  function getVadai() {
+    return Array.isArray(primState.vadai) ? [...primState.vadai] : [];
+  }
+
+  function isFromShiryun(name) {
+    return Array.isArray(primState.shiryun) && primState.shiryun.includes(name);
+  }
+  function isFromDbr(name) {
+    return Array.isArray(primState.dbr_picks) && primState.dbr_picks.includes(name);
+  }
+
+  // ═══════════════════════════════════════════
+  //  Render
+  // ═══════════════════════════════════════════
+  function render() {
+    const all    = buildCandidateList();
+    const vadai  = getVadai();
+
+    if (all.length === 0) {
+      document.getElementById('no-picks-screen').style.display = '';
+      document.getElementById('filter-ui').style.display = 'none';
+      return;
+    }
+    document.getElementById('no-picks-screen').style.display = 'none';
+    document.getElementById('filter-ui').style.display = '';
+
+    // Split into vadai (in order of vadai array) and pending (rest)
+    const vadaiSet   = new Set(vadai);
+    const vadaiList  = vadai.filter(n => all.includes(n)); // only if still in pool
+    const pendingList = all.filter(n => !vadaiSet.has(n));
+
+    // ── Vadai zone ──
+    const vadaiEl = document.getElementById('vadai-list');
+    if (vadaiList.length === 0) {
+      vadaiEl.innerHTML = '<div class="empty-zone">לחצי על מועמד/ת מהרשימה למטה כדי להוסיף לפתק</div>';
+    } else {
+      vadaiEl.innerHTML = vadaiList.map((name, i) => cardHTML(name, i + 1, true)).join('');
+    }
+
+    // ── Pending zone ──
+    const pendingEl = document.getElementById('pending-list');
+    if (pendingList.length === 0) {
+      pendingEl.innerHTML = '<div class="empty-zone">כל המועמדים שלך כבר בפתק הבחירה 🎉</div>';
+    } else {
+      pendingEl.innerHTML = pendingList.map((name, i) => cardHTML(name, null, false)).join('');
+    }
+
+    // ── Badges ──
+    document.getElementById('vadai-zone-badge').textContent  = vadaiList.length  + ' מועמדים';
+    document.getElementById('pending-zone-badge').textContent = pendingList.length + ' מועמדים';
+
+    // ── Progress counter ──
+    const countEl = document.getElementById('vadai-count');
+    countEl.textContent = vadaiList.length + '/' + MAX_VADAI;
+    countEl.className = 'vadai-count' +
+      (vadaiList.length === MAX_VADAI ? ' full' :
+       vadaiList.length  > MAX_VADAI  ? ' over' : '');
+
+    // ── Done button ──
+    document.getElementById('done-btn').disabled = (vadaiList.length === 0);
+  }
+
+  function cardHTML(name, position, isVadai) {
+    const fromShiryun = isFromShiryun(name);
+    const fromDbr     = isFromDbr(name);
+    const tags = [];
+    if (fromShiryun) tags.push('<span class="tag tag-shiryun">★ בחירה עצמאית</span>');
+    if (fromDbr)     tags.push('<span class="tag tag-dbr">● סימולציה</span>');
+
+    const numHtml = position
+      ? `<div class="slot-num">${position}</div>`
+      : `<div class="slot-num" style="opacity:.3">•</div>`;
+
+    const actionIcon = isVadai
+      ? `<div class="slot-action demote" title="הוצא מהפתק">×</div>`
+      : `<div class="slot-action promote" title="הוסף לפתק">↑</div>`;
+
+    return `
+      <div class="candidate-slot${isVadai ? ' is-vadai' : ''}"
+           onclick="toggleVadai('${escapeHtml(name)}')"
+           title="${isVadai ? 'לחצי להוצאה מהפתק' : 'לחצי להוספה לפתק'}">
+        ${numHtml}
+        <div class="slot-photo">
+          <img src="${escapeHtml(imgSrc(name))}"
+               alt="${escapeHtml(name)}"
+               onerror="${escapeHtml(imgFallback(name))}">
+        </div>
+        <div class="slot-info">
+          <div class="slot-name">${escapeHtml(name)}</div>
+          <div class="slot-tags">${tags.join('')}</div>
+        </div>
+        ${actionIcon}
+      </div>`;
+  }
+
+  // ═══════════════════════════════════════════
+  //  Toggle vadai
+  // ═══════════════════════════════════════════
+  function toggleVadai(name) {
+    if (!Array.isArray(primState.vadai)) primState.vadai = [];
+
+    const idx = primState.vadai.indexOf(name);
+    if (idx >= 0) {
+      // Remove from vadai
+      primState.vadai.splice(idx, 1);
+    } else {
+      // Add to vadai
+      if (primState.vadai.length >= MAX_VADAI) {
+        showToast('אפשר לסמן עד ' + MAX_VADAI + ' מועמדים בפתק');
+        return;
+      }
+      primState.vadai.push(name);
+    }
+
+    saveState(primState);
+    render();
+
+    // GA event
+    try { gtag('event', 'filter_toggle', { name, action: idx >= 0 ? 'remove' : 'add' }); } catch(e) {}
+  }
+
+  // ═══════════════════════════════════════════
+  //  Toast
+  // ═══════════════════════════════════════════
+  let toastTimer;
+  function showToast(msg) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove('show'), 2500);
+  }
+
+  // ═══════════════════════════════════════════
+  //  Finish
+  // ═══════════════════════════════════════════
+  function finishAndGo() {
+    saveState(primState);
+    try { gtag('event', 'filter_done', { vadai_count: (primState.vadai || []).length }); } catch(e) {}
+    window.location.href = 'dbr_P_01_process.html';
+  }
+
+  // ═══════════════════════════════════════════
+  //  Init
+  // ═══════════════════════════════════════════
+  render();
+</script>
+</body>
+</html>

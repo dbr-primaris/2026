@@ -310,8 +310,8 @@
     }
 
     .candidate-card.selected .photo-wrap {
-      border-color: var(--green);
-      box-shadow: 0 0 0 3px rgba(46,125,79,0.2);
+      border-color: var(--blue-main);
+      box-shadow: 0 0 0 3px rgba(29,95,167,0.2);
     }
 
     .photo-wrap img {
@@ -329,7 +329,7 @@
       line-height: 1.3;
     }
 
-    .candidate-card.selected .candidate-name { color: var(--green); }
+    .candidate-card.selected .candidate-name { color: var(--blue-main); }
 
     .card-btns {
       display: flex;
@@ -340,7 +340,7 @@
       margin-top: 2px;
     }
 
-    .btn-pick, .btn-shiryun {
+    .btn-pick {
       flex: 1;
       padding: 7px 6px;
       border-radius: 999px;
@@ -353,20 +353,40 @@
       color: var(--blue-dark);
       transition: all 0.15s ease;
     }
+    .btn-pick:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
 
-    .btn-pick.active {
-      background: #fffde7;
-      color: #b45309;
+    /* ── כפתור מחזורי: בחר / נבחר / ודאי ── */
+    .btn-select {
+      flex: 1;
+      padding: 7px 6px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      cursor: pointer;
+      font-family: inherit;
+      border: 1.5px solid var(--border-soft);
+      background: white;
+      color: var(--blue-dark);
+      transition: all 0.15s ease;
+    }
+    .btn-select.selected {
+      background: var(--blue-main);
+      color: #fff;
+      border-color: var(--blue-dark);
+    }
+    .btn-select.vadai {
+      background: #b45309;
+      color: #fff;
+      border-color: #92400e;
+    }
+    .btn-select:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+
+    .candidate-card.vadai .photo-wrap {
       border-color: #f59e0b;
+      box-shadow: 0 0 0 3px rgba(245,158,11,0.25);
     }
-
-    .btn-shiryun.selected {
-      background: var(--green-soft);
-      color: var(--green);
-      border-color: var(--green-border);
-    }
-
-    .btn-pick:hover, .btn-shiryun:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .candidate-card.vadai .candidate-name { color: #b45309; }
+    .photo-check-gold { background: #b45309 !important; }
 
     .candidate-card.dbr-picked .photo-wrap {
       border-color: var(--blue-main);
@@ -420,7 +440,7 @@
       justify-content: center;
       box-shadow: 0 2px 6px rgba(0,0,0,.2);
     }
-    .photo-check-green { background: var(--green) !important; }
+    .photo-check-green { background: var(--blue-main) !important; }
 
 
     /* ============ Sticky footer ============ */
@@ -736,6 +756,7 @@
     function ensureArrays() {
       if (!Array.isArray(primState.shiryun))   primState.shiryun   = [];
       if (!Array.isArray(primState.dbr_picks)) primState.dbr_picks = [];
+      if (!Array.isArray(primState.vadai))     primState.vadai     = [];
     }
 
     function recomputeSelected() {
@@ -748,15 +769,20 @@
 
     function isShiryun(id)  { return primState.shiryun.includes(id); }
     function isDbr(id)      { return primState.dbr_picks.includes(id); }
+    function isVadai(id)    { return Array.isArray(primState.vadai) && primState.vadai.includes(id); }
     function isPicked(id)   { return (primState.selected || []).includes(id); }
 
+    function selectBtnState(id) {
+      if (isVadai(id))    return { cls: 'btn-select vadai',    txt: '★ ודאי' };
+      if (isShiryun(id))  return { cls: 'btn-select selected',  txt: 'נבחר ✓' };
+      return                     { cls: 'btn-select',            txt: 'בחר'    };
+    }
+
     function cardButtonsHTML(id) {
-      const sh = isShiryun(id);
+      const s = selectBtnState(id);
       return `<div class="card-btns">`
         + `<button class="btn-pick" onclick="event.stopPropagation();openDossier('${escapeHtml(id)}')">פרופיל</button>`
-        + (sh
-          ? `<button class="btn-shiryun selected" onclick="toggleShiryun('${escapeHtml(id)}')">בטל</button>`
-          : `<button class="btn-shiryun" onclick="toggleShiryun('${escapeHtml(id)}')">בחר</button>`)
+        + `<button class="${s.cls}" onclick="event.stopPropagation();cycleSelection('${escapeHtml(id)}')">${s.txt}</button>`
         + `</div>`;
     }
 
@@ -783,13 +809,16 @@
       const sel = isShiryun(id);
       const picked = isPicked(id);
       const dbr = isDbr(id);
-      card.className = 'candidate-card' + (sel ? ' selected' : dbr ? ' dbr-picked' : '');
+      const vd = isVadai(id);
+      card.className = 'candidate-card' + (vd ? ' vadai' : sel ? ' selected' : dbr ? ' dbr-picked' : '');
 
       /* עדכון סימן על התמונה */
       const pw = card.querySelector('.photo-wrap');
       const existingCheck = pw.querySelector('.photo-check');
       if (existingCheck) existingCheck.remove();
-      if (sel) {
+      if (vd) {
+        pw.insertAdjacentHTML('beforeend', '<div class="photo-check photo-check-gold">★</div>');
+      } else if (sel) {
         pw.insertAdjacentHTML('beforeend', '<div class="photo-check photo-check-green">✓</div>');
       }
       pw.title = sel ? 'הסר מהרשימה' : 'בחר';
@@ -804,6 +833,7 @@
       if (wasShiryun) {
         // ביטול — רק עדכון הכרטיס במקומו, ללא סידור מחדש
         primState.shiryun = primState.shiryun.filter(x => x !== id);
+        primState.vadai   = (primState.vadai || []).filter(x => x !== id);  // הסרה גם מודאי
         primState.selected = (primState.selected || []).filter(x => x !== id);
         recomputeSelected();
         savePrimerisState(primState);
@@ -824,6 +854,37 @@
           card.addEventListener('animationend', () => card.classList.remove('pop'), { once: true });
         }
       }
+      renderCounters();
+    }
+
+    function cycleSelection(id) {
+      ensureArrays();
+      if (!isShiryun(id)) {
+        // בחר: הוסף לשריון
+        if (primState.shiryun.length >= MAX_SHIRYUN) {
+          showToast('הגעת למקסימום ' + MAX_SHIRYUN + ' מועמדים');
+          return;
+        }
+        primState.shiryun.unshift(id);
+        recomputeSelected();
+        const card = document.querySelector(`.candidate-card[data-id="${CSS.escape(id)}"]`);
+        if (card) { card.classList.add('pop'); card.addEventListener('animationend', () => card.classList.remove('pop'), { once: true }); }
+      } else if (!isVadai(id)) {
+        // נבחר → ודאי
+        if (primState.vadai.length >= 8) {
+          showToast('אפשר לסמן עד 8 ודאים');
+          return;
+        }
+        primState.vadai.push(id);
+      } else {
+        // ודאי → בטל הכל
+        primState.shiryun = primState.shiryun.filter(x => x !== id);
+        primState.vadai   = primState.vadai.filter(x => x !== id);
+        primState.selected = (primState.selected || []).filter(x => x !== id);
+        recomputeSelected();
+      }
+      savePrimerisState(primState);
+      updateCard(id);
       renderCounters();
     }
 
@@ -1029,7 +1090,8 @@
         const sel = isShiryun(c.id);
         const picked = isPicked(c.id);
         const dbr = isDbr(c.id);
-        const cardCls = sel ? ' selected' : picked ? ' picked' : dbr ? ' dbr-picked' : '';
+        const vd = isVadai(c.id);
+        const cardCls = vd ? ' vadai' : sel ? ' selected' : picked ? ' picked' : dbr ? ' dbr-picked' : '';
         return `
           <div class="candidate-card${cardCls}" data-id="${escapeHtml(c.id)}">
             <div class="photo-wrap" onclick="openDossier('${escapeHtml(c.id)}')" style="cursor:pointer" title="לפרופיל המועמד/ת">
@@ -1038,7 +1100,7 @@
                      ? `this.src='${escapeHtml(WIKI_PHOTOS[c.name])}';this.onerror=function(){this.outerHTML='<span style=\\'font-size:3rem\\'>${c.gender==='נשים'?'👩':'👨'}</span>'}`
                      : `this.outerHTML='<span style=\\'font-size:3rem\\'>${c.gender==='נשים'?'👩':'👨'}</span>'`}"
                    style="width:100%;height:100%;object-fit:cover">
-              ${sel ? '<div class="photo-check photo-check-green">✓</div>' : picked ? '<div class="photo-check">?</div>' : ''}
+              ${isVadai(c.id) ? '<div class="photo-check photo-check-gold">★</div>' : sel ? '<div class="photo-check photo-check-green">✓</div>' : picked ? '<div class="photo-check">?</div>' : ''}
             </div>
             <div style="display:flex;align-items:center;justify-content:center;padding:2px 8px 1px">
               <span class="candidate-name" onclick="openDossier('${escapeHtml(c.id)}')" style="margin:0;padding:0;cursor:pointer">${escapeHtml(displayName(c.name))}</span>
@@ -1242,14 +1304,18 @@
     }
 
     function cmToggleShiryun(id) {
-      toggleShiryun(id);
-      const sel = isShiryun(id);
+      cycleSelection(id);
       const b = document.getElementById('cm-btn-shiryun');
       if (b) {
-        b.textContent = sel ? 'בטל בחר' : 'בחר';
-        b.style.background = sel ? '#e6f4eb' : '#fff';
-        b.style.color = sel ? '#2e7d4f' : '#12355b';
-        b.style.borderColor = sel ? '#b8dcc5' : '#d7e3f3';
+        const s = selectBtnState(id);
+        b.textContent = s.txt;
+        if (isVadai(id)) {
+          b.style.background = '#b45309'; b.style.color = '#fff'; b.style.borderColor = '#92400e';
+        } else if (isShiryun(id)) {
+          b.style.background = '#1d5fa7'; b.style.color = '#fff'; b.style.borderColor = '#12355b';
+        } else {
+          b.style.background = '#fff'; b.style.color = '#12355b'; b.style.borderColor = '#d7e3f3';
+        }
       }
     }
 

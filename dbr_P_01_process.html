@@ -419,19 +419,18 @@
         </div>
       </div>
 
-      <div class="path-card" style="cursor:default;opacity:.7;border:2px dashed #a0b4cc;">
+      <div class="path-card" style="cursor:pointer;border:2px solid #1d5fa7;box-shadow:0 4px 20px rgba(29,95,167,.1);position:relative;" onclick="window.location.href='dbr_P_01_filter.html'">
         <div class="path-title">
-          <button class="card-zoom-btn" onclick="cardZoom('summary',-1)">−</button>
-          <span class="title-text" style="color:var(--text-muted)">מסך סיכום</span>
-          <button class="card-zoom-btn" onclick="cardZoom('summary',1)">+</button>
+          <button class="card-zoom-btn" onclick="cardZoom('summary',-1);event.stopPropagation()">−</button>
+          <span class="title-text">סינון סופי</span>
+          <button class="card-zoom-btn" onclick="cardZoom('summary',1);event.stopPropagation()">+</button>
         </div>
-        <div id="summary-static-desc" class="path-desc" style="color:var(--text-muted)">
-          במסך זה יוצג פתק הבחירה המלא שלכם — מוכן להדפסה, לשמירה כקובץ, או לשליחה לאחרים.
+        <div id="summary-static-desc" class="path-desc">
+          בחרי עד 8 מועמדים לפתק הבחירה הסופי שלך — מתוך כל מי שצברת בשלבים הקודמים. לחצי על מועמד/ת להוסיף או להוציא.
         </div>
         <div id="summary-desc" style="display:none;margin-top:6px;color:var(--text-main)"></div>
-        <div style="margin-top:10px;padding:8px 12px;background:#fff8e1;border:1.5px solid #fbbf24;border-radius:8px;font-size:.88rem;color:#92400e;">
-          <strong>שלב זה עדיין בפיתוח</strong> — יהיה זמין בקרוב.
-        </div>
+        <a href="dbr_P_01_filter.html" onclick="event.stopPropagation();trackPath('filter')" style="position:relative;z-index:2;display:inline-flex;align-items:center;justify-content:center;align-self:flex-end;margin-top:10px;width:36px;height:36px;background:var(--blue-soft);color:var(--blue-main);border:2px solid var(--blue-main);border-radius:50%;font-weight:900;font-size:1.2rem;text-decoration:none;box-shadow:0 2px 8px rgba(29,95,167,.18);transition:transform .15s,box-shadow .15s,background .15s;" onmouseover="this.style.transform='scale(1.12)';this.style.boxShadow='0 4px 14px rgba(29,95,167,.32)';this.style.background='#dceaff'" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 2px 8px rgba(29,95,167,.18)';this.style.background='var(--blue-soft)'">←</a>
+        <a href="dbr_P_01_filter.html" onclick="trackPath('filter')" class="card-tap-zone" aria-label="סינון סופי"></a>
       </div>
 
       <!-- מלבן: אתר המועמדים הרשמי -->
@@ -519,7 +518,7 @@
       const shiryunSet = new Set(shiryunArr);
       const list = selectedArr.map(n => {
         const isSh = shiryunSet.has(n);
-        return `<div style="display:flex;align-items:center;font-weight:${isSh ? '900' : '600'};color:${isSh ? '#2e7d4f' : '#12355b'};font-size:.85rem;line-height:1.2;padding:1px 0">${genderDot(n)}${n}${isSh ? ' ✓' : ''}</div>`;
+        return `<div style="display:flex;align-items:center;font-weight:${isSh ? '900' : '600'};color:${isSh ? '#1d5fa7' : '#12355b'};font-size:.85rem;line-height:1.2;padding:1px 0">${genderDot(n)}${n}${isSh ? ' ✓' : ''}</div>`;
       }).join('');
       return `נבחרו ${selectedArr.length} מועמדים/ות:<br><div style="display:grid;grid-template-columns:1fr 1fr;gap:0 10px;margin:4px 0">${list}</div>`;
     }
