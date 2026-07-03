@@ -48,29 +48,27 @@
 
     a { color: inherit; text-decoration: none; }
 
-    .page { max-width: 1100px; margin: 0 auto; padding: 0 24px 60px; }
+    .page { max-width: 1100px; margin: 0 auto; padding: 96px 24px 60px; }
 
-    /* ── Top bar ── */
+    /* ── Top bar (dark navy fixed) ── */
     .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      background: #f4f8ff;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: #0D2B5E;
+      padding: 12px 24px 0;
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      padding: 6px 0 6px;
-      border-bottom: 1px solid var(--border-soft);
-      margin-bottom: 8px;
     }
     .topbar-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 12px;
+      gap: 20px;
+      padding-bottom: 10px;
     }
 
-    /* ── Step navigator ── */
+    /* ── Step navigator (dark bg) ── */
     .step-nav {
       display: flex;
       align-items: center;
@@ -86,43 +84,43 @@
     }
     .step-item.done { cursor: pointer; }
     .step-dot {
-      width: 6px;
-      height: 6px;
+      width: 5px;
+      height: 5px;
       border-radius: 50%;
-      background: #d7e3f3;
+      background: rgba(255,255,255,.22);
       transition: all .2s;
     }
     .step-item.active .step-dot {
-      width: 9px;
-      height: 9px;
-      background: var(--blue-main);
-      box-shadow: 0 0 0 3px rgba(29,95,167,.15);
+      width: 8px;
+      height: 8px;
+      background: #fff;
+      box-shadow: 0 0 0 2px rgba(255,255,255,.2);
     }
-    .step-item.done .step-dot { background: var(--blue-main); }
+    .step-item.done .step-dot { background: rgba(255,255,255,.55); }
     .step-lbl {
       font-size: .62rem;
-      color: #b0bec7;
+      color: rgba(255,255,255,.35);
       white-space: nowrap;
       line-height: 1;
       font-weight: 500;
     }
-    .step-item.active .step-lbl { color: var(--blue-main); font-weight: 800; font-size: .68rem; }
-    .step-item.done .step-lbl   { color: var(--blue-main); font-weight: 600; }
+    .step-item.active .step-lbl { color: #fff; font-weight: 800; font-size: .63rem; }
+    .step-item.done .step-lbl   { color: rgba(255,255,255,.6); font-weight: 700; }
     .step-line {
       flex: 1;
-      height: 1.5px;
-      background: #d7e3f3;
-      margin-bottom: 15px;
+      height: 1px;
+      background: rgba(255,255,255,.12);
+      margin-bottom: 14px;
     }
-    .step-line.done { background: var(--blue-main); }
+    .step-line.done { background: rgba(255,255,255,.42); }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       font-weight: 800;
-      color: var(--blue-dark);
-      font-size: 1.2rem;
+      color: rgba(255,255,255,.92);
+      font-size: 1rem;
       min-width: 0;
       flex-shrink: 1;
     }
@@ -131,39 +129,43 @@
       text-overflow: ellipsis;
       white-space: nowrap;
     }
-
     .brand-mark {
-      height: 28px;
-      padding: 0 9px;
-      border-radius: 8px;
-      background: linear-gradient(135deg, #3730a3, #1e1b4b);
+      height: 26px;
+      padding: 0 8px;
+      border-radius: 9px;
+      background: #C9A017;
       display: grid;
       place-items: center;
-      color: white;
-      font-size: .72rem;
+      color: #0D2B5E;
+      font-size: .8rem;
       font-weight: 900;
-      letter-spacing: .06em;
-      box-shadow: 0 4px 14px rgba(55,48,163,.3);
+      flex-shrink: 0;
     }
 
-    .nav {
+    /* ── Tab bar ── */
+    .rec-tabs {
       display: flex;
-      gap: 6px;
-      font-size: .9rem;
+      gap: 2px;
+      border-bottom: 2px solid var(--border-soft);
+      margin-bottom: 16px;
     }
-
-    .nav a {
-      padding: 7px 14px;
-      border: 1px solid var(--border-soft);
-      border-radius: 999px;
-      background: white;
+    .rec-tab {
+      padding: 10px 16px;
+      font-size: .92rem;
+      font-weight: 700;
       color: var(--text-muted);
-      font-weight: 600;
-      transition: border-color .15s, color .15s;
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: color .15s;
+      white-space: nowrap;
     }
-
-    .nav a:hover { border-color: var(--blue-main); color: var(--blue-main); }
-    .nav a.active { background: var(--blue-main); color: white; border-color: var(--blue-main); }
+    .rec-tab:hover { color: var(--blue-main); }
+    .rec-tab.active { color: var(--blue-main); border-bottom-color: var(--blue-main); }
+    .rec-tab.soon { opacity: .4; cursor: default; pointer-events: none; }
 
     /* ── Back link ── */
     .back-link {
@@ -1476,14 +1478,14 @@
   gtag('config', 'G-TJNJTZQF1F');
 </script>
       <div class="topbar-row">
-        <a class="brand" href="dbr_P_01_index.html" style="min-width:0;flex-shrink:1">
+        <div class="brand">
           <span class="brand-mark">ד.ב.ר</span>
           <span>דמוקרטים בוחרים רציונלית</span>
-        </a>
-        <a id="back-btn" onclick="handleBack()" style="font-size:1.8rem;text-decoration:none;line-height:1;flex-shrink:0;cursor:pointer">⬅️</a>
+        </div>
+        <a href="dbr_P_01_process.html" style="color:rgba(255,255,255,.65);font-size:.85rem;font-weight:600;text-decoration:none;flex-shrink:0">תפריט</a>
       </div>
       <div class="step-nav">
-        <div class="step-item done" onclick="window.location.href='dbr_P_01_shiryun.html'" title="חזרה לבחירה">
+        <div class="step-item done" onclick="window.location.href='dbr_P_01_shiryun.html'">
           <div class="step-dot"></div>
           <div class="step-lbl">בחירה</div>
         </div>
@@ -1519,46 +1521,12 @@
       </div>
     </div>
 
-    <section class="page-title">
-      <h1>בחרו זווית התחלה <button id="desc-toggle-btn" onclick="toggleScreenDesc()" title="הסבר על המסך" style="display:none;background:none;border:none;cursor:pointer;font-size:1.3rem;vertical-align:middle;padding:0 2px;line-height:1;color:#f59e0b;transition:color .2s">ⓘ</button></h1>
-      <p id="screen-desc">בחרו זווית התחלה — כל מסלול מציג דרך אחרת להכיר את המועמדים ו"לשחק" עם בחירתכם.</p>
-    </section>
-
-    <!-- בחירת סוג המלצה -->
-    <div class="rec-type-picker" id="rec-type-picker">
-      <div class="rec-type-grid">
-
-        <div class="rec-type-card rec-type-card--ai" onclick="selectRecType('ai_squads')">
-          <div class="rec-type-icon">🧠</div>
-          <div class="rec-type-title">מסלול נושאי הליבה</div>
-          <div class="rec-type-desc">תשעה נושאי ליבה של המפלגה — דמוקרטיה, כלכלה, ביטחון ועוד. בכל נושא מדורגים המועמדים לפי זיקתם לנושא — כמה הוא מרכזי בדרכם הציבורית — לצד היכרות כללית עם הרקע שלהם.</div>
-          <div class="rec-type-arrow">←</div>
-        </div>
-
-        <div class="rec-type-card rec-type-card--imitation" onclick="selectRecType('imitation')">
-          <div class="rec-type-icon">👥</div>
-          <div class="rec-type-title">סימולציית נבחרות</div>
-          <div class="rec-type-desc">מסלולים המדמים נקודות מבט שונות — מטבח המפלגה, בוחרי הצפון, או בחירה אקראית-משחקית.</div>
-          <div style="font-size:.78rem;font-weight:800;color:var(--blue-main);margin-top:2px">3 נבחרות זמינות</div>
-          <div class="rec-type-arrow">←</div>
-        </div>
-
-        <div class="rec-type-card soon">
-          <div class="rec-type-icon">🌟</div>
-          <div class="rec-type-title">נבחרות מהשטח</div>
-          <div class="rec-type-desc">נבחרות שירכיבו בהמשך אנשים, קבוצות או גורמים ציבוריים מזוהים.</div>
-          <div class="rec-type-badge">בקרוב</div>
-        </div>
-
-        <div class="rec-type-card rec-type-card--special" onclick="selectRecType('special_topics')">
-          <div class="rec-type-icon">🎯</div>
-          <div class="rec-type-title">העמקה בנושאים ייחודיים</div>
-          <div class="rec-type-desc">מסלולי עומק סביב סוגיות ציבוריות מסוימות, שאינן תמיד מקבלות ביטוי מלא בחלוקה הכללית לנושאים.</div>
-          <div style="font-size:.78rem;font-weight:800;color:#b45309;margin-top:2px">2 נבחרות זמינות</div>
-          <div class="rec-type-arrow">←</div>
-        </div>
-
-      </div>
+    <!-- לשוניות בחירת מסלול -->
+    <div class="rec-tabs" id="rec-tabs">
+      <button class="rec-tab active" id="tab-ai_squads"       onclick="switchTab(this,'ai_squads')">נושאי ליבה</button>
+      <button class="rec-tab"        id="tab-special_topics"  onclick="switchTab(this,'special_topics')">נושאים ייחודיים</button>
+      <button class="rec-tab"        id="tab-imitation"       onclick="switchTab(this,'imitation')">נבחרות אחרות</button>
+      <button class="rec-tab soon">נבחרות מהשטח</button>
     </div>
 
     <!-- בחירת נבחרת -->
@@ -2421,7 +2389,7 @@
 
     let inRankingView = false;
 
-    let inRecTypePicker = true;  // true = מסך בחירת סוג המלצה מוצג
+    let inRecTypePicker = false;  // tabs always visible — no picker screen
 
     function notReady(el) {
       // ביפ שגיאה קצר
@@ -2447,6 +2415,12 @@
       }
     }
 
+    function switchTab(el, type) {
+      document.querySelectorAll('.rec-tab').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+      selectRecType(type);
+    }
+
     function selectRecType(type) {
       inRecTypePicker = false;
       // הצג רק כרטיסי נבחרת מהסוג שנבחר
@@ -2454,10 +2428,7 @@
         const cardType = card.dataset.recType;
         card.style.display = (!cardType || cardType === type) ? '' : 'none';
       });
-      document.getElementById('rec-type-picker').style.display = 'none';
       document.getElementById('team-picker').style.display = '';
-      const desc = document.getElementById('screen-desc');
-      if (desc) desc.textContent = 'בחרו נבחרת מהתיבות למטה.';
     }
 
     function handleBack() {
@@ -2474,12 +2445,6 @@
         const _aiVisible = [...document.querySelectorAll('.team-card[data-rec-type="ai_squads"]')]
           .some(c => c.style.display !== 'none');
         if (_aiVisible && typeof highlightMyTopics === 'function') setTimeout(highlightMyTopics, 0);
-      } else if (!inRecTypePicker) {
-        inRecTypePicker = true;
-        document.getElementById('team-picker').style.display = 'none';
-        document.getElementById('rec-type-picker').style.display = '';
-        const desc = document.getElementById('screen-desc');
-        if (desc) desc.textContent = 'בחרו את סוג ההמלצה.';
       } else {
         window.location.href = 'dbr_P_01_process.html';
       }
@@ -3555,6 +3520,11 @@
       }
       rankList.sort((a,b) => (b.scoreC??-1) - (a.scoreC??-1));
     }
+
+    // ── פתיחת לשונית ראשונה אוטומטית ──
+    document.addEventListener('DOMContentLoaded', () => {
+      selectRecType('ai_squads');
+    });
 
     // ══════════════════════════════════════════
     // ספירת קליקים במסך הדירוג להעלמת הסבר אוטומטית

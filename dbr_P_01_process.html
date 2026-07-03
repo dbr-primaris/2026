@@ -486,6 +486,7 @@
         <div class="sc-info">
           <div class="sc-title">סימולציית נבחרות</div>
           <div class="sc-status" id="status-state">בשלב זה יש להשלים בחירה של 6-12 שמות</div>
+          <!-- step 2 always unlocked -->
         </div>
         <div class="sc-arr">›</div>
       </div>
@@ -495,7 +496,7 @@
         <div class="sc-num" id="num-shiryun">1</div>
         <div class="sc-info">
           <div class="sc-title">בחירת המוצא שלי</div>
-          <div class="sc-status" id="status-shiryun">בשלב זה ניתן לסמן 0-12 שמות ←</div>
+          <div class="sc-status" id="status-shiryun">התחל כאן</div>
         </div>
         <div class="sc-arr">›</div>
       </div>
@@ -576,18 +577,16 @@
       // ── כרטיסית 1: בחירה (תחתון) ──
       if (step1Done) {
         setCard('card-shiryun','num-shiryun','status-shiryun','done','✓',
-          `בחירת מוצא: נבחרו ${shiryun.length} מתוכם ${vadai.length} ודאי`);
+          `נבחרו ${shiryun.length} מתוכם ${vadai.length} ודאי`);
       } else {
-        setCard('card-shiryun','num-shiryun','status-shiryun','active','1','בשלב זה ניתן לסמן 0-12 שמות ←');
+        setCard('card-shiryun','num-shiryun','status-shiryun','active','1','בשלב זה ניתן לסמן 0-12 שמות');
       }
 
-      // ── כרטיסית 2: סימולציה (אמצע) — נפתחת מרגע שיש בחירה כלשהי בשלב 1 ──
+      // ── כרטיסית 2: סימולציה (אמצע) — תמיד פתוחה (שלב 1 אופציונלי) ──
       if (step2Done) {
         setCard('card-state','num-state','status-state','done','✓',`${selected.length} מועמדים נבחרו`);
-      } else if (step1Done) {
-        setCard('card-state','num-state','status-state','active','2','בשלב זה יש להשלים בחירה של 6-12 שמות ←');
       } else {
-        setCard('card-state','num-state','status-state','locked','2','בשלב זה יש להשלים בחירה של 6-12 שמות');
+        setCard('card-state','num-state','status-state','active','2','בשלב זה יש להשלים בחירה של 6-12 שמות');
       }
 
       // ── כרטיסית 3: הפתק שלי (ראש) — נפתחת רק אם שלב 1 ≥6 או שלב 2 הושלם ──
@@ -606,7 +605,7 @@
       if (step1Done) { document.getElementById('sn1').classList.add('done'); }
       else           { document.getElementById('sn1').classList.add('active'); }
       if (step2Done) { document.getElementById('sn2').classList.add('done'); document.getElementById('sl1').classList.add('done'); }
-      else if (step1Done) { document.getElementById('sn2').classList.add('active'); }
+      else { document.getElementById('sn2').classList.add('active'); }
       if (step3Done) { document.getElementById('sn3').classList.add('done'); document.getElementById('sl2').classList.add('done'); }
       else if (step1EnoughForStep3 || step2Done) { document.getElementById('sn3').classList.add('active'); }
     }
