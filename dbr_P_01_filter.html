@@ -1,7 +1,24 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-<script>if(localStorage.getItem('dbr_disclaimer_accepted')!=='yes'){window.location.href='dbr_P_01_index.html?redirect='+encodeURIComponent(location.pathname.split('/').pop()+location.search)}</script>
+<script>if(localStorage.getItem('dbr_disclaimer_accepted')!=='yes'){window.location.href='dbr_P_01_index.html?redirect='+encodeURIComponent(location.pathname.split('/').pop()+location.search)}
+    function navToStep(step) {
+      try { localStorage.setItem('dbr_disclaimer_accepted','yes'); } catch(e) {}
+      var st = {}; try { st = JSON.parse(localStorage.getItem('primeris_state_v1')||'{}'); } catch(e){}
+      var count = (st.shiryun || []).length;
+      if (step === 1) window.location.href = 'dbr_P_01_shiryun.html';
+      else if (step === 2) window.location.href = 'dbr_P_01_state.html';
+      else if (step === 3) {
+        if (count >= 6) window.location.href = 'dbr_P_01_filter.html';
+      }
+    }
+    function initStepNav() {
+      var st = {}; try { st = JSON.parse(localStorage.getItem('primeris_state_v1')||'{}'); } catch(e){}
+      var count = (st.shiryun || []).length;
+      var s3 = document.getElementById('step3-nav');
+      if (s3) { s3.classList.toggle('locked', count < 6); }
+    }
+  </script>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-TJNJTZQF1F"></script>
 <script>
@@ -486,7 +503,12 @@
     transition: transform .15s, box-shadow .15s;
   }
   .intro-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(29,95,167,.25); }
-</style>
+
+    .step-item { cursor: pointer; }
+    .step-item.locked { cursor: not-allowed; }
+    .step-item.locked .step-dot { background: rgba(255,255,255,.10); }
+    .step-item.locked .step-lbl { color: rgba(255,255,255,.18); }
+  </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
@@ -511,20 +533,20 @@
       <span class="brand-mark">ד.ב.ר</span>
       <span class="brand-label">דמוקרטים בוחרים רציונלית</span>
     </a>
-    <a href="dbr_P_01_process.html" style="color:rgba(255,255,255,.65);font-size:.85rem;font-weight:600;text-decoration:none;flex-shrink:0">תפריט</a>
+    <a href="dbr_P_01_process.html" style="color:rgba(255,255,255,.65);font-size:.85rem;font-weight:600;text-decoration:none;flex-shrink:0">☰</a>
   </div>
   <div class="step-nav">
-    <div class="step-item done" onclick="window.location.href='dbr_P_01_shiryun.html'">
+    <div class="step-item done" onclick="navToStep(1)">
       <div class="step-dot"></div>
-      <div class="step-lbl">בחירה</div>
+      <div class="step-lbl">נקודת הפתיחה</div>
     </div>
     <div class="step-line done"></div>
-    <div class="step-item done" onclick="window.location.href='dbr_P_01_state.html'">
+    <div class="step-item done" onclick="navToStep(2)">
       <div class="step-dot"></div>
-      <div class="step-lbl">סימולציה</div>
+      <div class="step-lbl">משחק הכסאות</div>
     </div>
     <div class="step-line done"></div>
-    <div class="step-item active">
+    <div class="step-item active" id="step3-nav" onclick="navToStep(3)">
       <div class="step-dot"></div>
       <div class="step-lbl">הפתק שלי</div>
     </div>
