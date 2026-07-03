@@ -1184,14 +1184,14 @@
     }
     .intro-card .intro-note {
       background: var(--blue-soft);
-      border: 1px solid var(--border-soft);
-      border-radius: var(--radius-small);
-      padding: 12px 14px;
+      border-top: 1px solid var(--border-soft);
+      border-bottom: 1px solid var(--border-soft);
+      padding: 12px 28px;
+      margin: 16px -28px;
       font-size: .88rem;
       color: var(--blue-dark);
-      font-weight: 700;
-      line-height: 1.6;
-      margin: 16px 0;
+      font-weight: 400;
+      line-height: 1.75;
     }
     .intro-btn {
       display: block;
@@ -1634,18 +1634,21 @@
     <!-- Intro overlay — first visit -->
     <div id="intro-overlay" class="intro-overlay" style="display:none" onclick="if(event.target===this)dismissIntro()">
       <div class="intro-card" onclick="event.stopPropagation()">
-        <h2>משחק הבחירה</h2>
-        <p>במסך הזה אתם בונים את רשימת המועמדים שלכם דרך נבחרות פתיחה שונות.</p>
-        <p>כל נבחרת מציגה עד 20 מועמדים לפי זווית בחירה מסוימת — המבוססת על דיוקנאות המועמדים, על פי הרזומה שלהם והמוטיבציה שלהם לתפקידם הציבורי הבכיר. תוכלו להחליף בין נבחרות באמצעות הרשימה הנפתחת שבראש המסך.</p>
-        <p>איך עובדים במסך:</p>
-        <ul>
-          <li>להוספת מועמד מהנבחרת — לחצו על שמו. שמו יופיע בכחול כהה ומודגש.</li>
-          <li>מועמדים שבחרתם ואינם כלולים בנבחרת יופיעו בסוף רשימת הדירוג, בעמודה השמאלית.</li>
-          <li>להסרת מועמד — לחצו שוב על שמו. הסרה כאן מבטלת את בחירתו בכל המסכים.</li>
-          <li>לצפייה בכרטיס המועמד של הנבחרת — לחצו על 📋.</li>
-        </ul>
-        <p>בכל רגע תוכלו ללחוץ על «הצגת פתק הבחירה» כדי לראות כיצד תיראה הרשימה שבניתם.</p>
-        <div class="intro-note">הנבחרות הן נקודת פתיחה למשחק הבחירה.<br>ההחלטה הסופית נשארת שלכם.</div>
+        <h2 style="text-align:center">שלב 2/3 - משחק הכסאות</h2>
+
+        <p><strong>המטרה:</strong> הרחבה, החלפה, צמצום הבחירות שלך בעזרת נקודת מבט ממוקדת לפי תחומי העשייה והייצוג שמעניינים אותך.</p>
+
+        <p><strong>מה עושים?</strong> מדפדפים! בין הלשוניות ובין הנושאים שמעניינים אותך בכל לשונית. לחיצה על נושא תפתח רשימת מועמדים.</p>
+
+        <div class="intro-note">
+          <p style="margin:0 0 8px"><strong>ותכלס?!</strong> נבחרי נקודת הפתיחה כבר ממתינים לך ברשימות. ניתן להוסיף ולהסיר מועמדים ע"י לחיצה על שמם.</p>
+          <p style="margin:0"><strong>חשוב!</strong> הסרת מועמד מסירה אותו מכל בחירה קודמת שלך, גם מנקודת הפתיחה, אלא אם נבחר כ<span style="color:#C9A017">ודאי</span>, ואז אינו בר-הסרה. <strong>יש להגיע ל-6–12 בחירות בסך הכל</strong>.</p>
+        </div>
+
+        <p><strong>איך נבנו הרשימות?</strong> ע"י סקירה מקיפה של רזומה המועמדים וניתוח רב-שלבי אחוד שנותן סיווג לרמת הזיקה של המועמד לכל נושא + ניקוד משוקלל.</p>
+
+        <p><strong>ואיך להבין רשימה?</strong> רשימה מציגה עד 24 מועמדים בעלי הניקוד המשוקלל הגבוה ביותר בנושא, בסדר יורד של הניקוד. לצד כל מועמד מופיע גם סיווג הזיקה הישירה שלו לתחום על פי מקרא.</p>
+
         <button class="intro-btn" onclick="dismissIntro()">הבנתי, אפשר להמשיך</button>
       </div>
     </div>
