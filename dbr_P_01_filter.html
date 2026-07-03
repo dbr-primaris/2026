@@ -113,65 +113,75 @@
 
   /* ── Progress bar (sticky below fixed topbar) ── */
   .progress-bar {
-    background: var(--white);
-    border-bottom: 1px solid var(--border-soft);
-    padding: 6px 14px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
     gap: 10px;
+    padding: 6px 14px;
+    background: var(--white);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-small);
+    box-shadow: var(--shadow-soft);
+    justify-content: space-between;
     position: sticky;
     top: 86px;
     z-index: 40;
-    box-shadow: 0 2px 8px rgba(18,53,91,.06);
+    margin: 0 0 6px;
   }
-  .pf-status-label {
-    font-size: 1rem;
+  .pf-bar-title {
+    font-size: 1.15rem;
     font-weight: 900;
     color: var(--blue-dark);
-    flex-shrink: 0;
+    letter-spacing: -0.01em;
   }
-  .pf-status-counts {
-    flex: 1;
-    min-width: 0;
-    padding: 0 10px;
-    font-size: .82rem;
+  .pf-bar-help {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    color: var(--blue-main);
+    font-size: .72rem;
+    font-weight: 700;
+    font-family: inherit;
+    line-height: 1;
+  }
+  .pf-bar-count {
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--blue-dark);
+  }
+  .pf-bar-detail {
+    font-size: .72rem;
     color: var(--text-muted);
-    font-weight: 600;
-    text-align: center;
+    margin-top: 1px;
   }
-  .sep { opacity: .4; margin: 0 4px; }
+  .pf-bar-detail strong { color: var(--blue-dark); font-weight: 800; }
+  .sep { margin: 0 6px; opacity: .45; }
   .done-btn {
     flex-shrink: 0;
-    border: none;
+    border: 1px solid #cbd5e1;
     border-radius: 10px;
     font-family: inherit;
     cursor: not-allowed;
-    transition: background .15s, transform .1s;
+    transition: background .15s, color .15s, border-color .15s;
     white-space: normal;
     text-align: center;
     line-height: 1.3;
-    max-width: 140px;
-    padding: 7px 14px;
-    font-size: .78rem;
-    font-weight: 700;
+    max-width: 130px;
+    padding: 10px 18px;
+    font-size: .9rem;
+    font-weight: 800;
     background: #f1f5f9;
     color: #94a3b8;
-    box-shadow: none;
   }
   .done-btn.ready {
-    background: var(--blue-main);
-    color: white;
-    font-size: .95rem;
-    font-weight: 800;
+    background: var(--blue-soft);
+    color: var(--blue-main);
+    border: 1px solid var(--blue-main);
     cursor: pointer;
     white-space: nowrap;
     max-width: none;
-    padding: 8px 22px;
-    border-radius: 999px;
-    box-shadow: 0 4px 14px rgba(29,95,167,.3);
   }
-  .done-btn.ready:hover { background: var(--blue-dark); transform: translateY(-1px); }
+  .done-btn.ready:hover { background: #dceaff; }
 
   /* ── Page layout ── */
   .page { max-width: 600px; margin: 0 auto; padding: 0 16px; }
@@ -523,11 +533,17 @@
 
 <!-- ── Progress bar ── -->
 <div class="progress-bar">
-  <div class="pf-status-label"><strong id="pf-total">0</strong> בפתק שלי</div>
-  <div class="pf-status-counts">
-    <strong id="pf-origin">0</strong> ★ מוצא
-    <span class="sep">·</span>
-    <strong id="pf-added">0</strong> נוספו
+  <div style="display:flex;flex-direction:column;align-items:flex-start;flex-shrink:0;gap:2px">
+    <span class="pf-bar-title">הפתק שלי</span>
+    <button class="pf-bar-help" onclick="document.getElementById('intro-overlay').style.display=''">ⓘ הסבר</button>
+  </div>
+  <div style="flex:1;min-width:0;padding:0 12px">
+    <div class="pf-bar-count"><strong id="pf-total">0</strong> נבחרים</div>
+    <div class="pf-bar-detail">
+      <strong id="pf-origin">0</strong> נבחרי מוצא
+      <span class="sep">·</span>
+      <strong id="pf-added">0</strong> נוספו בשלב זה
+    </div>
   </div>
   <button class="done-btn" id="done-btn" onclick="finishAndGo()" disabled>יש לבחור 6–8 כדי לסיים</button>
 </div>
