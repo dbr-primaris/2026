@@ -1637,7 +1637,7 @@
         <div class="step-line"></div>
         <div class="step-item" id="step3-nav" onclick="navToStep(3)">
           <div class="step-dot"></div>
-          <div class="step-lbl">הפתק שלי</div>
+          <div class="step-lbl">פתק הבחירה</div>
         </div>
       </div>
     </header>
@@ -1677,7 +1677,7 @@
             <span id="sim-lock-hint" style="font-size:.72rem;color:var(--text-muted);font-weight:400;margin-right:6px"> · <span style="color:#dc2626">⚠</span> נדרשים לפחות 6 כדי להתקדם</span>
           </div>
           <div class="sim-bar-detail">
-            <strong id="sim-origin-count">0</strong> נבחרי מוצא
+            <strong id="sim-origin-count">0</strong> נבחרי פתיחה
             <span class="sep">·</span>
             <strong id="sim-added-count">0</strong> נוספו בשלב זה
           </div>
@@ -3728,4 +3728,16 @@
       if (rs) {
         let rankClickCount = 0;
         rs.addEventListener('click', () => {
-          const hint = docum
+          const hint = document.getElementById('rank-info-text');
+          if (hint && hint.style.display !== 'none') {
+            rankClickCount++;
+            if (rankClickCount >= 3) hint.style.display = 'none';
+          }
+        });
+      }
+    });
+
+  </script>
+  </div>
+</body>
+</html>
