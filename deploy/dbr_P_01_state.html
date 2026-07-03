@@ -55,6 +55,7 @@
 
     * { box-sizing: border-box; }
 
+    html { overflow-y: scroll; }
     body {
       margin: 0;
       font-family: 'Heebo', Arial, sans-serif;
@@ -90,7 +91,7 @@
       display: flex;
       align-items: center;
       width: 100%;
-      padding: 2px 0 4px;
+      padding: 4px 0 10px;
     }
     .step-item {
       display: flex;
@@ -101,28 +102,26 @@
     }
     .step-item.done { cursor: pointer; }
     .step-dot {
-      width: 5px;
-      height: 5px;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
       background: rgba(255,255,255,.22);
       transition: all .2s;
     }
     .step-item.active .step-dot {
-      width: 8px;
-      height: 8px;
       background: #fff;
       box-shadow: 0 0 0 2px rgba(255,255,255,.2);
     }
     .step-item.done .step-dot { background: rgba(255,255,255,.55); }
     .step-lbl {
-      font-size: .62rem;
+      font-size: .63rem;
       color: rgba(255,255,255,.35);
       white-space: nowrap;
       line-height: 1;
-      font-weight: 500;
+      font-weight: 800;
     }
-    .step-item.active .step-lbl { color: #fff; font-weight: 800; font-size: .63rem; }
-    .step-item.done .step-lbl   { color: rgba(255,255,255,.6); font-weight: 700; }
+    .step-item.active .step-lbl { color: #fff; }
+    .step-item.done .step-lbl   { color: rgba(255,255,255,.6); }
     .step-line {
       flex: 1;
       height: 1px;
@@ -190,7 +189,7 @@
     }
     .sim-status-bar {
       display: flex;
-      align-items: center;
+      align-items: stretch;
       gap: 10px;
       margin: 0 0 8px;
       padding: 6px 14px;
@@ -231,16 +230,13 @@
     .sim-bar-detail strong { color: var(--blue-dark); font-weight: 800; }
     .sim-bar-detail .sep { margin: 0 6px; opacity: .45; }
     .sim-next-btn {
-      padding: 10px 18px;
+      padding: 10px 26px;
       border-radius: 10px;
       font-weight: 800;
-      font-size: .9rem;
+      font-size: 1rem;
       font-family: inherit;
       cursor: not-allowed;
-      white-space: normal;
-      text-align: center;
-      line-height: 1.3;
-      max-width: 130px;
+      white-space: nowrap;
       background: #f1f5f9;
       color: #94a3b8;
       border: 1px solid #cbd5e1;
@@ -252,10 +248,16 @@
       color: var(--blue-main);
       border: 1px solid var(--blue-main);
       cursor: pointer;
-      white-space: nowrap;
-      max-width: none;
     }
     .sim-next-btn.ready:hover { background: #dceaff; }
+    .sim-next-hint {
+      font-size: .63rem;
+      color: var(--text-muted);
+      margin-top: 3px;
+      text-align: center;
+      line-height: 1.3;
+      max-width: 130px;
+    }
 
     /* ── Tab bar ── */
     .rec-tabs {
@@ -1665,19 +1667,24 @@
     <!-- סרגל סטטוס + לשוניות — sticky -->
     <div class="sticky-controls">
       <div class="sim-status-bar">
-        <div style="display:flex;flex-direction:column;align-items:flex-start;flex-shrink:0;gap:2px">
-          <span class="sim-bar-title">סימולציה</span>
+        <div style="display:flex;flex-direction:column;align-items:flex-start;flex-shrink:0;justify-content:space-between">
+          <span class="sim-bar-title">משחק הכסאות</span>
           <button class="sim-bar-help" onclick="document.getElementById('intro-overlay').style.display=''">ⓘ הסבר</button>
         </div>
-        <div style="flex:1;min-width:0;padding:0 12px">
-          <div class="sim-bar-count"><strong id="sim-total-count">0</strong> נבחרים</div>
+        <div style="flex:1;min-width:0;padding:0 12px;display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between">
+          <div class="sim-bar-count">
+            <strong id="sim-total-count">0</strong> נבחרים
+            <span id="sim-lock-hint" style="font-size:.72rem;color:var(--text-muted);font-weight:400;margin-right:6px"> · <span style="color:#dc2626">⚠</span> נדרשים לפחות 6 כדי להתקדם</span>
+          </div>
           <div class="sim-bar-detail">
             <strong id="sim-origin-count">0</strong> נבחרי מוצא
             <span class="sep">·</span>
             <strong id="sim-added-count">0</strong> נוספו בשלב זה
           </div>
         </div>
-        <button class="sim-next-btn" id="sim-next-btn" onclick="window.location.href='dbr_P_01_process.html'">השלם בחירה של לפחות 6 כדי להמשיך לשלב האחרון</button>
+        <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0;align-self:center">
+          <button class="sim-next-btn" id="sim-next-btn" onclick="window.location.href='dbr_P_01_process.html'">לשלב הבא</button>
+        </div>
       </div>
       <div class="rec-tabs" id="rec-tabs">
         <button class="rec-tab soon">סימולציה היסטורית</button>
@@ -3480,10 +3487,9 @@
       if (btn) {
         btn.classList.toggle('ready', ready);
         btn.disabled = !ready;
-        btn.textContent = ready
-          ? 'לשלב הבא'
-          : 'השלם בחירה של לפחות 6 כדי להמשיך לשלב האחרון';
       }
+      const hint = document.getElementById('sim-lock-hint');
+      if (hint) hint.style.display = ready ? 'none' : '';
     }
 
     // מחזיר את שם הנבחרת הפעילה כרגע (לרישום מקור הבחירה)
@@ -3722,16 +3728,4 @@
       if (rs) {
         let rankClickCount = 0;
         rs.addEventListener('click', () => {
-          const hint = document.getElementById('rank-info-text');
-          if (hint && hint.style.display !== 'none') {
-            rankClickCount++;
-            if (rankClickCount >= 3) hint.style.display = 'none';
-          }
-        });
-      }
-    });
-
-  </script>
-  </div>
-</body>
-</html>                                                                                                              
+          const hint = docum
