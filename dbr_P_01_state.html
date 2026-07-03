@@ -1690,7 +1690,7 @@
           <span class="pill" id="all-filter-btn" style="cursor:pointer;margin:0 auto" onclick="togglePickedFilter()"><span id="all-filter-label">הצגת פתק הבחירה</span></span>
           <span id="no-picks-hint" style="display:none;margin:0 auto;font-size:.85rem;color:var(--text-muted);text-align:center;font-family:inherit;">לחץ על השם לבחירה</span>
           <span id="pool-counter" style="display:none;font-size:.88rem;font-weight:800;color:var(--blue-main);border:1.5px solid #d7e3f3;border-radius:999px;padding:3px 10px;background:#f0f6ff;white-space:nowrap;"></span>
-          <button id="go-filter-btn" onclick="window.location.href='dbr_P_01_filter.html'" style="display:none;background:var(--blue-main);color:#fff;border:none;border-radius:9px;padding:7px 14px;font-size:.88rem;font-weight:700;cursor:pointer;white-space:nowrap;font-family:inherit;">← לפתק שלי</button>
+          <button id="go-filter-btn" onclick="goToFilterChecked()" style="display:none;background:var(--blue-main);color:#fff;border:none;border-radius:9px;padding:7px 14px;font-size:.88rem;font-weight:700;cursor:pointer;white-space:nowrap;font-family:inherit;">← לפתק שלי</button>
           <button class="expand-btn" id="zoom-in-btn"  onclick="zoomIn()"  title="הגדל פונט">+</button>
         </div>
         <span id="rank-meta-text" class="last-updated-text"></span>
@@ -3321,6 +3321,16 @@
     }
 
     const MAX_SHIRYUN = 12;
+    const MIN_SHIRYUN = 6;
+
+    function goToFilterChecked() {
+      const count = (loadState().shiryun || []).length;
+      if (count < MIN_SHIRYUN) {
+        showStateToast('יש לבחור לפחות 6 שמות כדי להמשיך לשלב הבא (נבחרו ' + count + ')');
+        return;
+      }
+      window.location.href = 'dbr_P_01_filter.html';
+    }
 
     // מחזיר את שם הנבחרת הפעילה כרגע (לרישום מקור הבחירה)
     function _getTeamLabel() {
