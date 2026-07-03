@@ -37,7 +37,7 @@
 
     body {
       margin: 0;
-      font-family: Arial, "Noto Sans Hebrew", sans-serif;
+      font-family: 'Heebo', Arial, sans-serif;
       background: linear-gradient(180deg, #f4f8ff 0%, #ffffff 45%, #f8fbff 100%);
       color: var(--text-main);
       line-height: 1.7;
@@ -49,39 +49,88 @@
     .page {
       max-width: 980px;
       margin: 0 auto;
-      padding: 24px;
+      padding: 96px 24px 40px;
     }
 
-    /* ============ Topbar ============ */
+    /* ============ Topbar (fixed, dark navy) ============ */
     .topbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: #0D2B5E;
+      padding: 12px 24px 0;
+      display: flex;
+      flex-direction: column;
+    }
+    .topbar-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 20px;
-      padding: 8px 0 6px;
+      padding-bottom: 10px;
     }
+
+    /* ── Step navigator (on dark bg) ── */
+    .step-nav {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      padding: 4px 0 10px;
+    }
+    .step-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+    .step-item.done { cursor: pointer; }
+    .step-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.22);
+      transition: all .2s;
+    }
+    .step-item.done .step-dot  { background: rgba(255,255,255,.55); }
+    .step-item.active .step-dot { width: 8px; height: 8px; background: #fff; box-shadow: 0 0 0 2px rgba(255,255,255,.2); }
+    .step-lbl {
+      font-size: .58rem;
+      color: rgba(255,255,255,.35);
+      white-space: nowrap;
+      line-height: 1;
+      font-weight: 500;
+    }
+    .step-item.done .step-lbl  { color: rgba(255,255,255,.6); font-weight: 700; }
+    .step-item.active .step-lbl { color: #fff; font-weight: 800; font-size: .63rem; }
+    .step-line {
+      flex: 1;
+      height: 1px;
+      background: rgba(255,255,255,.12);
+      margin-bottom: 14px;
+    }
+    .step-line.done { background: rgba(255,255,255,.42); }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
+      color: rgba(255,255,255,.92);
       font-weight: 800;
-      color: var(--blue-dark);
-      font-size: 1.15rem;
+      font-size: 1rem;
+      text-decoration: none;
     }
 
     .brand-mark {
-      height: 28px;
-      padding: 0 9px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #3730a3, #1e1b4b);
+      height: 26px;
+      padding: 0 8px;
+      border-radius: 9px;
+      background: #C9A017;
       display: grid;
       place-items: center;
-      color: white;
-      font-size: .84rem;
+      color: #0D2B5E;
+      font-size: .8rem;
       font-weight: 900;
-      letter-spacing: .06em;
-      box-shadow: 0 4px 14px rgba(55,48,163,.3);
+      letter-spacing: .05em;
     }
 
     .nav {
@@ -141,7 +190,7 @@
     /* ============ Sticky controls (search + status) ============ */
     .sticky-controls {
       position: sticky;
-      top: 0;
+      top: 96px;
       z-index: 40;
       background: #f4f8ff;
       padding: 12px 0 10px;
@@ -287,17 +336,7 @@
       align-items: center;
       gap: 10px;
       box-shadow: var(--shadow-soft);
-      transition: transform 0.18s ease;
     }
-    @keyframes card-pop {
-      0%   { transform: scale(1); }
-      30%  { transform: scale(1.12); box-shadow: 0 12px 32px rgba(18,53,91,0.18); }
-      70%  { transform: scale(1.12); box-shadow: 0 12px 32px rgba(18,53,91,0.18); }
-      100% { transform: scale(1); }
-    }
-    .candidate-card.pop { animation: card-pop 0.9s ease forwards; }
-
-    .candidate-card:hover { transform: translateY(-2px); }
 
     .photo-wrap {
       width: 96px;
@@ -309,9 +348,14 @@
       flex-shrink: 0;
     }
 
-    .candidate-card.selected .photo-wrap {
+    .candidate-card.selected {
       border-color: var(--blue-main);
-      box-shadow: 0 0 0 3px rgba(29,95,167,0.2);
+      box-shadow: 0 0 0 1px var(--blue-main), 0 4px 12px rgba(29,95,167,.1);
+      background: #f0f7ff;
+    }
+    .candidate-card.selected .photo-wrap {
+      border-color: transparent;
+      box-shadow: none;
     }
 
     .photo-wrap img {
@@ -329,7 +373,7 @@
       line-height: 1.3;
     }
 
-    .candidate-card.selected .candidate-name { color: var(--blue-main); }
+    /* שם המועמד שומר על צבעו המקורי גם בסימון */
 
     .card-btns {
       display: flex;
@@ -381,11 +425,16 @@
     }
     .btn-select:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
 
-    .candidate-card.vadai .photo-wrap {
+    .candidate-card.vadai {
       border-color: #f59e0b;
-      box-shadow: 0 0 0 3px rgba(245,158,11,0.25);
+      box-shadow: 0 0 0 1px #f59e0b, 0 4px 12px rgba(245,158,11,.1);
+      background: #fff9f2;
     }
-    .candidate-card.vadai .candidate-name { color: #b45309; }
+    .candidate-card.vadai .photo-wrap {
+      border-color: transparent;
+      box-shadow: none;
+    }
+    /* שם ודאי שומר גם הוא על צבעו המקורי */
     .photo-check-gold { background: #b45309 !important; }
 
     .candidate-card.dbr-picked .photo-wrap {
@@ -533,62 +582,102 @@
       .button { flex: 1; padding: 11px 10px; font-size: 0.88rem; }
     }
   </style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
   <!-- ══ מסך פתיחה — מוצג פעם אחת ══ -->
-  <div id="shiryun-intro" style="display:none;position:fixed;inset:0;background:#f4f8ff;z-index:200;overflow-y:auto;padding:0 0 100px">
+  <div id="shiryun-intro" style="display:none">
     <style>
+      #shiryun-intro {
+        position: fixed; inset: 0;
+        background: rgba(13,43,94,.12);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+        z-index: 200;
+        display: grid; place-items: center;
+        padding: 20px;
+      }
+      #shiryun-intro .intro-card {
+        background: white;
+        border-radius: 16px;
+        max-width: 560px; width: 100%;
+        max-height: 90vh; overflow-y: auto;
+        padding: 32px 28px;
+        box-shadow: 0 28px 70px rgba(16,24,40,.25);
+        text-align: right;
+      }
+      #shiryun-intro .intro-card h2 {
+        font-size: 1.35rem; color: var(--blue-dark);
+        margin: 0 0 18px; line-height: 1.3;
+        text-align: center;
+      }
+      #shiryun-intro .intro-card p {
+        color: var(--text-main); font-size: .93rem;
+        line-height: 1.75; margin: 0 0 12px;
+      }
+      #shiryun-intro .intro-note {
+        background: var(--blue-soft);
+        border: 1px solid var(--border-soft);
+        border-radius: 12px;
+        padding: 12px 14px;
+        font-size: .88rem; color: var(--blue-dark);
+        font-weight: 700; line-height: 1.6; margin: 14px 0;
+      }
+      #shiryun-intro .intro-btn {
+        display: block; width: 100%;
+        padding: 13px 20px;
+        background: var(--blue-main); color: white;
+        border: none; border-radius: 12px;
+        font-size: 1rem; font-weight: 800;
+        cursor: pointer; font-family: inherit;
+        margin-top: 16px;
+        transition: transform .15s, box-shadow .15s;
+      }
+      #shiryun-intro .intro-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(29,95,167,.25); }
       #shiryun-intro details > summary::-webkit-details-marker { display: none; }
       #shiryun-intro .fold-arr { transition: transform .2s; display: inline-block; color: var(--blue-main); font-size: .8rem; }
       #shiryun-intro details[open] .fold-arr { transform: rotate(180deg); }
     </style>
-    <div style="max-width:680px;margin:0 auto;padding:32px 24px">
+    <div class="intro-card">
 
-      <div style="display:flex;align-items:center;gap:12px;margin-bottom:28px">
-        <span style="height:40px;padding:0 13px;border-radius:12px;background:linear-gradient(135deg,#3730a3,#1e1b4b);display:grid;place-items:center;color:white;font-size:.84rem;font-weight:900;letter-spacing:.06em;box-shadow:0 4px 14px rgba(55,48,163,.3)">ד.ב.ר</span>
-        <span style="font-weight:800;color:var(--blue-dark);font-size:1.05rem">דמוקרטים בוחרים רציונלית</span>
+      <h2>1/3 — בחירה עצמאית</h2>
+
+      <p><strong>המטרה:</strong> לזהות את רשימת המוצא שלכם בדרך להחלטה האישית על 6–8 שמות להצבעה בפועל.</p>
+
+      <p><strong>מה עושים?</strong> סמנו את בחירתכם מתוך הרשימה הכללית לפי היכרות, אמון, הערכה אישית, עמדה פוליטית, או כל סיבה שחשובה לכם. לכל מועמד.ת אפשרות הרחבה לקריאת הפרופיל האישי.</p>
+
+      <p><strong>כמה?</strong> בשלב זה המערכת מאפשרת עד 12 בחירות. החלפות וצמצומים יתאפשרו לאורך הדרך.</p>
+
+      <p style="margin-bottom:10px"><strong>יש לכם פייבוריטים?</strong> סמנו אותם כאן כ"ודאי.ת" בלחיצה נוספת על כפתור הבחירה.</p>
+
+      <!-- הדגמה מחזור 3 מצבים -->
+      <div style="background:var(--blue-soft);border-radius:12px;padding:14px 16px;margin:0 0 16px">
+
+        <!-- שורה 1: 3 כפתורים + חיצים — סדר RTL: בחר מימין, ★ ודאי משמאל -->
+        <div style="display:flex;align-items:center;gap:5px;direction:rtl">
+          <span style="flex:1;text-align:center;padding:5px 0;border-radius:999px;font-size:.75rem;font-weight:800;background:white;color:var(--blue-dark);border:1.5px solid var(--border-soft);white-space:nowrap">בחר</span>
+          <span style="color:var(--text-muted);font-size:.8rem;flex-shrink:0">←</span>
+          <span style="flex:1;text-align:center;padding:5px 0;border-radius:999px;font-size:.75rem;font-weight:800;background:var(--blue-main);color:#fff;border:1.5px solid var(--blue-dark);white-space:nowrap">✓ נבחר</span>
+          <span style="color:var(--text-muted);font-size:.8rem;flex-shrink:0">←</span>
+          <span style="flex:1;text-align:center;padding:5px 0;border-radius:999px;font-size:.75rem;font-weight:800;background:#b45309;color:#fff;border:1.5px solid #92400e;white-space:nowrap">★ ודאי</span>
+        </div>
+
+        <!-- שורה 2: חץ חזרה — צד ימין (אל בחר): עיקול CSS כצד ימין של U -->
+        <div style="display:flex;align-items:flex-end;direction:rtl;margin-top:2px;height:18px;overflow:visible">
+          <span style="display:inline-block;flex-shrink:0;width:9px;height:13px;border-right:1.5px solid #b0c4d8;border-bottom:1.5px solid #b0c4d8;border-bottom-right-radius:6px;position:relative;margin-bottom:3px">
+            <span style="position:absolute;top:-5px;right:-4px;border-left:3.5px solid transparent;border-right:3.5px solid transparent;border-bottom:5px solid #b0c4d8"></span>
+          </span>
+          <span style="flex:1;border-top:1.5px dashed #b0c4d8;margin-bottom:3px;margin-left:1px;margin-right:1px"></span>
+          <span style="display:inline-block;flex-shrink:0;width:9px;height:13px;border-left:1.5px solid #b0c4d8;border-bottom:1.5px solid #b0c4d8;border-bottom-left-radius:6px;position:relative;margin-bottom:3px">
+            <span style="position:absolute;top:-5px;left:-4px;border-left:3.5px solid transparent;border-right:3.5px solid transparent;border-top:5px solid #b0c4d8"></span>
+          </span>
+        </div>
+
       </div>
 
-      <h2 style="margin:0 0 6px;font-size:clamp(1.3rem,3vw,1.7rem);color:var(--blue-dark);line-height:1.3">בחירה עצמאית</h2>
-
-      <p style="margin:16px 0;color:var(--text-main);font-size:.98rem;line-height:1.75">
-        כאן בוחרים את המועמדות והמועמדים בעצמכם, ישירות מתוך הרשימה — לפי היכרות, אמון, הערכה אישית, עמדה פוליטית, או כל סיבה שחשובה לכם.
-      </p>
-      <p style="margin:0 0 22px;color:var(--text-main);font-size:.98rem;line-height:1.75">
-        על כל מועמד/ת אפשר לפתוח כרטיס ביקור עם פרופיל מלא — בלחיצה על התמונה או על השם — בכל שלב שנוח לכם.
-      </p>
-
-      <!-- כפתור התחלה — מופיע מיד, לחסרי הסבלנות -->
-      <div style="text-align:center;margin-bottom:18px">
-        <button onclick="dismissIntro()" style="padding:14px 36px;background:var(--blue-main);color:white;border:none;border-radius:14px;font-weight:800;font-size:1.05rem;cursor:pointer;font-family:inherit;box-shadow:0 8px 24px rgba(29,95,167,.25);transition:transform .15s" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
-          בואו נתחיל ←
-        </button>
-      </div>
-
-      <!-- ההסבר המלא — מקופל למי שרוצה להעמיק -->
-      <details style="margin-bottom:10px">
-        <summary style="cursor:pointer;padding:11px 16px;background:white;border:1px solid var(--border-soft);border-radius:12px;font-weight:800;color:var(--blue-dark);font-size:.95rem;display:flex;justify-content:space-between;align-items:center;gap:10px;list-style:none">
-          <span>איך זה עובד? — הסבר קצר</span>
-          <span class="fold-arr">▾</span>
-        </summary>
-
-      <div style="background:white;border:1px solid var(--border-soft);border-radius:16px;padding:20px 22px;margin:10px 0 22px">
-        <p style="margin:0;color:var(--text-main);font-size:.96rem;line-height:1.7">
-          לחצו <strong style="color:var(--green)">בחר</strong> על מועמדים שאתם רוצים בנבחרת. לחצו <strong style="color:#c0392b">בטל</strong> לביטול.
-        </p>
-      </div>
-
-      <p style="margin:0 0 20px;color:var(--text-muted);font-size:.93rem;line-height:1.7">
-        אין מגבלת מספר, ואפשר לשנות כל סימון בכל רגע. לפני שמחליטים — כדאי לפתוח את כרטיס הביקור של המועמד/ת ולעיין בפרופיל המלא.
-      </p>
-
-      <div style="background:var(--blue-soft);border-radius:14px;padding:16px 20px;margin-bottom:28px">
-        <p style="margin:0;color:var(--blue-dark);font-weight:700;font-size:.95rem;line-height:1.65">
-          המטרה כאן: לגבש בעצמכם את הנבחרת שמדברת אליכם, לפי מה שחשוב לכם.
-        </p>
-      </div>
-      </details>
-
+      <button class="intro-btn" onclick="dismissIntro()">הבנתי, אפשר להמשיך</button>
     </div>
   </div>
   <!-- ════════════════════════════════ -->
@@ -603,34 +692,44 @@
   gtag('js', new Date());
   gtag('config', 'G-TJNJTZQF1F');
 </script>
-      <div style="display:flex;flex-direction:column;width:100%;gap:6px">
-        <div style="display:flex;align-items:center;justify-content:space-between">
-          <a class="brand" href="dbr_P_01_index.html" style="min-width:0;flex-shrink:1">
-            <span class="brand-mark">ד.ב.ר</span>
-            <span>דמוקרטים בוחרים רציונלית</span>
-          </a>
-          <a href="dbr_P_01_process.html" style="font-size:1.8rem;text-decoration:none;line-height:1;flex-shrink:0">⬅️</a>
+      <div class="topbar-row">
+        <a class="brand" href="dbr_P_01_index.html" style="min-width:0;flex-shrink:1">
+          <span class="brand-mark">ד.ב.ר</span>
+          <span>דמוקרטים בוחרים רציונלית</span>
+        </a>
+        <a href="dbr_P_01_process.html" style="color:rgba(255,255,255,.65);font-size:.85rem;font-weight:600;text-decoration:none;flex-shrink:0">תפריט</a>
+      </div>
+      <div class="step-nav">
+        <div class="step-item active">
+          <div class="step-dot"></div>
+          <div class="step-lbl">בחירה</div>
         </div>
-        <div style="text-align:center;font-size:.72rem;color:var(--text-muted)">© 2026 Silvertel Online ltd | כל הזכויות שמורות</div>
+        <div class="step-line"></div>
+        <div class="step-item">
+          <div class="step-dot"></div>
+          <div class="step-lbl">סימולציה</div>
+        </div>
+        <div class="step-line"></div>
+        <div class="step-item">
+          <div class="step-dot"></div>
+          <div class="step-lbl">הפתק שלי</div>
+        </div>
       </div>
     </header>
-    <section class="page-header">
-      <div style="display:flex;align-items:center;gap:10px;margin:0 0 10px">
-        <h1 style="margin:0;font-size:clamp(1.5rem,2.8vw,2rem);color:var(--blue-dark);letter-spacing:-0.015em">בחירה עצמאית</h1>
-        <button onclick="document.getElementById('shiryun-intro').style.display='block'"
-                title="הצג הסבר על המסלול"
-                style="flex-shrink:0;display:flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;border:2px solid var(--blue-main);background:white;color:var(--blue-main);font-size:.85rem;font-weight:900;cursor:pointer;font-family:Georgia,serif;line-height:1;padding:0">i</button>
-      </div>
-      <p class="subtitle">
-        בחרו מועמדים שאתם בטוחים לגביהם — צפו בפרופיל שלהם בכל שלב שנוח לכם.
-      </p>
-    </section>
-
-    <!-- אזור בקרה דביק בראש: חיפוש + סטטוס (נשאר קבוע בגלילה) -->
+    <!-- אזור בקרה דביק בראש: כותרת + סטטוס + חיפוש -->
     <div class="sticky-controls">
-      <div class="status-bar" id="status-bar" style="display:none">
-        <div id="counter-summary" style="font-size:.92rem;font-weight:700;color:#12355b"></div>
-        <button class="continue-btn" onclick="saveAndReturn()">סיום ←</button>
+      <div class="status-bar" id="status-bar">
+        <div style="display:flex;flex-direction:column;align-items:flex-start;flex-shrink:0;gap:2px">
+          <h1 style="margin:0;font-size:1.15rem;font-weight:900;color:var(--blue-dark);letter-spacing:-0.01em">בחירה</h1>
+          <button onclick="document.getElementById('shiryun-intro').style.display=''"
+                  title="הסבר"
+                  style="background:none;border:none;padding:0;cursor:pointer;color:var(--blue-main);font-size:.72rem;font-weight:700;font-family:inherit;line-height:1">ⓘ הסבר</button>
+        </div>
+        <div style="flex:1;min-width:0;padding:0 12px">
+          <div id="counter-summary" style="font-size:1rem;font-weight:800;color:var(--blue-dark)">0 נבחרו</div>
+          <div style="font-size:.72rem;color:var(--text-muted);margin-top:1px">במסך זה ניתן לבחור 0-12 שמות.</div>
+        </div>
+        <button class="continue-btn" onclick="saveAndReturn()">לשלב הבא</button>
       </div>
       <div class="search-box">
         <input
@@ -642,9 +741,6 @@
         />
         <button class="search-clear" id="search-clear" onclick="searchBtnAction()" title="רענון ההצגה">⟳</button>
       </div>
-      <p class="search-help" id="search-help">
-        אפשר לחפש כל מילה שמופיעה בתיאור המועמדים — שם, מפלגה, תחום עיסוק או מאפיין. כמה מילים יחד מצמצמות את התוצאות.
-      </p>
     </div>
 
     <div class="candidates-list" id="candidates-list">
@@ -663,7 +759,7 @@
     }
 
     if (localStorage.getItem(INTRO_KEY) !== 'yes' || new URLSearchParams(location.search).get('intro') === '1') {
-      document.getElementById('shiryun-intro').style.display = 'block';
+      document.getElementById('shiryun-intro').style.display = '';
     }
     // ════════════════
 
@@ -774,7 +870,7 @@
 
     function selectBtnState(id) {
       if (isVadai(id))    return { cls: 'btn-select vadai',    txt: '★ ודאי' };
-      if (isShiryun(id))  return { cls: 'btn-select selected',  txt: 'נבחר ✓' };
+      if (isShiryun(id))  return { cls: 'btn-select selected',  txt: '✓ נבחר' };
       return                     { cls: 'btn-select',            txt: 'בחר'    };
     }
 
@@ -1000,9 +1096,7 @@
       ]).size;
       const elSummary = document.getElementById('counter-summary');
       if (elSummary) {
-        elSummary.innerHTML = shiryunN > 0
-          ? `נבחרו <strong style="color:#2e7d4f">${shiryunN}</strong><span style="color:#5f6b7a;font-weight:600">/${MAX_SHIRYUN}</span> מועמדים`
-          : '';
+        elSummary.innerHTML = `<strong style="font-size:1.2rem">${shiryunN}</strong> נבחרו`;
       }
       const elFooter = document.getElementById('footer-selected');
       if (elFooter) elFooter.textContent = totalN;
@@ -1024,7 +1118,7 @@
       const statusBar = document.getElementById('status-bar');
       const help = document.getElementById('search-help');
       const clearBtn = document.getElementById('search-clear');
-      if (statusBar) statusBar.style.display = (totalN > 0 || searchActive) ? 'flex' : 'none';
+      if (statusBar) statusBar.style.display = 'flex';
       if (help) help.style.display = (totalN > 0) ? 'none' : 'block';
       if (clearBtn) {
         clearBtn.textContent = searchActive ? '✕' : '⟳';

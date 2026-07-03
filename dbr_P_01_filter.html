@@ -12,7 +12,7 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>סינון סופי | ד.ב.ר</title>
+<title>הפתק שלי | ד.ב.ר</title>
 <style>
   :root {
     --blue-dark: #12355b;
@@ -36,7 +36,7 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
   body {
-    font-family: Arial, "Noto Sans Hebrew", sans-serif;
+    font-family: 'Heebo', Arial, sans-serif;
     background: linear-gradient(180deg, #f4f8ff 0%, #fff 60%);
     color: var(--text-main);
     line-height: 1.6;
@@ -47,16 +47,67 @@
   /* ── Topbar ── */
   .topbar {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 20px 8px;
+    flex-direction: column;
+    padding: 10px 20px 6px;
     border-bottom: 1px solid var(--border-soft);
     background: var(--white);
     position: sticky;
     top: 0;
     z-index: 50;
+    gap: 8px;
+  }
+  .topbar-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     gap: 12px;
   }
+
+  /* ── Step navigator ── */
+  .step-nav {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 2px 0 4px;
+  }
+  .step-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+  .step-item.done { cursor: pointer; }
+  .step-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #d7e3f3;
+    transition: all .2s;
+  }
+  .step-item.active .step-dot {
+    width: 9px;
+    height: 9px;
+    background: var(--blue-main);
+    box-shadow: 0 0 0 3px rgba(29,95,167,.15);
+  }
+  .step-item.done .step-dot { background: var(--blue-main); }
+  .step-lbl {
+    font-size: .62rem;
+    color: #b0bec7;
+    white-space: nowrap;
+    line-height: 1;
+    font-weight: 500;
+  }
+  .step-item.active .step-lbl { color: var(--blue-main); font-weight: 800; font-size: .68rem; }
+  .step-item.done .step-lbl   { color: var(--blue-main); font-weight: 600; }
+  .step-line {
+    flex: 1;
+    height: 1.5px;
+    background: #d7e3f3;
+    margin-bottom: 15px;
+  }
+  .step-line.done { background: var(--blue-main); }
   .brand {
     display: flex;
     align-items: center;
@@ -94,7 +145,7 @@
     justify-content: space-between;
     gap: 12px;
     position: sticky;
-    top: 53px;
+    top: 86px;
     z-index: 40;
     box-shadow: 0 2px 8px rgba(18,53,91,.06);
   }
@@ -262,8 +313,9 @@
     border-radius: 999px;
     white-space: nowrap;
   }
-  .tag-shiryun { background: var(--amber-soft); color: var(--amber); }
-  .tag-dbr     { background: var(--blue-soft);  color: var(--blue-main); }
+  .tag-shiryun { background: #dce9f7; color: #3a6fa0; }
+  .tag-dbr     { background: var(--blue-soft); color: var(--blue-main); }
+  .tag-vadai   { background: #fef3cd; color: #9a6c00; font-weight: 800; }
 
   /* Action icon */
   .slot-action {
@@ -383,23 +435,96 @@
     .slot-name { font-size: .92rem; }
     .slot-photo { width: 44px; height: 56px; }
   }
+
+  /* ── Intro overlay ── */
+  .intro-overlay {
+    position: fixed; inset: 0;
+    background: rgba(13,43,94,.12);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 50;
+    display: grid; place-items: center;
+    padding: 20px;
+  }
+  .intro-card {
+    background: white;
+    border-radius: 16px;
+    max-width: 560px; width: 100%;
+    max-height: 90vh; overflow-y: auto;
+    padding: 32px 28px;
+    box-shadow: 0 28px 70px rgba(16,24,40,.25);
+    text-align: right;
+  }
+  .intro-card h2 { font-size: 1.35rem; color: var(--blue-dark); margin: 0 0 14px; line-height: 1.3; }
+  .intro-card p  { color: var(--text-main); font-size: .93rem; line-height: 1.75; margin: 0 0 12px; }
+  .intro-card .intro-note {
+    background: var(--blue-soft);
+    border: 1px solid var(--border-soft);
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: .88rem; color: var(--blue-dark);
+    font-weight: 700; line-height: 1.6; margin: 14px 0;
+  }
+  .intro-btn {
+    display: block; width: 100%;
+    padding: 13px 20px;
+    background: var(--blue-main); color: white;
+    border: none; border-radius: 12px;
+    font-size: 1rem; font-weight: 800;
+    cursor: pointer; font-family: inherit;
+    margin-top: 8px;
+    transition: transform .15s, box-shadow .15s;
+  }
+  .intro-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(29,95,167,.25); }
 </style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
 
+<!-- ── Intro overlay — כניסה ראשונה ── -->
+<div id="intro-overlay" class="intro-overlay" style="display:none">
+  <div class="intro-card">
+    <h2>הפתק שלי</h2>
+    <p>כאן בונים את פתק הבחירה הסופי — 6 עד 8 מועמדות ומועמדים שתרצו לסמן ביום ההצבעה.</p>
+    <p>המועמדים שצברתם בשלבים הקודמים מחכים לכם כאן. לחצו על שם כדי להוסיפו לפתק או להוציאו ממנו.</p>
+    <div class="intro-note">הפתק תקף רק עם לפחות 6 שמות ולא יותר מ-8. ✓</div>
+    <button class="intro-btn" onclick="dismissIntro()">הבנתי, אפשר להמשיך</button>
+  </div>
+</div>
+
 <!-- ── Topbar ── -->
 <header class="topbar">
-  <a class="brand" href="dbr_P_01_index.html">
-    <span class="brand-mark">ד.ב.ר</span>
-    <span class="brand-label">דמוקרטים בוחרים רציונלית</span>
-  </a>
-  <a href="dbr_P_01_process.html" style="font-size:1.8rem;text-decoration:none;line-height:1;flex-shrink:0" title="חזרה">⬅️</a>
+  <div class="topbar-row">
+    <a class="brand" href="dbr_P_01_index.html">
+      <span class="brand-mark">ד.ב.ר</span>
+      <span class="brand-label">דמוקרטים בוחרים רציונלית</span>
+    </a>
+    <a href="dbr_P_01_process.html" style="font-size:1.8rem;text-decoration:none;line-height:1;flex-shrink:0" title="חזרה">⬅️</a>
+  </div>
+  <div class="step-nav">
+    <div class="step-item done" onclick="window.location.href='dbr_P_01_shiryun.html'" title="חזרה לבחירה">
+      <div class="step-dot"></div>
+      <div class="step-lbl">בחירה</div>
+    </div>
+    <div class="step-line done"></div>
+    <div class="step-item done" onclick="window.location.href='dbr_P_01_state.html'" title="חזרה לסימולציה">
+      <div class="step-dot"></div>
+      <div class="step-lbl">סימולציה</div>
+    </div>
+    <div class="step-line done"></div>
+    <div class="step-item active">
+      <div class="step-dot"></div>
+      <div class="step-lbl">הפתק שלי</div>
+    </div>
+  </div>
 </header>
 
 <!-- ── Progress bar ── -->
 <div class="progress-bar">
   <div class="progress-label">
-    <span>פתק הבחירה שלי:</span>
+    <span>הפתק שלי (6–8):</span>
     <span class="vadai-count" id="vadai-count">0/8</span>
   </div>
   <button class="done-btn" id="done-btn" onclick="finishAndGo()" disabled>סיום ←</button>
@@ -420,7 +545,7 @@
   <div id="filter-ui" style="display:none">
 
     <p class="page-intro">
-      סמני עד 8 מועמדים לפתק הבחירה הסופי. לחצי על מועמד/ת להוסיף או להוציא.
+      סמני 6–8 מועמדים לפתק הבחירה הסופי. לחצי על מועמד/ת להוסיף או להוציא.
     </p>
 
     <!-- ── Zone A: ודאיים ── -->
@@ -449,10 +574,22 @@
 <div id="toast"></div>
 
 <script>
+  // ══ מסך פתיחה ══
+  const INTRO_KEY = 'dbr_filter_intro_seen';
+  function dismissIntro() {
+    document.getElementById('intro-overlay').style.display = 'none';
+    try { localStorage.setItem(INTRO_KEY, 'yes'); } catch(e) {}
+  }
+  if (localStorage.getItem(INTRO_KEY) !== 'yes') {
+    document.getElementById('intro-overlay').style.display = '';
+  }
+  // ════════════════
+
   // ═══════════════════════════════════════════
   //  State
   // ═══════════════════════════════════════════
   const STATE_KEY = 'primeris_state_v1';
+  const MIN_VADAI = 6;
   const MAX_VADAI = 8;
 
   function loadState() {
@@ -471,6 +608,13 @@
   }
 
   let primState = loadState();
+
+  // מיפוי מגדר לכינוי ודאי/ודאית
+  let genderMap = {};
+  fetch('data/candidates_master.json').then(r => r.ok ? r.json() : {}).then(data => {
+    (data.candidates || []).forEach(c => { if (c['שם']) genderMap[c['שם']] = c['קטגוריה'] || ''; });
+    render(); // רנדר מחדש עם מגדר נכון
+  }).catch(() => {});
 
   // ═══════════════════════════════════════════
   //  Image helpers (copied from shiryun page)
@@ -601,9 +745,21 @@
   function cardHTML(name, position, isVadai) {
     const fromShiryun = isFromShiryun(name);
     const fromDbr     = isFromDbr(name);
+    const teamSource  = (primState.shiryun_sources || {})[name];
+    const isFemale    = genderMap[name] === 'נשים';
     const tags = [];
-    if (fromShiryun) tags.push('<span class="tag tag-shiryun">★ בחירה עצמאית</span>');
-    if (fromDbr)     tags.push('<span class="tag tag-dbr">● סימולציה</span>');
+    if (isVadai) {
+      tags.push(`<span class="tag tag-vadai">★ ${isFemale ? 'ודאית' : 'ודאי'}</span>`);
+    }
+    if (fromShiryun) {
+      if (teamSource) {
+        tags.push(`<span class="tag tag-dbr">${teamSource}</span>`);
+      } else {
+        tags.push('<span class="tag tag-shiryun">בחירה ראשונית</span>');
+      }
+    } else if (fromDbr) {
+      tags.push('<span class="tag tag-dbr">סימולציה</span>');
+    }
 
     const numHtml = position
       ? `<div class="slot-num">${position}</div>`
@@ -639,10 +795,8 @@
 
     const idx = primState.vadai.indexOf(name);
     if (idx >= 0) {
-      // Remove from vadai
       primState.vadai.splice(idx, 1);
     } else {
-      // Add to vadai
       if (primState.vadai.length >= MAX_VADAI) {
         showToast('אפשר לסמן עד ' + MAX_VADAI + ' מועמדים בפתק');
         return;
@@ -653,7 +807,6 @@
     saveState(primState);
     render();
 
-    // GA event
     try { gtag('event', 'filter_toggle', { name, action: idx >= 0 ? 'remove' : 'add' }); } catch(e) {}
   }
 
