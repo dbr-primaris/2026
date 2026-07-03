@@ -727,7 +727,7 @@
         </div>
         <div style="flex:1;min-width:0;padding:0 12px">
           <div id="counter-summary" style="font-size:1rem;font-weight:800;color:var(--blue-dark)">0 נבחרו</div>
-          <div style="font-size:.72rem;color:var(--text-muted);margin-top:1px">במסך זה ניתן לבחור 0-12 שמות.</div>
+          <div style="font-size:.72rem;color:var(--text-muted);margin-top:1px">בשלב זה ניתן לבחור 0-12 שמות.</div>
         </div>
         <button class="continue-btn" onclick="saveAndReturn()">לשלב הבא</button>
       </div>
@@ -1094,9 +1094,11 @@
         ...primState.shiryun,
         ...primState.dbr_picks
       ]).size;
+      const vadaiN = (primState.vadai || []).length;
       const elSummary = document.getElementById('counter-summary');
       if (elSummary) {
-        elSummary.innerHTML = `<strong style="font-size:1.2rem">${shiryunN}</strong> נבחרו`;
+        const vadaiSuffix = vadaiN > 0 ? `, מתוכם ${vadaiN} ודאי` : '';
+        elSummary.innerHTML = `<strong style="font-size:1.2rem">${shiryunN}</strong> נבחרו${vadaiSuffix}`;
       }
       const elFooter = document.getElementById('footer-selected');
       if (elFooter) elFooter.textContent = totalN;

@@ -550,9 +550,11 @@
     let primState = loadState();
 
     // ── ניווט ──────────────────────────────────────────────────────────────
-    function goToShiryun() { trackPath('shiryun'); window.location.href = 'dbr_P_01_shiryun.html'; }
-    function goToState()   { trackPath('committee'); window.location.href = 'dbr_P_01_state.html'; }
-    function goToFilter()  { trackPath('filter'); window.location.href = 'dbr_P_01_filter.html'; }
+    // הגעה לעמוד זה מוכיחה שהמשתמש עבר את מסך ההסכמה — נוודא שהמפתח מוגדר לפני כל ניווט
+    function _ensureDisclaimer() { try { localStorage.setItem('dbr_disclaimer_accepted','yes'); } catch(e) {} }
+    function goToShiryun() { _ensureDisclaimer(); trackPath('shiryun'); window.location.href = 'dbr_P_01_shiryun.html'; }
+    function goToState()   { _ensureDisclaimer(); trackPath('committee'); window.location.href = 'dbr_P_01_state.html'; }
+    function goToFilter()  { _ensureDisclaimer(); trackPath('filter'); window.location.href = 'dbr_P_01_filter.html'; }
 
 
     function setCard(cardId, numId, statusId, state, numText, statusText) {
@@ -568,32 +570,41 @@
       const shiryun  = primState.shiryun  || [];
       const selected = primState.selected || [];
       const vadai    = primState.vadai    || [];
+      const sources  = primState.shiryun_sources || {};
 
-      const step1Done           = shiryun.length  > 0;
-      const step1EnoughForStep3 = shiryun.length  >= 6;
+      // נבחרי מוצא = נבחרו בשלב 1 בלבד (ללא מקור נבחרת בשלב 2)
+      const originShiryun   = shiryun.filter(n => !sources[n]);
+      const regularOrigin   = originShiryun.filter(n => !vadai.includes(n)).length;
+
+      const step1Done           = originShiryun.length > 0;
+      const step1EnoughForStep3 = originShiryun.length >= 6;
       const step2Done           = selected.length >= 6;
       const step3Done           = vadai.length    >= 6;
 
       // ── כרטיסית 1: בחירה (תחתון) ──
       if (step1Done) {
-        setCard('card-shiryun','num-shiryun','status-shiryun','done','✓',
-          `נבחרו ${shiryun.length} מתוכם ${vadai.length} ודאי`);
+        const s1txt = vadai.length > 0
+          ? `${originShiryun.length} נבחרו, מתוכם ${vadai.length} ודאי`
+          : `${originShiryun.length} נבחרו`;
+        setCard('card-shiryun','num-shiryun','status-shiryun','done','✓', s1txt);
       } else {
         setCard('card-shiryun','num-shiryun','status-shiryun','active','1','בשלב זה ניתן לסמן 0-12 שמות');
       }
 
       // ── כרטיסית 2: סימולציה (אמצע) — תמיד פתוחה (שלב 1 אופציונלי) ──
       if (step2Done) {
-        setCard('card-state','num-state','status-state','done','✓',`${selected.length} מועמדים נבחרו`);
+        const addedCount = shiryun.filter(n => sources[n]).length;
+        const s2txt = `${shiryun.length} נבחרו, מתוכם ${originShiryun.length} מוצא ו-${addedCount} נוספו בשלב זה`;
+        setCard('card-state','num-state','status-state','done','✓', s2txt);
       } else {
         setCard('card-state','num-state','status-state','active','2','בשלב זה יש להשלים בחירה של 6-12 שמות');
       }
 
-      // ── כרטיסית 3: הפתק שלי (ראש) — נפתחת רק אם שלב 1 ≥6 או שלב 2 הושלם ──
+      // ── כרטיסית 3: הפתק שלי (ראש) — נפתחת רק כשיש לפחות 6 נבחרים סה"כ ──
       if (step3Done) {
-        setCard('card-filter','num-filter','status-filter','done','✓',`${vadai.length} מועמדים בפתק`);
-      } else if (step1EnoughForStep3 || step2Done) {
-        setCard('card-filter','num-filter','status-filter','active','3',`${selected.length || shiryun.length} מועמדים מוכנים לסינון ←`);
+        setCard('card-filter','num-filter','status-filter','done','✓',`${vadai.length} נבחרים בפתק שלך`);
+      } else if (shiryun.length >= 6) {
+        setCard('card-filter','num-filter','status-filter','active','3','הבחירה שלך מוכנה, הכנס כדי לראות.');
       } else {
         setCard('card-filter','num-filter','status-filter','locked','3','6–8 מועמדים לפתק הבחירה הסופי');
       }

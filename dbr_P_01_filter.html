@@ -633,6 +633,13 @@
   }
   const initialVadai = new Set(primState.vadai_step1);
 
+  // אם בדיוק 6 מועמדים סה"כ — כולם עולים אוטומטית מעל קו ההכרעה
+  const _allInit = [...new Set([...(primState.shiryun || []), ...(primState.dbr_picks || [])])];
+  if (_allInit.length === 6 && (primState.vadai || []).length < 6) {
+    primState.vadai = [..._allInit];
+    saveState(primState);
+  }
+
   // מיפוי מגדר לכינוי ודאי/ודאית + תגיות נושא
   let genderMap = {};
   let candidateTopTags = {};
