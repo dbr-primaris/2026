@@ -659,7 +659,7 @@
       // ── כרטיסית 2: סימולציה (אמצע) — תמיד פתוחה (שלב 1 אופציונלי) ──
       if (step2Done) {
         const addedCount = shiryun.filter(n => sources[n]).length;
-        const s2txt = `${shiryun.length} נבחרו, מתוכם ${originShiryun.length} מוצא ו-${addedCount} נוספו בשלב זה`;
+        const s2txt = `${shiryun.length} נבחרו, מתוכם ${originShiryun.length} בנקודת הפתיחה ו-${addedCount} בשלב זה`;
         setCard('card-state','num-state','status-state','done','✓', s2txt);
       } else if (step1Done) {
         setCard('card-state','num-state','status-state','active','2','בשלב זה יש להשלים בחירה של 6-12 שמות');

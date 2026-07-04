@@ -561,11 +561,6 @@
   </div>
   <div style="flex:1;min-width:0;padding:0 12px">
     <div class="pf-bar-count"><strong id="pf-total">0</strong> נבחרים</div>
-    <div class="pf-bar-detail">
-      <strong id="pf-origin">0</strong> נבחרי מוצא
-      <span class="sep">·</span>
-      <strong id="pf-added">0</strong> נוספו בשלב זה
-    </div>
   </div>
   <button class="done-btn" id="done-btn" onclick="finishAndGo()" disabled>יש לבחור 6–8 כדי לסיים</button>
 </div>
@@ -799,11 +794,7 @@
     const originCount = vadaiList.filter(n => initialVadai.has(n)).length;
     const addedCount  = total - originCount;
     const pfTotal  = document.getElementById('pf-total');
-    const pfOrigin = document.getElementById('pf-origin');
-    const pfAdded  = document.getElementById('pf-added');
-    if (pfTotal)  pfTotal.textContent  = total;
-    if (pfOrigin) pfOrigin.textContent = originCount;
-    if (pfAdded)  pfAdded.textContent  = addedCount;
+    if (pfTotal)  pfTotal.textContent  = (primState.shiryun || []).length;
 
     // ── Done button — נפתח רק כשיש 6-8 מעל קו ההכרעה ──
     const readyToFinish = total >= MIN_VADAI && total <= MAX_VADAI;
@@ -913,4 +904,4 @@
 </script>
 </body>
 </html>
-                                                            
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
