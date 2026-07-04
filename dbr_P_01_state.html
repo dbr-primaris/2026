@@ -941,9 +941,6 @@
       color: #C9A017 !important;
       font-weight: 900 !important;
     }
-    [data-vadai="1"] {
-      cursor: default !important;
-    }
     .vadai-badge {
       font-size: .58rem;
       font-weight: 900;
@@ -2989,10 +2986,12 @@
       const eName = escapeHtml(name);
       const icon = monkeyGenderIcon(name);
       const dv = divider ? ' squad-divider' : '';
+      const isVadai = (state.vadai || []).includes(name);
       if (picked) {
+        const nameStyle = isVadai ? ' style="color:#C9A017;font-weight:900"' : '';
         return '<div class="rank-row is-picked' + dv + '" onclick="toggleSquadPick(\'' + eName + '\')">'
           + icon
-          + '<span class="rank-name picked">' + eName + '</span>'
+          + '<span class="rank-name picked"' + nameStyle + '>' + eName + '</span>'
           + '</div>';
       }
       return '<div class="rank-row' + dv + '" onclick="toggleSquadPick(\'' + eName + '\')">'
@@ -3178,9 +3177,11 @@
       // מועמד שכבר נבחר — עיגול זיקה (אם בנבחרת) + שם בלבד, ללא מילת התאמה או כרטיס
       if (c.picked) {
         const dot = c.inSquad ? squadDotHtml(c.value, cfg.color_family, dotBand) : '';
+        const isVadai = (state.vadai || []).includes(c.name);
+        const nameStyle = isVadai ? ' style="color:#C9A017;font-weight:900"' : '';
         return '<div class="rank-row is-picked' + (c.inSquad ? '' : ' squad-extra') + dv + '" onclick="toggleSquadPick(\'' + eName + '\')">'
           + dot
-          + '<span class="rank-name picked">' + eName + '</span>'
+          + '<span class="rank-name picked"' + nameStyle + '>' + eName + '</span>'
           + '</div>';
       }
       // העיגול + המקרא למטה מספרים את הרצועה — אין צורך במילת התאמה בשורה
@@ -3409,47 +3410,31 @@
       state = loadState();
       state.selected = state.selected || [];
       state.shiryun  = state.shiryun  || [];
-      const inShiryun = state.shiryun.indexOf(name) >= 0;
-      if (!inShiryun) {
+      state.vadai    = state.vadai    || [];
+      const isVadai   = state.vadai.includes(name);
+      const inShiryun = state.shiryun.includes(name);
+
+      if (isVadai) {
+        // ודאי → רגיל נבחר
+        state.vadai = state.vadai.filter(x => x !== name);
+        autoLog(name, 'הוסר ודאי');
+      } else if (inShiryun) {
+        // נבחר רגיל → ביטול
+        state.selected = state.selected.filter(x => x !== name);
+        state.shiryun  = state.shiryun.filter(x => x !== name);
+        state.vadai    = state.vadai.filter(x => x !== name);
+        autoLog(name, 'בוטל');
+      } else {
+        // לא נבחר → נבחר
         if (state.shiryun.length >= MAX_SHIRYUN) { maxReached(); return; }
-        if (state.selected.indexOf(name) < 0) state.selected.push(name);
+        if (!state.selected.includes(name)) state.selected.push(name);
         state.shiryun.push(name);
         _recordTeamSource(state, name);
         autoLog(name, 'נבחר');
-        saveState(state);
-        updateStatusBar();
-        if (activeMonkey) { renderMonkeySquad(false); } else { renderSquad(activeSquad); }
-        return;
       }
-      // ביטול בחירה — אזהרה לפי סך נוכחות המועמד בנבחרות (כולל הנוכחית)
-      const squads = squadMembershipTitles(name); // כל הנבחרות שבהן מוצג כחבר
-      let msg = 'ביטול הבחירה של ' + name + ' יסיר את סימון הנבחר בכל המסכים.\n\n';
-      if (squads.length === 0) {
-        // אינו חבר באף נבחרת — יוסר מכל מסכי הנבחרות לחלוטין
-        msg += name + ' אינו/ה מופיע/ה כחבר/ת אף נבחרת, ולכן לא יוצג/תוצג בשום מסך נבחרת.';
-        msg += '\n\nרצוי מאוד להשאירו/ה כנבחר/ת עד השלבים הסופיים של התהליך.';
-      } else {
-        // חבר/ה בנבחרות — יאבד את סימון הנבחר בהן ויוצג כחבר רגיל
-        msg += name + ' יוסר/תוסר מסימון הנבחר, ויוצג/תוצג כחבר/ת נבחרת רגיל/ה בנבחרות:\n';
-        msg += '• ' + squads.join('\n• ');
-        if (squads.length > 4) {
-          // נוכחות רחבה — המלצה חלשה
-          msg += '\n\nמאחר שהוא/היא מופיע/ה בנבחרות רבות, ההסרה פחות משמעותית.';
-        } else {
-          // נוכחות מצומצמת — המלצה בינונית
-          msg += '\n\nמומלץ לשקול להשאירו/ה, ולהחליט לגביו/ה לקראת סוף התהליך.';
-        }
-      }
-      squadConfirm(msg, () => {
-        const st = loadState();
-        st.selected = (st.selected || []).filter(x => x !== name);
-        st.shiryun  = (st.shiryun  || []).filter(x => x !== name);
-        autoLog(name, 'בוטל');
-        saveState(st);
-        state = st;
-        updateStatusBar();
-        if (activeMonkey) { renderMonkeySquad(false); } else { renderSquad(activeSquad); }
-      });
+      saveState(state);
+      updateStatusBar();
+      if (activeMonkey) { renderMonkeySquad(false); } else { renderSquad(activeSquad); }
     }
 
     // מודאל אישור מותאם — ממורכז וגליל, לא נחתך כמו window.confirm בנייד
@@ -3636,8 +3621,8 @@
       const vadaiBadge = (isVadai && picked)
         ? '<span class="vadai-badge">ודאי</span>'
         : '';
-      const vadaiAttr = (isVadai && picked) ? ' data-vadai="1"' : '';
-      const rowClick = (isVadai && picked) ? ' onclick="showStateToast(\'סומן/ה כ-ודאי — הסרה רק דרך שלב 1\')"' : ' onclick="togglePick(\'' + eName + '\')"';
+      const vadaiAttr = '';
+      const rowClick = ' onclick="togglePick(\'' + eName + '\')"';
 
       var row = '<div class="rank-row' + (picked ? ' is-picked' : '') + '"' + vadaiAttr + rowClick + '>'
         + '<span style="display:inline-flex;align-items:center;gap:2px;flex-shrink:0">' + gDot + (picked ? '' : '<span class="rank-num">' + rank + '</span>') + '</span>'
@@ -3697,35 +3682,29 @@
     function togglePick(name) {
       if (filterPicked && !expanded) return;
       state = loadState();
-      console.log('[DBR togglePick]', name, '| vadai:', JSON.stringify(state.vadai));
-      // ודאי — חסום להסרה בשלב 2
-      if ((state.vadai || []).includes(name)) {
-        showStateToast('סומן/ה כ-ודאי — הסרה רק דרך שלב 1');
-        return;
-      }
       state.selected = state.selected || [];
       state.shiryun  = state.shiryun  || [];
-      const inSelected  = state.selected.indexOf(name) >= 0;
-      const inShiryun   = state.shiryun.indexOf(name)  >= 0;
+      state.vadai    = state.vadai    || [];
+      const isVadai   = state.vadai.includes(name);
+      const inShiryun = state.shiryun.includes(name);
 
-      if (!inShiryun) {
-        // ריק / מתלבט → נבחר
+      if (isVadai) {
+        // ודאי → רגיל נבחר (מוריד ודאיות, נשאר בשריון)
+        state.vadai = state.vadai.filter(x => x !== name);
+        autoLog(name, 'הוסר ודאי');
+      } else if (inShiryun) {
+        // נבחר רגיל → ביטול
+        state.selected = state.selected.filter(x => x !== name);
+        state.shiryun  = state.shiryun.filter(x => x !== name);
+        state.vadai    = state.vadai.filter(x => x !== name);
+        autoLog(name, 'בוטל');
+      } else {
+        // לא נבחר → נבחר
         if (state.shiryun.length >= MAX_SHIRYUN) { maxReached(); return; }
-        if (!inSelected) state.selected.push(name);
+        if (!state.selected.includes(name)) state.selected.push(name);
         state.shiryun.push(name);
         _recordTeamSource(state, name);
         autoLog(name, 'נבחר');
-      } else {
-        // נבחר → ביטול
-        const candidate = rankList.find(c => c.name === name);
-        const isOutside = candidate && (candidate._origRank > rankSlots());
-        if (isOutside) {
-          const ok = window.confirm(name + ' נמצא/ת מחוץ ל-20 המועמדים המובילים.\nביטול הבחירה יסיר אותו/ה מהרשימה לחלוטין.\nלהמשיך?');
-          if (!ok) return;
-        }
-        state.selected = state.selected.filter(x => x !== name);
-        state.shiryun  = state.shiryun.filter(x => x !== name);
-        autoLog(name, 'בוטל');
       }
       saveState(state);
       updateStatusBar();
@@ -3802,11 +3781,12 @@
     function toggleShiryunState(name) {
       state = loadState();
       state.selected = state.selected || [];
-      state.shiryun = state.shiryun || [];
-      const isShiryuned = state.shiryun.indexOf(name) >= 0;
+      state.shiryun  = state.shiryun  || [];
+      state.vadai    = state.vadai    || [];
+      const isShiryuned = state.shiryun.includes(name);
       if (isShiryuned) {
-        const i = state.shiryun.indexOf(name);
-        if (i >= 0) state.shiryun.splice(i, 1);
+        state.shiryun = state.shiryun.filter(x => x !== name);
+        state.vadai   = state.vadai.filter(x => x !== name);
         autoLog(name, 'בוטל שריון');
       } else {
         if (state.shiryun.length >= MAX_SHIRYUN) {
