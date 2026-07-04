@@ -68,7 +68,7 @@
     top: 0; left: 0; right: 0;
     z-index: 100;
     background: #0D2B5E;
-    padding: 12px 24px 0;
+    padding: 12px 0 0;
     display: flex;
     flex-direction: column;
   }
@@ -78,13 +78,20 @@
     align-items: center;
     gap: 20px;
     padding-bottom: 10px;
+    /* מיושר לעמודת התוכן (.page) */
+    width: 100%;
+    max-width: 600px;
+    margin-inline: auto;
+    padding-inline: 16px;
   }
   /* ── Step navigator ── */
   .step-nav {
     display: flex;
     align-items: center;
     width: 100%;
-    padding: 4px 0 10px;
+    max-width: 600px;
+    margin-inline: auto;
+    padding: 4px 16px 10px;
   }
   .step-item {
     display: flex;
@@ -680,6 +687,101 @@
   function getTopicTags(name) { return candidateTopTags[name] || []; }
 
   // ═══════════════════════════════════════════
+  //  שיוך מועמד → נבחרות (הופכי לגלריה בדף הסטייט; אותו סף בדיוק)
+  // ═══════════════════════════════════════════
+  let squadConfig = {};      // squad_id → שורת קונפיג
+  let squadData   = {};      // שם → שורת main_teams
+  let flatDB      = {};      // שם → שורת dbr_P_01_data (בשביל zccc)
+  let droppedSet  = new Set();
+  let candidateSquads = {};  // שם → [כותרות נבחרות] (מחושב פעם אחת)
+
+  function parseCsvLine(line) {
+    const out=[]; let cur=''; let inQ=false;
+    for (let i=0;i<line.length;i++) {
+      const c=line[i];
+      if (c==='"'){if(inQ&&line[i+1]==='"'){cur+='"';i++;}else inQ=!inQ;}
+      else if(c===','&&!inQ){out.push(cur);cur='';}
+      else cur+=c;
+    }
+    out.push(cur); return out;
+  }
+  function parseCsv(txt) {
+    txt=txt.replace(/^﻿/,'');
+    const lines=txt.split(/\r?\n/), headers=parseCsvLine(lines[0]), rows=[];
+    for(let i=1;i<lines.length;i++){
+      if(!lines[i].trim())continue;
+      const vals=parseCsvLine(lines[i]),r={};
+      headers.forEach((h,j)=>{r[h.trim()]=(vals[j]||'').trim();});
+      rows.push(r);
+    }
+    return rows;
+  }
+
+  // combined בזמן ריצה — זהה לדף הסטייט (בפילטר אין החלפת ועדה → zccc עמודה ישירה)
+  function computeCombined(squadId, row) {
+    const cfg  = squadConfig[squadId] || {};
+    let   w    = parseFloat(cfg.resume_weight || '0') || 0;
+    const aff  = parseInt(row[squadId] || '0', 10) || 0;
+    const zRaw = (flatDB[row.id1] || {})['zccc'];
+    const z    = parseFloat(zRaw);
+    if (w > 0 && (zRaw === undefined || zRaw === '' || isNaN(z))) w = 0;
+    const zc   = isNaN(z) ? 0 : z;
+    return (1 - w) * aff + w * (zc * 10);
+  }
+
+  // חברי נבחרת = top squad_size לפי combined — זהה ל-squadInNames בדף הסטייט
+  function squadMembers(squadId) {
+    const cfg = squadConfig[squadId] || {};
+    const squadSize = parseInt(cfg.squad_size || '0', 10) || 16;
+    return Object.values(squadData)
+      .map(r => ({
+        name:     r.id1,
+        value:    parseInt(r[squadId] || '0', 10),
+        combined: computeCombined(squadId, r),
+        rank:     parseInt(r[squadId + '_rank'] || '0', 10)
+      }))
+      .filter(c => c.value > 0 && !droppedSet.has(c.name))
+      .sort((a, b) => {
+        if (a.combined > 0 || b.combined > 0) return b.combined - a.combined;
+        const aHas = a.rank > 0, bHas = b.rank > 0;
+        if (aHas && bHas) return a.rank - b.rank;
+        if (aHas) return -1;
+        if (bHas) return 1;
+        return b.value - a.value;
+      })
+      .slice(0, squadSize)
+      .map(c => c.name);
+  }
+
+  // בונה פעם אחת: שם מועמד → כל הנבחרות שהוא מוצג בהן (לפי הסף)
+  function buildCandidateSquads() {
+    candidateSquads = {};
+    Object.keys(squadConfig).forEach(sid => {
+      const title = squadConfig[sid].title || sid;
+      squadMembers(sid).forEach(name => {
+        (candidateSquads[name] = candidateSquads[name] || []).push(title);
+      });
+    });
+  }
+
+  function squadsOf(name) { return candidateSquads[name] || []; }
+
+  // טעינת שלושת הקבצים + המודחים, בניית המפה, ורנדר מחדש
+  Promise.all([
+    fetch('main_teams.csv').then(r => r.ok ? r.text() : ''),
+    fetch('main_teams_config.csv').then(r => r.ok ? r.text() : ''),
+    fetch('dbr_P_01_data.csv').then(r => r.ok ? r.text() : ''),
+    fetch('dropped.json').then(r => r.ok ? r.json() : []).catch(() => [])
+  ]).then(([teamsTxt, cfgTxt, dataTxt, droppedList]) => {
+    droppedSet = new Set(droppedList);
+    for (const r of parseCsv(cfgTxt))  { if (r['squad_id']) squadConfig[r['squad_id']] = r; }
+    for (const r of parseCsv(teamsTxt)) { if (r['id1']) squadData[r['id1']] = r; }
+    for (const r of parseCsv(dataTxt))  { if (r['id1']) flatDB[r['id1']] = r; }
+    buildCandidateSquads();
+    render();
+  }).catch(() => {});
+
+  // ═══════════════════════════════════════════
   //  Image helpers (copied from shiryun page)
   // ═══════════════════════════════════════════
   const JPEG_NAMES = new Set([]);
@@ -816,20 +918,23 @@
   function cardHTML(name, position, isVadai) {
     const fromShiryun = isFromShiryun(name);
     const fromDbr     = isFromDbr(name);
-    const teamSource  = (primState.shiryun_sources || {})[name];
     const isFemale    = genderMap[name] === 'נשים';
     const tags = [];
-    // תג עדיפות (סלוט 1): מקור שלב 2 — או ★ ודאי בקבוצה התחתונה
-    if (teamSource) {
-      tags.push(`<span class="tag tag-dbr">${escapeHtml(teamSource)}</span>`);
-    } else if (!isVadai && initialVadai.has(name)) {
+    // שיוך לנבחרות — כל הנבחרות שהמועמד/ת מוצג/ת בהן (אותו סף כמו דף הסטייט)
+    const squads = squadsOf(name);
+    squads.forEach(t => {
+      tags.push(`<span class="tag tag-dbr">${escapeHtml(t)}</span>`);
+    });
+    // ★ ודאי בקבוצה התחתונה
+    if (!isVadai && initialVadai.has(name)) {
       tags.push(`<span class="tag tag-vadai">★ ${isFemale ? 'ודאית' : 'ודאי'}</span>`);
     }
-    // מלא עד 3 תגיות בסה"כ — מתחומי החוזק של המועמד/ת
-    const topicTags = getTopicTags(name);
-    topicTags.slice(0, 3 - tags.length).forEach(t => {
-      tags.push(`<span class="tag tag-topic">${escapeHtml(t)}</span>`);
-    });
+    // אין שיוך לאף נבחרת — מלא בתחומי החוזק כמו קודם
+    if (squads.length === 0) {
+      getTopicTags(name).slice(0, 3).forEach(t => {
+        tags.push(`<span class="tag tag-topic">${escapeHtml(t)}</span>`);
+      });
+    }
 
     const numHtml = position
       ? `<div class="slot-num">${position}</div>`
