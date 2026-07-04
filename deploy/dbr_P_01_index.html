@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl"><head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TJNJTZQF1F"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-TJNJTZQF1F');
+</script><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>ד.ב.ר | דמוקרטים בוחרים רציונלית</title><style>
+
+:root {
+  --blue-dark: #12355b;
+  --blue-main: #1d5fa7;
+  --blue-soft: #eaf3ff;
+  --blue-card: #f7fbff;
+  --text-main: #1f2933;
+  --text-muted: #5f6b7a;
+  --border-soft: #d7e3f3;
+  --white: #ffffff;
+  --warning-bg: #fffdf5;
+  --warning-border: #eadca8;
+  --shadow: 0 16px 38px rgba(18, 53, 91, 0.14);
+  --radius-large: 24px;
+  --radius-medium: 18px;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: 'Heebo', Arial, sans-serif;
+  background: linear-gradient(180deg, #f4f8ff 0, #ffffff 42%, #f8fbff 100%);
+  color: var(--text-main);
+  line-height: 1.78;
+}
+a { color: var(--blue-main); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.page { max-width: 600px; margin: 0 auto; padding: 24px; }
+.topbar {
+  padding: 14px 0 10px;
+  text-align: center;
+}
+.hero-copy {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  direction: ltr;
+  text-align: center;
+  padding: 6px 20px 0;
+}
+.site-title {
+  display: block;
+  font-size: clamp(1.55rem, 6.5vw, 2.6rem);
+  font-weight: 900;
+  color: #8fb0ce;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  text-decoration: none;
+  margin-bottom: 8px;
+}
+.site-title:hover { opacity: 0.85; }
+.init {
+  color: var(--blue-dark);
+  font-size: 1.22em;
+  font-weight: 900;
+}
+.image-caption {
+  text-align: center;
+  padding: 14px 20px 4px;
+}
+.image-caption-main {
+  font-size: clamp(1.15rem, 4vw, 1.45rem);
+  font-weight: 900;
+  color: var(--blue-dark);
+  letter-spacing: -0.01em;
+  display: block;
+}
+.image-caption-sub {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  display: block;
+  margin-top: 3px;
+}
+.topbar-sub {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.about-link {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--blue-main);
+  padding: 5px 13px;
+  border: 1px solid var(--border-soft);
+  border-radius: 999px;
+  background: rgba(255,255,255,0.86);
+}
+.site-copy {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  direction: ltr;
+}
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.hero {
+  background: var(--white);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-large);
+  padding: 0 0 28px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  overflow: hidden;
+  position: relative;
+}
+.hero-text {
+  padding: 22px 28px 0;
+}
+.hero::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: -90px;
+  top: -90px;
+  width: 260px;
+  height: 260px;
+  background: radial-gradient(circle, rgba(29,95,167,0.16), rgba(29,95,167,0));
+  border-radius: 50%;
+}
+.portrait-card {
+  position: relative;
+  border-radius: 22px;
+  background: var(--blue-soft);
+  border: 1px solid var(--border-soft);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+.portrait-card img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 22px;
+  object-fit: contain;
+}
+.portrait-fallback {
+  font-size: 2.6rem;
+  font-weight: 900;
+  color: var(--blue-dark);
+  letter-spacing: 0.05em;
+  text-align: center;
+  direction: ltr;
+}
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--blue-soft);
+  color: var(--blue-dark);
+  font-weight: 800;
+  font-size: 0.9rem;
+  margin-bottom: 12px;
+}
+h1 {
+  margin: 0 0 12px;
+  font-size: clamp(1.4rem, 4.5vw, 2.1rem);
+  line-height: 1.15;
+  color: var(--blue-dark);
+  letter-spacing: -0.02em;
+}
+.subtitle {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  margin: 0 0 18px;
+  text-align: center;
+}
+.tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 0; }
+.tag {
+  background: var(--blue-soft);
+  color: var(--blue-dark);
+  border: 1px solid var(--border-soft);
+  border-radius: 999px;
+  padding: 6px 11px;
+  font-size: 0.88rem;
+  font-weight: 800;
+}
+.hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 17px;
+  border-radius: 14px;
+  font-weight: 800;
+  border: 1px solid transparent;
+}
+.button.primary { background: white; color: var(--blue-main); border-color: var(--blue-main); box-shadow: 0 4px 14px rgba(29,95,167,0.12); }
+.button.secondary { background: white; color: var(--blue-main); border-color: var(--blue-main); box-shadow: 0 4px 14px rgba(29,95,167,0.12); }
+.button.tertiary { background: transparent; color: var(--text-muted); border: 1px solid var(--border-soft); font-size: 0.82rem; font-weight: 700; padding: 7px 11px; box-shadow: none; border-radius: 10px; }
+.notice {
+  margin-top: 20px;
+  border-radius: var(--radius-medium);
+  padding: 18px 20px;
+  background: var(--warning-bg);
+  border: 1px solid var(--warning-border);
+  color: #584719;
+}
+.quick-grid {
+  margin-top: 24px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+.quick-card {
+  background: var(--white);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-medium);
+  padding: 18px;
+  box-shadow: 0 10px 24px rgba(18, 53, 91, 0.08);
+}
+.quick-card .label { color: var(--text-muted); font-size: 0.85rem; font-weight: 800; }
+.quick-card .value { color: var(--blue-dark); font-size: 1.05rem; font-weight: 900; margin-top: 4px; }
+.layout {
+  margin-top: 28px;
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 22px;
+  align-items: start;
+}
+.toc {
+  position: sticky;
+  top: 16px;
+  background: var(--white);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-medium);
+  padding: 18px;
+  box-shadow: 0 10px 24px rgba(18, 53, 91, 0.08);
+}
+.toc h2 { margin: 0 0 12px; font-size: 1.06rem; color: var(--blue-dark); }
+.toc a {
+  display: block;
+  padding: 8px 0;
+  color: var(--text-main);
+  border-bottom: 1px solid #edf3fb;
+  font-weight: 700;
+  font-size: 0.93rem;
+}
+.toc a:last-child { border-bottom: 0; }
+.content { min-width: 0; }
+.summary-box, .sources-box {
+  background: var(--white);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-medium);
+  padding: 24px;
+  box-shadow: 0 10px 24px rgba(18, 53, 91, 0.08);
+  margin-bottom: 18px;
+}
+.summary-box h2, .sources-box h2 { color: var(--blue-dark); margin: 0 0 10px; font-size: 1.35rem; }
+.summary-box p { margin: 0; color: var(--text-main); }
+.profile-section {
+  background: var(--white);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-medium);
+  padding: 26px;
+  box-shadow: 0 10px 24px rgba(18, 53, 91, 0.08);
+  margin-bottom: 18px;
+}
+.profile-section h2 {
+  margin: 0 0 16px;
+  color: var(--blue-dark);
+  font-size: 1.65rem;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-soft);
+}
+.profile-section h3 { color: var(--blue-dark); margin: 24px 0 10px; font-size: 1.16rem; }
+.profile-section p { margin: 0 0 12px; }
+ul { padding: 0 22px 0 0; margin: 8px 0 14px; }
+li { margin-bottom: 7px; }
+strong { color: #142f50; }
+.source-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.source-chips span {
+  background: var(--blue-card);
+  border: 1px solid var(--border-soft);
+  color: var(--blue-dark);
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 800;
+  direction: ltr;
+}
+.page-end {
+  margin-top: 20px;
+  padding-bottom: 16px;
+  border-top: 1px solid var(--border-soft);
+}
+@media (max-width: 950px) {
+  .hero, .layout, .quick-grid { grid-template-columns: 1fr; }
+  .toc { position: static; }
+  .portrait-card { min-height: unset; }
+}
+.dsc-fold { border: 1px solid #d7e3f3; border-radius: 12px; margin: 3px 0; background: #f7fbff; overflow: hidden; }
+.dsc-fold > summary { cursor: pointer; padding: 8px 12px; font-size: 1.0rem; font-weight: 800; color: #12355b; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.dsc-fold > summary::-webkit-details-marker { display: none; }
+.dsc-fold > summary::after { content: "\25C0"; font-size: 0.7rem; color: #1d5fa7; transition: transform .2s; flex-shrink: 0; }
+.dsc-fold[open] > summary::after { transform: rotate(-90deg); }
+.dsc-fold > p { padding: 0 16px 14px; margin: 0; font-size: 0.92rem; }
+.dsc-fold > p:first-of-type { padding-top: 4px; }
+@media (max-width: 560px) {
+  .page { padding: 16px; }
+  .hero-text { padding: 16px 18px 0; }
+  .profile-section, .summary-box, .sources-box { padding: 22px; }
+  .hero-actions { flex-direction: row; }
+  .hero-actions .button { flex: 1; text-align: center; }
+  .portrait-card { aspect-ratio: unset; }
+  .portrait-card img { width: 100%; height: auto; object-fit: contain; }
+}
+
+  .hot-zone { position:absolute; border-radius:10px; background:rgba(255,255,255,0); transition:background .2s; }
+  .hot-zone.enabled { cursor:pointer; }
+  .hot-zone.enabled:hover { background:rgba(255,255,255,.18); }
+  .hot-zone.locked { cursor:default; }
+  @keyframes zoneReveal {
+    0%, 100% { background:rgba(255,255,255,0);   box-shadow:0 0 0 0 rgba(80,150,255,0); }
+    50%      { background:rgba(255,255,255,.14); box-shadow:0 0 0 3px rgba(80,150,255,.45); }
+  }
+  .hot-zone.hint { animation: zoneReveal 1.3s ease-in-out 3; }
+  @keyframes zonePulse {
+    0%   { background:rgba(255,255,255,0);   box-shadow:0 0 0 0   rgba(80,180,255,0); }
+    35%  { background:rgba(255,255,255,.45); box-shadow:0 0 0 8px rgba(80,180,255,.85); }
+    100% { background:rgba(255,255,255,0);   box-shadow:0 0 0 0   rgba(80,180,255,0); }
+  }
+  .hot-zone.pulse { animation: zonePulse 0.7s ease-out 1; }
+  @media (prefers-reduced-motion: reduce) { .hot-zone.hint, .hot-zone.pulse { animation: none; } }
+  </style><link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body><main class="page"><header class="topbar">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TJNJTZQF1F"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-TJNJTZQF1F');
+</script></header>
+<section class="hero">
+  <div class="portrait-card">
+    <img src="images_new/team-field.webp" alt="בחירת הנבחרת — דמוקרטים בוחרים רציונלית">
+    <!-- 1: המאמן יאיר גולן (קיצור דרך) -->
+    <a href="#" class="hot-zone shortcut-zone" onclick="goShortcut(event,'dbr_P_01_process.html?entry=coach')"
+       title="המאמן יאיר גולן"
+       style="left:26%;top:18%;width:42%;height:52%"></a>
+    <!-- 2: הגנה קישור התקפה (קיצור דרך) -->
+    <a href="#" class="hot-zone shortcut-zone" onclick="goShortcut(event,'dbr_P_01_process.html?entry=squad')"
+       title="הגנה קישור התקפה"
+       style="left:69%;top:75%;width:23%;height:14%"></a>
+    <!-- 3: להתכונן לכל תרחיש (קיצור דרך) -->
+    <a href="#" class="hot-zone shortcut-zone" onclick="goShortcut(event,'dbr_P_01_process.html?entry=scenarios')"
+       title="להתכונן לכל תרחיש"
+       style="left:34%;top:72%;width:28%;height:13%"></a>
+    <!-- 4: מסי רונלדו ומרדונה (קיצור דרך) -->
+    <a href="#" class="hot-zone shortcut-zone" onclick="goShortcut(event,'dbr_P_01_process.html?entry=stars')"
+       title="מסי רונלדו ומרדונה"
+       style="left:18%;top:56%;width:25%;height:15%"></a>
+    <!-- 5: רק זהבי (קיצור דרך) -->
+    <a href="#" class="hot-zone shortcut-zone" onclick="goShortcut(event,'dbr_P_01_process.html?entry=specific')"
+       title="רק זהבי"
+       style="left:3%;top:57%;width:17%;height:13%"></a>
+    <!-- 7: הכר לנו את השחקנים ← דף הרשימה (תמיד פעיל — נקודת היכרות) -->
+    <a href="#" class="hot-zone enabled intro-zone" onclick="openDisclaimer('dbr_P_01_list.html');return false"
+       title="הכר לנו את השחקנים"
+       style="left:80%;top:45%;width:20%;height:16%"></a>
+  </div>
+  <!-- כפתור כניסה — מתחת לתמונה, מעל המלל -->
+  <div style="text-align:center;padding:18px 28px 0">
+    <a href="#" onclick="openDisclaimer('dbr_P_01_process.html?entry=start');return false"
+       style="display:inline-block;background:#1d5fa7;color:#fff;font-weight:900;font-size:1.15rem;padding:14px 38px;border-radius:14px;text-decoration:none;box-shadow:0 6px 18px rgba(29,95,167,.28);transition:transform .15s,box-shadow .15s"
+       onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 22px rgba(29,95,167,.36)'"
+       onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 6px 18px rgba(29,95,167,.28)'">כנסו למשחקי הסימולציה ←</a>
+  </div>
+  <div class="hero-text">
+    <div class="image-caption"><span class="image-caption-main">לקראת הפריימריז של הדמוקרטים 2026</span></div>
+    <p class="subtitle">משחק סימולציה פוליטי, עצמאי ומבוסס בינה מלאכותית, לבניית נבחרות ולהיכרות עם מועמדי הפריימריז. דיוקני המועמדים נבנו בעזרת בינות, על בסיס מידע ציבורי טקסטואלי מהרשת, ומעודכנים ככל האפשר ל־1.6.2026.</p>
+    <div style="text-align:center;padding-top:10px"><span class="site-copy">© 2026 Silvertel Online ltd | כל הזכויות שמורות | <a href="#" onclick="clearLocalStorage();return false" style="color:inherit;text-decoration:none;" title="לחץ לניקוי זיכרון מקומי">v4.01</a></span></div>
+  </div>
+</section>
+</main>
+<!-- מודל הסכמה -->
+<div id="disclaimer-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1000;overflow-y:auto;padding:20px">
+<div style="background:#fff;border-radius:22px;max-width:720px;margin:20px auto;padding:28px 26px;box-shadow:0 28px 70px rgba(16,24,40,.25);line-height:1.75;color:#1f2933">
+
+<h1 style="font-size:1.5rem;color:#12355b;margin:0 0 2px;text-align:center">ברוכים הבאים ל־DBR</h1>
+<p style="text-align:center;color:#5f6b7a;font-size:1rem;font-weight:700;margin:0 0 2px">דמוקרטים בוחרים רציונלית | משחק הפריימריז</p>
+
+<p style="font-size:.82rem;color:#5f6b7a;text-align:center;margin:0 0 4px">לחצו על כל סעיף כדי לקרוא. תיבת האישור מופיעה בתחתית.</p>
+
+<details class="dsc-fold">
+<summary>על היוזמה — מאת אמנון זוסמן</summary>
+<p>שמי אמנון זוסמן. אני מגיע מעולם ההיי־טק, עם ניסיון של עשרות שנים בפיתוח, ניהול, יזמות, הקמת מערכות, הובלת פרויקטים והתמודדות עם בעיות מורכבות.</p>
+<p>כמו רבים אחרים, גם אני מודאג ממצבה של מדינת ישראל. מבחינתי, אחד מתנאי היסוד לתיקון הוא איכות האנשים שמגיעים להנהגה. לכן הבחירה במועמדים שיכהנו כחברי כנסת, ישפיעו על עתיד המדינה ועל חיי ילדינו ונכדינו — איננה עניין טכני או שולי. זו החלטה אזרחית כבדה.</p>
+<p>לקראת הפריימריז של מפלגת הדמוקרטים ניסיתי לחשוב איך בוחר מן השורה יכול להתמודד עם בעיה מורכבת: איך בוחרים מספר מצומצם של מועמדים מתוך רשימה רחבה? איך מאזנים בין עמדות, יכולות, ניסיון, תדמית, ייצוג, אמינות, מידע חסר ושיקולים קבוצתיים? ואיך עושים זאת כאשר עשרות אלפי בוחרים פועלים במקביל, כל אחד לפי שיקוליו?</p>
+<p>מכאן נולד DBR — דמוקרטים בוחרים רציונלית.</p>
+<p>בשלב הראשון חשבתי על המיזם ככלי עזר לבחירה. בהמשך, ומתוך זהירות ומתוך הבנה שהמידע על מועמדים אינו תמיד שלם, מדויק או מוסכם, בחרתי למסגר את המיזם כמשחק סימולציה פוליטי: משחק שמאפשר לבוחר להתנסות בבניית נבחרת, לבדוק תרחישים, להכיר מועמדים ולחשוב על הבחירה מזווית רחבה יותר.</p>
+</details>
+
+<details class="dsc-fold">
+<summary>מהו המשחק?</summary>
+<p>DBR הוא משחק סימולציה פוליטי־אזרחי.</p>
+<p>הוא אינו מערכת רשמית, אינו מנגנון המלצה, אינו דירוג מוסמך, ואינו קובע מי "טוב", "ראוי" או "נכון" יותר.</p>
+<p>המשחק מאפשר למשתמש להתנסות בבניית נבחרות, לבחון התאמות בין מועמדים לתרחישים שונים, לראות איך בחירות שונות משנות את ההרכב, ולהבין טוב יותר את המורכבות של בחירה פוליטית קבוצתית.</p>
+<p>בדומה למשחקי כדורגל ממוחשבים, שבהם המשתמש בונה הרכב, בוחר שחקנים, בודק מערכים ולומד על תפקידים שונים במגרש — גם כאן המשתמש מוזמן לשחק עם רעיון הנבחרת הפוליטית: מי מתאים לאיזה תפקיד, איזה איזון נוצר, מה חסר, ומה משתנה כאשר מחליפים מועמד אחד באחר.</p>
+<p><strong>המשחק אינו מחליף את שיקול הדעת של המשתמש. להפך: הוא נועד לעורר אותו.</strong></p>
+</details>
+
+<details class="dsc-fold">
+<summary>על מה מבוסס המשחק?</summary>
+<p>המשחק מבוסס במידה רבה על שימוש בבינה מלאכותית: באיסוף מידע ציבורי טקסטואלי, בארגון מידע על מועמדים, בבניית דיוקנאות, בהגדרת מאפייני התאמה, בבניית נבחרות ובפיתוח הקוד עצמו.</p>
+<p>משום כך יש לראות בו כלי ניסיוני, מתקדם אך לא מושלם.</p>
+<p>המידע על מועמדים עשוי להתבסס על מקורות ציבוריים, פוסטים, פרסומים, ראיונות, אתרים, כתבות, מידע שהופיע ברשת, וכן על עיבודים וניתוחים של בינה מלאכותית. במקרים מסוימים המידע עשוי להיות חלקי, לא מעודכן, לא מאוזן, או לא משקף במלואו את עמדות המועמד/ת.</p>
+<p>מועמד שאין עליו מידע רב אינו בהכרח מועמד חלש. מועמד שיש עליו מידע רב אינו בהכרח מועמד טוב יותר. המשחק מציג תמונת עבודה בלבד, לא אמת סופית.</p>
+</details>
+
+<details class="dsc-fold">
+<summary>מצב המשחק כיום</summary>
+<p>המשחק נמצא כעת בשלב סיום, לקראת הפצה רחבה. המשמעות היא שהוא כבר פעיל וניתן להתנסות בו, אך ייתכנו עדיין תיקונים, עדכונים ושיפורים אחרונים.</p>
+<p>מאגר המועמדים עדיין עשוי להשתנות. לא כל המועמדים האפשריים מופיעים בהכרח במשחק. חלק מהמועמדים עשויים להצטרף, להסיר מועמדות, לשנות סטטוס, או להופיע במידע ציבורי חדש שלא עודכן עדיין.</p>
+<p>גם רשימת המועמדים הסופית ופרטי הפריימריז עשויים להשתנות. לכן הנתונים במשחק אינם בהכרח סופיים.</p>
+<p>בנוסף, חלק מהמידע מבוסס על עיבוד ממוחשב ובינה מלאכותית, ולכן ייתכנו טעויות, חוסרים, אי־דיוקים, הטיות, מידע מיושן, טעויות הצגה או תוצאות שאינן משקפות כראוי את המציאות.</p>
+<p>נושאים נוספים שעדיין עשויים להשתנות הם דיוקני המועמדים, מבנה הנבחרות, שיטת ההתאמה, המשקלים, וכן תיקונים ידניים במקומות שבהם הבינות טעו בבירור בניתוח. כל תיקון ידני כזה מוצג ביישום כתיקון ידני.</p>
+</details>
+
+<details class="dsc-fold">
+<summary>יוזמה פרטית ולא כלי רשמי</summary>
+<p>חשוב להבהיר: DBR הוא מיזם פרטי של אמנון זוסמן.</p>
+<p>הוא אינו מערכת רשמית של מפלגת הדמוקרטים, אינו מופעל מטעם המפלגה, אינו מייצג את עמדת המפלגה, הנהגתה, מוסדותיה או מי מהמועמדים.</p>
+<p>המשחק נבנה כיוזמה אזרחית עצמאית, מתוך רצון לעודד חשיבה מסודרת, סקרנות, בדיקה והשוואה, ולא מתוך כוונה לפגוע באיש או לקבוע לציבור כיצד להצביע.</p>
+</details>
+
+<details class="dsc-fold">
+<summary>מגבלות המשחק</summary>
+<p>השימוש במשחק מחייב הבנה של מגבלותיו.</p>
+<p>המשחק עשוי להציג נבחרות, התאמות, דירוגים, סימונים או תרחישים. כל אלה הם חלק ממנגנון סימולציה, ואינם קביעה מוסמכת לגבי מועמד כלשהו.</p>
+<p><strong>אין לראות בתוצאה שמופיעה במשחק המלצת הצבעה, קביעה עובדתית, דירוג רשמי, הערכה מקצועית, ייעוץ פוליטי, ייעוץ משפטי, או התחייבות לנכונות.</strong></p>
+<p>המשחק עלול לטעות. הוא עלול להחמיץ מידע, לפרש מידע באופן לא מדויק, להעניק משקל יתר לפרסום מסוים, לא לזהות שינוי עדכני, או להציג התאמה שאינה משקפת את עמדת המשתמש או את המציאות הפוליטית בפועל.</p>
+<p><strong>המשחק מיועד לסייע לחשיבה, היכרות והתנסות — לא להחליף שיקול דעת עצמאי.</strong></p>
+</details>
+
+<details class="dsc-fold">
+<summary>אחריות המשתמש</summary>
+<p>השימוש ב־DBR נעשה באחריותו המלאה של המשתמש.</p>
+<p>המשתמש מבין כי מדובר במשחק סימולציה ניסיוני, וכי כל החלטה פוליטית, ציבורית או אישית שהוא מקבל בעקבות השימוש בו היא החלטתו בלבד.</p>
+<p>המשתמש מתבקש להפעיל שיקול דעת עצמאי, לקרוא מידע נוסף במקרה הצורך, לבדוק מקורות נוספים, ולהבין שהבחירה הסופית היא שלו בלבד.</p>
+</details>
+
+<details class="dsc-fold">
+<summary>פרטיות</summary>
+<p>השימוש במשחק נועד להיות אנונימי. ככלל, המידע שהמשתמש מזין לצורך משחק, סימולציה או כיול העדפות נשמר בדפדפן של המשתמש ואינו נשלח למאגר אישי חיצוני.</p>
+<p>האתר עשוי להשתמש בכלי מדידה כלליים, כגון Google Analytics, כדי להבין היקפי שימוש, עומסים, דפים נצפים והתנהגות כללית באתר. מידע זה משמש לשיפור המשחק ואינו מיועד לזיהוי אישי של המשתמש.</p>
+<p>אם המשתמש בוחר באפשרות "אל תציג לי הודעה זו שוב", ההעדפה עשויה להישמר בדפדפן המקומי שלו. מחיקת נתוני הדפדפן, שימוש בדפדפן אחר או מעבר למכשיר אחר עשויים לגרום להצגת ההודעה מחדש.</p>
+</details>
+
+<details class="dsc-fold">
+<summary>תיקונים, הערות, משוב ובקשות הסרה</summary>
+<p>מכיוון שהמשחק נמצא בשלב סיום לקראת הפצה רחבה, ומבוסס בחלקו על מידע ציבורי ועל עיבודי בינה מלאכותית, ייתכנו טעויות, חוסרים ואי־דיוקים. משוב ממשתמשים, מועמדים ואנשים שמכירים את השטח יתקבל בברכה.</p>
+<p>אם מצאתם מידע שגוי, חסר, לא מעודכן או לא הוגן לגבי מועמד/ת, ניתן לפנות ולהציע תיקון, השלמה או הבהרה.</p>
+<p>מועמד/ת שמופיע/ה במשחק ומבקש/ת לתקן מידע, להוסיף מידע, להבהיר עמדה, או להסיר את עצמו/ה מהמשחק — מוזמן/ת לפנות. המטרה היא לאפשר משחק הוגן, שקוף וזהיר ככל האפשר, ולא לפגוע באיש.</p>
+</details>
+
+<details class="dsc-fold">
+<summary>לפני שממשיכים</summary>
+<p>אני מזמין אתכם להיכנס למשחק, להתנסות, לבדוק, לחשוב, לחלוק, לשנות הרכבים, לבנות נבחרות ולשלוח משוב.</p>
+<p>אבל חשוב שכל מי שנכנס יבין היטב: זהו משחק סימולציה עצמאי, ניסיוני, מבוסס בינה מלאכותית, עם מגבלות ידועות. הוא אינו כלי רשמי, אינו המלצת הצבעה, אינו דירוג מוסמך ואינו תחליף לשיקול דעת אישי.</p>
+<p><strong>הוא נועד לעזור לכם להכיר, לחשוב ולשחק עם המורכבות של בחירת נבחרת פוליטית — לא להחליט במקומכם.</strong></p>
+</details>
+
+<div style="background:#f4f8ff;border:1.5px solid #d7e3f3;border-radius:14px;padding:16px 18px;margin:20px 0">
+<p style="font-size:.92rem;font-weight:800;color:#12355b;margin:0 0 10px">אישור המשתמש</p>
+
+<!-- לחצן בחר הכל -->
+<button onclick="selectAllChk()" style="margin-bottom:12px;background:#eaf3ff;border:1.5px solid #1d5fa7;border-radius:9px;padding:7px 18px;font-weight:800;font-size:.88rem;color:#1d5fa7;cursor:pointer;font-family:inherit;">✓ בחר הכל</button>
+
+<div id="chk1-row"><label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:4px;font-size:.88rem">
+<input type="checkbox" id="chk1" onchange="checkDisclaimer()" style="margin-top:4px;flex-shrink:0;width:18px;height:18px">
+קראתי והבנתי את האמור לעיל.
+</label></div>
+
+<div id="chk2-row"><label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:4px;font-size:.88rem">
+<input type="checkbox" id="chk2" onchange="checkDisclaimer()" style="margin-top:4px;flex-shrink:0;width:18px;height:18px">
+אני מבין/ה שמדובר במשחק סימולציה ניסיוני, עצמאי ולא רשמי.
+</label></div>
+
+<div id="chk3-row"><label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:4px;font-size:.88rem">
+<input type="checkbox" id="chk3" onchange="checkDisclaimer()" style="margin-top:4px;flex-shrink:0;width:18px;height:18px">
+אני מבין/ה שהמידע במשחק עשוי להיות חלקי, לא מעודכן או שגוי.
+</label></div>
+
+<div id="chk4-row"><label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:4px;font-size:.88rem">
+<input type="checkbox" id="chk4" onchange="checkDisclaimer()" style="margin-top:4px;flex-shrink:0;width:18px;height:18px">
+אני מבין/ה שאין לראות בתוצאות המשחק המלצה, דירוג מוסמך או הוראה למי להצביע.
+</label></div>
+
+<div id="chk5-row"><label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:4px;font-size:.88rem">
+<input type="checkbox" id="chk5" onchange="checkDisclaimer()" style="margin-top:4px;flex-shrink:0;width:18px;height:18px">
+אני מבין/ה שהשימוש במשחק הוא באחריותי בלבד, וששיקול הדעת הסופי הוא שלי.
+</label></div>
+
+<label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:0;font-size:.84rem;color:#5f6b7a;margin-top:8px">
+<input type="checkbox" id="chk-skip" onchange="onSkipChange()" style="margin-top:4px;flex-shrink:0;width:18px;height:18px">
+אל תציג לי הודעה זו שוב בדפדפן זה.
+</label>
+</div>
+
+<div style="text-align:center;margin-top:16px">
+<button id="btn-disclaimer" disabled onclick="acceptDisclaimer()" style="background:#1d5fa7;color:#fff;border:none;border-radius:14px;padding:13px 28px;font-weight:900;font-size:1rem;cursor:pointer;font-family:inherit;opacity:.45">הבנתי, אני רוצה להיכנס למשחק</button>
+</div>
+
+</div>
+</div>
+
+<script>
+// ניקוי נתונים ישנים למשתמשים שלא אישרו את ההסכמה החדשה
+if (localStorage.getItem('dbr_disclaimer_accepted') !== 'yes') {
+  localStorage.removeItem('dbr_v2');
+  localStorage.removeItem('primeris_state_v1');
+}
+
+function clearLocalStorage() {
+  if (confirm('לנקות את כל הזיכרון המקומי ולהתחיל מחדש?')) {
+    localStorage.clear();
+    location.reload();
+  }
+}
+
+let _disclaimerTarget = '';
+
+function openDisclaimer(url) {
+  if (localStorage.getItem('dbr_disclaimer_accepted') === 'yes') {
+    window.location.href = url;
+    return;
+  }
+  _disclaimerTarget = url;
+  document.getElementById('disclaimer-overlay').style.display = 'block';
+  document.getElementById('disclaimer-overlay').scrollTop = 0;
+}
+
+const CHK_DONE_KEY = 'dbr_chk_done';
+
+function checkDisclaimer() {
+  const ok = ['chk1','chk2','chk3','chk4','chk5'].every(function(id) {
+    return document.getElementById(id).checked;
+  });
+  const btn = document.getElementById('btn-disclaimer');
+  btn.disabled = !ok;
+  btn.style.opacity = ok ? '1' : '.45';
+}
+
+function selectAllChk() {
+  ['chk1','chk2','chk3','chk4','chk5'].forEach(function(id) {
+    document.getElementById(id).checked = true;
+  });
+  checkDisclaimer();
+}
+
+function acceptDisclaimer() {
+  localStorage.setItem(CHK_DONE_KEY, 'yes');
+  sessionStorage.setItem('dbr_session_accepted', 'yes');
+  if (document.getElementById('chk-skip').checked) {
+    localStorage.setItem('dbr_disclaimer_accepted', 'yes');
+  }
+  window.location.href = _disclaimerTarget;
+}
+
+// כניסה חוזרת: chk1-5 כבר סומנו בעבר → הסתר אותם, הצג רק chk-skip + הבנתי
+(function applyReturnVisit() {
+  if (localStorage.getItem(CHK_DONE_KEY) !== 'yes') return;
+  ['chk1','chk2','chk3','chk4','chk5'].forEach(function(id) {
+    document.getElementById(id).checked = true;
+  });
+  ['chk1-row','chk2-row','chk3-row','chk4-row','chk5-row'].forEach(function(id) {
+    var el = document.getElementById(id); if (el) el.style.display = 'none';
+  });
+  var selectBtn = document.querySelector('[onclick="selectAllChk()"]');
+  if (selectBtn) selectBtn.style.display = 'none';
+  var btn = document.getElementById('btn-disclaimer');
+  if (btn) { btn.disabled = false; btn.style.opacity = '1'; }
+}());
+
+// אם הגיעו עם redirect מדף פנימי — פתח הסכמה עם היעד
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  const redirect = params.get('redirect');
+  if (redirect && localStorage.getItem('dbr_disclaimer_accepted') !== 'yes') {
+    openDisclaimer(redirect);
+  }
+})();
+
+// קיצורי דרך: לחצני התמונה (פרט לכחול) פעילים רק אחרי הכניסה הראשונה לתהליך
+function goShortcut(e, url) {
+  e.preventDefault();
+  if (localStorage.getItem('dbr_disclaimer_accepted') !== 'yes') return false; // עדיין נעול
+  openDisclaimer(url);
+  return false;
+}
+(function() {
+  const unlocked = localStorage.getItem('dbr_disclaimer_accepted') === 'yes';
+  document.querySelectorAll('.shortcut-zone').forEach(function(z) {
+    z.classList.add(unlocked ? 'enabled' : 'locked');
+  });
+  let hasSelections = false;
+  try {
+    const raw = localStorage.getItem('primeris_state_v1');
+    if (raw) {
+      const state = JSON.parse(raw);
+      hasSelections = !!(state.selected && state.selected.length > 0);
+    }
+  } catch(e) {}
+  // הבהוב סיבובי אם יש מועמדים שנבחרו, אחרת פעימה עדינה רגילה
+  const enabledZones = Array.from(document.querySelectorAll('.hot-zone.enabled'));
+  if (hasSelections) {
+    // מיין לפי מיקום השלט בתמונה (שמאל לימין)
+    enabledZones.sort(function(a, b) {
+      return parseFloat(a.style.left) - parseFloat(b.style.left);
+    });
+    enabledZones.forEach(function(z, i) {
+      z.style.animationDelay = (i * 0.7) + 's';
+      z.classList.add('pulse');
+    });
+  } else {
+    enabledZones.forEach(function(z) { z.classList.add('hint'); });
+  }
+})();
+</script>
+
+</body></html>

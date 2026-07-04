@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<script>if(localStorage.getItem('dbr_disclaimer_accepted')!=='yes'&&sessionStorage.getItem('dbr_session_accepted')!=='yes'){window.location.href='dbr_P_01_index.html?redirect='+encodeURIComponent(location.pathname.split('/').pop()+location.search)}</script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TJNJTZQF1F"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-TJNJTZQF1F');
+</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>הוועדה המסדרת | מערכת תומכת החלטה לפריימריז</title>
+  <style>
+    :root {
+      --blue-dark: #12355b;
+      --blue-main: #1d5fa7;
+      --blue-soft: #eaf3ff;
+      --blue-card: #f7fbff;
+      --text-main: #1f2933;
+      --text-muted: #5f6b7a;
+      --border-soft: #d7e3f3;
+      --white: #ffffff;
+      --shadow: 0 16px 38px rgba(18,53,91,.13);
+      --shadow-soft: 0 4px 16px rgba(18,53,91,.07);
+      --radius-large: 24px;
+      --radius-medium: 18px;
+      --radius-small: 12px;
+      /* עור בן-גוריון — קלף וספיה */
+      --bg-sepia-dark:   #6b5232;
+      --bg-sepia-main:   #8b6f47;
+      --bg-sepia-soft:   #f6efe2;
+      --bg-sepia-border: #d9c9a8;
+      /* עור רבין — כחול עבודה 92' */
+      --rb-blue-dark:   #123a6b;
+      --rb-blue-main:   #1d5fa7;
+      --rb-blue-soft:   #e9f1fb;
+      --rb-blue-border: #b9d1ec;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, "Noto Sans Hebrew", sans-serif;
+      background: #f4f8ff;
+      color: var(--text-main);
+      line-height: 1.65;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .page { max-width: 1060px; margin: 0 auto; padding: 0 24px 60px; }
+
+    /* ── Top bar ── */
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      padding: 8px 0 6px;
+      border-bottom: 1px solid var(--border-soft);
+      margin-bottom: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      color: var(--blue-dark);
+      font-size: 1.1rem;
+    }
+
+    .brand-mark {
+      height: 28px;
+      padding: 0 9px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #3730a3, #1e1b4b);
+      display: grid;
+      place-items: center;
+      color: white;
+      font-size: .84rem;
+      font-weight: 900;
+      letter-spacing: .06em;
+      box-shadow: 0 4px 14px rgba(55,48,163,.3);
+    }
+
+    /* ── Page title ── */
+    .page-title h1 {
+      margin: 0 0 8px;
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      color: var(--blue-dark);
+      letter-spacing: -.02em;
+      line-height: 1.25;
+    }
+
+    .story {
+      background: white;
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-medium);
+      padding: 16px 20px;
+      color: var(--text-main);
+      font-size: .98rem;
+      box-shadow: var(--shadow-soft);
+      margin-bottom: 12px;
+    }
+
+    .disclaimer {
+      background: #fff8e1;
+      border: 1.5px solid #fbbf24;
+      border-radius: var(--radius-small);
+      padding: 10px 16px;
+      font-size: .85rem;
+      color: #92400e;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+
+    /* ── בורר הוועדות ── */
+    .committee-tabs {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 26px;
+    }
+
+    .ctab {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: 2px solid var(--border-soft);
+      border-radius: var(--radius-small);
+      background: white;
+      padding: 7px 12px;
+      cursor: pointer;
+      text-align: right;
+      transition: transform .16s, box-shadow .16s, border-color .16s;
+      position: relative;
+      min-width: 0;
+    }
+    .ctab:hover { transform: translateY(-2px); box-shadow: var(--shadow-soft); }
+    .ctab .ctab-icon { font-size: 1.3rem; flex-shrink: 0; }
+    .ctab .ctab-text { min-width: 0; }
+    .ctab .ctab-title { font-weight: 900; font-size: .92rem; color: var(--blue-dark); line-height: 1.25; white-space: nowrap; }
+    .ctab .ctab-sub { font-size: .7rem; color: var(--text-muted); font-weight: 600; line-height: 1.3; }
+
+    .ctab--bg.active, .ctab--bg:hover { border-color: var(--bg-sepia-main); }
+    .ctab--bg.active { background: var(--bg-sepia-soft); box-shadow: 0 6px 20px rgba(139,111,71,.18); }
+    .ctab--rb.active, .ctab--rb:hover { border-color: var(--rb-blue-main); }
+    .ctab--rb.active { background: var(--rb-blue-soft); box-shadow: 0 6px 20px rgba(29,95,167,.16); }
+    /* ── אזור הוועדה ── */
+    .committee-view { display: none; }
+    .committee-view.active { display: block; }
+
+    .quote-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
+      border-radius: var(--radius-medium);
+      padding: 18px 22px;
+      margin-bottom: 10px;
+    }
+    .view--bg .quote-row { background: var(--bg-sepia-soft); border: 1.5px solid var(--bg-sepia-border); }
+    .view--rb .quote-row { background: var(--rb-blue-soft); border: 1.5px solid var(--rb-blue-border); }
+
+    .portrait-box { flex-shrink: 0; text-align: center; width: 108px; }
+    .portrait-box img {
+      width: 108px; height: 108px; border-radius: 50%;
+      object-fit: cover; object-position: top;
+      box-shadow: 0 6px 18px rgba(0,0,0,.18);
+      display: block;
+    }
+    .view--bg .portrait-box img { border: 3px solid var(--bg-sepia-main); filter: sepia(.25); }
+    .view--rb .portrait-box img { border: 3px solid var(--rb-blue-main); }
+    .portrait-caption { font-size: .64rem; color: var(--text-muted); line-height: 1.35; margin-top: 6px; font-weight: 600; }
+
+    .quote {
+      font-size: 1.02rem;
+      font-weight: 600;
+      line-height: 1.75;
+      position: relative;
+      padding-top: 6px;
+    }
+    .quote::before { content: "”"; position: absolute; top: -14px; right: -6px; font-size: 2.6rem; opacity: .25; font-family: Georgia, serif; }
+    .view--bg .quote { color: #4a3a22; }
+    .view--rb .quote { color: #12355b; }
+
+    .ctab-portrait {
+      width: 34px; height: 34px; border-radius: 50%;
+      object-fit: cover; object-position: top;
+      border: 2px solid var(--border-soft);
+      display: block;
+      flex-shrink: 0;
+    }
+    .ctab--bg .ctab-portrait { border-color: var(--bg-sepia-main); filter: sepia(.25); }
+    .ctab--rb .ctab-portrait { border-color: var(--rb-blue-main); }
+
+    @media (max-width: 560px) {
+      .quote-row { flex-direction: column; align-items: center; }
+      .quote { text-align: center; }
+      .quote::before { display: none; }
+    }
+
+    .split-note {
+      font-size: .88rem;
+      color: var(--text-muted);
+      margin: 0 4px 20px;
+    }
+
+    /* ── כרטיס יו"ר ── */
+    .chair-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: white;
+      color: var(--text-main);
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-medium);
+      padding: 12px 14px;
+      max-width: 500px;
+      margin: 0 auto 18px;
+      box-shadow: var(--shadow-soft);
+    }
+    .chair-card img, .chair-card .photo-fb {
+      width: 52px; height: 52px; border-radius: 50%;
+      object-fit: cover; border: 2px solid var(--border-soft);
+      background: var(--blue-soft);
+      display: grid; place-items: center; font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+    .chair-card .chair-kicker { font-size: .72rem; font-weight: 700; letter-spacing: .04em; color: var(--text-muted); }
+    .chair-card .chair-name { font-size: 1rem; font-weight: 800; color: var(--blue-dark); line-height: 1.3; }
+    .chair-card .chair-note { font-size: .78rem; color: var(--text-muted); }
+
+    /* ── רשת הקבינט ── */
+    .cabinet-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .seat {
+      background: white;
+      border: 1.5px solid var(--border-soft);
+      border-radius: var(--radius-medium);
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: transform .15s, box-shadow .15s;
+    }
+    .seat:hover { transform: translateY(-2px); box-shadow: var(--shadow-soft); }
+
+    .seat-role {
+      display: inline-block;
+      align-self: flex-start;
+      font-size: .74rem;
+      font-weight: 900;
+      padding: 3px 11px;
+      border-radius: 999px;
+      letter-spacing: .01em;
+    }
+    .view--bg .seat { border-color: var(--bg-sepia-border); background: #fffdf8; }
+    .view--bg .seat-role { background: var(--bg-sepia-soft); color: var(--bg-sepia-dark); border: 1px solid var(--bg-sepia-border); }
+    .view--rb .seat { border-color: var(--rb-blue-border); background: #fbfdff; }
+    .view--rb .seat-role { background: var(--rb-blue-soft); color: var(--rb-blue-dark); border: 1px solid var(--rb-blue-border); }
+
+    .seat-person { display: flex; align-items: center; gap: 12px; }
+    .seat-person img, .seat-person .photo-fb {
+      width: 52px; height: 52px; border-radius: 50%;
+      object-fit: cover; flex-shrink: 0;
+      border: 2px solid var(--border-soft);
+      background: var(--blue-soft);
+      display: grid; place-items: center; font-size: 1.4rem;
+    }
+    .seat-name { font-size: 1.08rem; font-weight: 900; color: var(--blue-dark); line-height: 1.3; }
+    .seat-reason { font-size: .88rem; color: var(--text-main); line-height: 1.6; }
+
+    .composition-note {
+      font-size: .84rem;
+      color: var(--text-muted);
+      background: white;
+      border: 1px dashed var(--border-soft);
+      border-radius: var(--radius-small);
+      padding: 9px 14px;
+      margin-bottom: 8px;
+    }
+
+    /* ── Footer ── */
+    .footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-soft);
+      color: var(--text-muted);
+      font-size: .85rem;
+      text-align: center;
+    }
+
+    @media (max-width: 720px) {
+      .ctab .ctab-title { white-space: normal; }
+      .cabinet-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) { .page { padding-inline: 8px; } }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <div style="display:flex;flex-direction:column;width:100%;gap:6px">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <a class="brand" href="dbr_P_01_index.html" style="min-width:0;flex-shrink:1">
+            <span class="brand-mark">ד.ב.ר</span>
+            <span>דמוקרטים בוחרים רציונלית</span>
+          </a>
+          <a href="dbr_P_01_state.html" title="חזרה למסך המסלולים" style="font-size:1.8rem;text-decoration:none;line-height:1;flex-shrink:0">⬅️</a>
+        </div>
+        <div style="text-align:center;font-size:.72rem;color:var(--text-muted)">© 2026 Silvertel Online ltd | כל הזכויות שמורות</div>
+      </div>
+    </header>
+
+    <section class="page-title">
+      <h1>🏛️ הוועדה המסדרת — סימולציות היסטוריות</h1>
+    </section>
+
+    <div class="story" id="story-text"></div>
+
+    <!-- יו"ר המפלגה — קבוע מעל שתי הוועדות -->
+    <div id="chair-slot"></div>
+
+    <!-- בורר ועדות -->
+    <div class="committee-tabs">
+      <button class="ctab ctab--bg active" id="tab-bg1948" onclick="showView('bg1948')">
+        <img class="ctab-portrait" src="images_new/דוד_בן_גוריון.webp" alt="דוד בן־גוריון" onerror="this.outerHTML='<div class=&quot;ctab-icon&quot;>📜</div>'">
+        <div class="ctab-text">
+          <div class="ctab-title">בן־גוריון · 1948</div>
+          <div class="ctab-sub">להקים מדינה על פי המגילה</div>
+        </div>
+      </button>
+      <button class="ctab ctab--rb" id="tab-rabin1992" onclick="showView('rabin1992')">
+        <img class="ctab-portrait" src="images_new/יצחק_רבין.webp" alt="יצחק רבין" onerror="this.outerHTML='<div class=&quot;ctab-icon&quot;>🕊️</div>'">
+        <div class="ctab-text">
+          <div class="ctab-title">רבין · 1992</div>
+          <div class="ctab-sub">סדר עדיפויות חדש</div>
+        </div>
+      </button>
+    </div>
+
+    <!-- ועדת בן-גוריון -->
+    <div class="committee-view view--bg active" id="view-bg1948"></div>
+
+    <!-- ועדת רבין -->
+    <div class="committee-view view--rb" id="view-rabin1992"></div>
+
+    <div class="disclaimer" id="disclaimer-text" style="margin-top:28px;margin-bottom:0"></div>
+
+    <footer class="footer">
+      מערכת תומכת החלטה לפריימריז של מפלגת הדמוקרטים · סימולציה רעיונית — לא עמדה אמיתית של הדמויות ההיסטוריות.
+    </footer>
+  </div>
+
+  <script>
+    // ── תמונות: קובץ מקומי → ויקיפדיה → אימוג'י ──────────────────────────────
+    const IMAGE_OVERRIDE = {
+      'ענבל וורטמן שהם': 'ענבל_וורטמן_שהם',
+      'עלי סלאלחה':      'עלי_סלאחלה',
+      'אמיר חניפס':      "אמיר_ח'ניפס",
+      'מהרטה ברוך רון':  'מהרטה_ברוך-רון'
+    };
+    const WIKI_PHOTOS = {
+      'גלעד קריב': 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Gilad_Kariv_%28SHL_9093%29.jpg/250px-Gilad_Kariv_%28SHL_9093%29.jpg',
+      'יעל כהן-פארן': 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Yael_Cohen_Paran_%28IMG_0412%29.jpg/250px-Yael_Cohen_Paran_%28IMG_0412%29.jpg',
+      'ערן עציון': 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Eran_Etzion.jpg/250px-Eran_Etzion.jpg',
+      'נמרוד שפר': 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Tat-Aluf_Nimrod_Shefer_1.jpg/250px-Tat-Aluf_Nimrod_Shefer_1.jpg',
+      'אבי דבוש': 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Avi_Dabush_2025a.jpg/250px-Avi_Dabush_2025a.jpg',
+      'נאור נרקיס': 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Naor_Narkis_%28cropped%29.jpg/250px-Naor_Narkis_%28cropped%29.jpg',
+      'נעמה לזימי': 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Naama_lazimi_%28cropped%29.jpg/250px-Naama_lazimi_%28cropped%29.jpg',
+      'אפרת רייטן': 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Efrat_Rayten.jpg/250px-Efrat_Rayten.jpg',
+      'גבי לסקי': 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Gaby_Lasky_180222_023_%28cropped%29.jpg/250px-Gaby_Lasky_180222_023_%28cropped%29.jpg',
+      'עלי סלאלחה': 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Ali_Salalcha_%28salalja%29.jpg/250px-Ali_Salalcha_%28salalja%29.jpg',
+      'יאיא פינק': 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Yaya_Fink_%28cropped%29.jpg/250px-Yaya_Fink_%28cropped%29.jpg',
+      'משה רדמן': 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Moshe_Radman.png/250px-Moshe_Radman.png',
+      'רם שפע': 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Ram_Shefa_%28SHL_8927%29.jpg/250px-Ram_Shefa_%28SHL_8927%29.jpg'
+    };
+
+    function localImageUrl(name) {
+      const base = IMAGE_OVERRIDE[name] || name.replace(/ /g, '_');
+      return 'images_new/' + base + '.webp';
+    }
+
+    function photoHtml(name, cls) {
+      const wiki = WIKI_PHOTOS[name] || '';
+      const fb = `this.outerHTML='<div class=&quot;photo-fb ${cls||''}&quot;>👤</div>'`;
+      const chain = wiki
+        ? `this.onerror=function(){${fb}};this.src='${wiki}'`
+        : fb;
+      return `<img src="${localImageUrl(name)}" alt="${name}" loading="lazy" onerror="${chain}">`;
+    }
+
+    // ── רינדור ────────────────────────────────────────────────────────────────
+    let DATA = null;
+
+    function chairHtml() {
+      const c = DATA.chair;
+      return `<div class="chair-card">
+        ${photoHtml(c.name)}
+        <div>
+          <div class="chair-kicker">${c.title}</div>
+          <div class="chair-name">${c.name}</div>
+          <div class="chair-note">${c.note}</div>
+        </div>
+      </div>`;
+    }
+
+    function committeeHtml(cm) {
+      const seats = cm.picks.map(p => `
+        <div class="seat">
+          <span class="seat-role">${p.role}</span>
+          <div class="seat-person">
+            ${photoHtml(p.name)}
+            <div class="seat-name">${p.name}</div>
+          </div>
+          <div class="seat-reason">${p.reason}</div>
+        </div>`).join('');
+      const portrait = cm.portrait ? `
+        <div class="portrait-box">
+          <img src="${cm.portrait}" alt="${cm.portrait_caption || ''}" onerror="this.parentElement.style.display='none'">
+          <div class="portrait-caption">${cm.portrait_caption || ''}</div>
+        </div>` : '';
+      return `
+        <div class="quote-row">${portrait}<div class="quote">${cm.quote}</div></div>
+        ${cm.split_note ? `<div class="split-note">${cm.split_note}</div>` : ''}
+        <div class="cabinet-grid">${seats}</div>
+        <div class="composition-note">${cm.composition_note}</div>`;
+    }
+
+    function showView(id) {
+      ['bg1948','rabin1992'].forEach(k => {
+        document.getElementById('view-'+k).classList.remove('active');
+        document.getElementById('tab-'+k).classList.remove('active');
+      });
+      document.getElementById('view-' + id).classList.add('active');
+      document.getElementById('tab-' + id).classList.add('active');
+      try { gtag('event', 'committee_view', { view: id }); } catch(e) {}
+    }
+
+    fetch('data/committees.json')
+      .then(r => r.json())
+      .then(d => {
+        DATA = d;
+        document.getElementById('story-text').textContent = d.story;
+        document.getElementById('disclaimer-text').textContent = '⚠️ ' + d.disclaimer;
+        document.getElementById('chair-slot').innerHTML = chairHtml();
+        document.getElementById('view-bg1948').innerHTML = committeeHtml(d.committees.bg1948);
+        document.getElementById('view-rabin1992').innerHTML = committeeHtml(d.committees.rabin1992);
+      })
+      .catch(e => {
+        document.getElementById('story-text').textContent = 'שגיאה בטעינת נתוני הוועדות: ' + e;
+      });
+  </script>
+</body>
+</html>
