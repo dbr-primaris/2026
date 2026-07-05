@@ -634,7 +634,8 @@
       primState = loadState();
       const shiryun  = primState.shiryun  || [];
       const selected = primState.selected || [];
-      const vadai    = primState.vadai    || [];
+      const vadai    = primState.vadai    || [];   // סימוני ודאי (שלב 1/2)
+      const ballot   = primState.ballot   || [];   // פתק הבחירה הסופי (שלב 3)
       const sources  = primState.shiryun_sources || {};
 
       // נבחרי מוצא = נבחרו בשלב 1 בלבד (ללא מקור נבחרת בשלב 2)
@@ -644,7 +645,7 @@
       const step1Done           = originShiryun.length > 0;
       const step1EnoughForStep3 = originShiryun.length >= 6;
       const step2Done           = selected.length >= 6;
-      const step3Done           = vadai.length    >= 6;
+      const step3Done           = ballot.length   >= 6;
 
       // ── כרטיסית 1: בחירה (תחתון) ──
       if (step1Done) {
@@ -669,7 +670,7 @@
 
       // ── כרטיסית 3: פתק הבחירה (ראש) — נפתחת רק כשיש לפחות 6 נבחרים סה"כ ──
       if (step3Done) {
-        setCard('card-filter','num-filter','status-filter','done','✓',`${vadai.length} נבחרים בפתק שלך`);
+        setCard('card-filter','num-filter','status-filter','done','✓',`${ballot.length} נבחרים בפתק שלך`);
       } else if (shiryun.length >= 6) {
         setCard('card-filter','num-filter','status-filter','active','3','הבחירה שלך מוכנה, הכנס כדי לראות.');
       } else {

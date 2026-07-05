@@ -3195,9 +3195,11 @@
       // מועמד שכבר נבחר — עיגול זיקה (אם בנבחרת) + שם בלבד, ללא מילת התאמה או כרטיס
       if (c.picked) {
         const dot = c.inSquad ? squadDotHtml(c.value, cfg.color_family, dotBand) : '';
+        const vadaiCls   = c.vadai ? ' vadai-name' : '';
+        const vadaiBadge = c.vadai ? '<span class="vadai-badge">ודאי</span>' : '';
         return '<div class="rank-row is-picked' + (c.inSquad ? '' : ' squad-extra') + dv + '" onclick="toggleSquadPick(\'' + eName + '\')">'
           + dot
-          + '<span class="rank-name picked">' + eName + '</span>'
+          + '<span class="rank-name picked' + vadaiCls + '">' + eName + vadaiBadge + '</span>'
           + '</div>';
       }
       // העיגול + המקרא למטה מספרים את הרצועה — אין צורך במילת התאמה בשורה
@@ -3223,6 +3225,7 @@
       if (!cfg) return;
       state = loadState();
       const allPicks = new Set([ ...(state.shiryun || []), ...(state.dbr_picks || []) ]);
+      const vadaiSet = new Set(state.vadai || []);
 
       // מועמדי הנבחרת — ערך>0, מיון לפי combined יורד, חיתוך ב-squad_size, חלוקה ל-4 רצועות
       const squadSize = parseInt(cfg.squad_size || '0', 10) || 16;
@@ -3251,6 +3254,7 @@
         ...c,
         inSquad: true,
         picked:  allPicks.has(c.name),
+        vadai:   vadaiSet.has(c.name),
         // band_split: 2 קבוצות לפי ערך (≥split=רצועת ליבה, <split=נגיעה); אחרת חלוקה לפי מיקום
         bandIdx: splitAt ? (c.value >= splitAt ? 2 : 3) : Math.min(3, Math.floor(i / bandSize))
       }));
@@ -3259,7 +3263,7 @@
       // בחירות הבוחר שאינן בנבחרת זו (ערך 0 / לא קיים) — מתחת לקו המקווקו
       const extras = [...allPicks]
         .filter(n => !inNames.has(n))
-        .map(n => ({ name: n, value: 0, inSquad: false, picked: true }));
+        .map(n => ({ name: n, value: 0, inSquad: false, picked: true, vadai: vadaiSet.has(n) }));
 
       // רצועה-רצועה, שורה-שורה ימין→שמאל, בגריד אחד מלא-רוחב.
       // קו מפריד אחיד מקצה לקצה בין הרצועות; ברצועה אי-זוגית תא ריק ליישור הבאה.
@@ -3426,7 +3430,10 @@
       state = loadState();
       state.selected = state.selected || [];
       state.shiryun  = state.shiryun  || [];
+      state.vadai    = state.vadai    || [];
       const inShiryun = state.shiryun.indexOf(name) >= 0;
+      const isVadai   = state.vadai.indexOf(name) >= 0;
+      // לא נבחר → בחירה רגילה (קדימה, לבחירת מועמד/ת חדש/ה)
       if (!inShiryun) {
         if (state.shiryun.length >= MAX_SHIRYUN) { maxReached(); return; }
         if (state.selected.indexOf(name) < 0) state.selected.push(name);
@@ -3438,7 +3445,16 @@
         if (activeMonkey) { renderMonkeySquad(false); } else { renderSquad(activeSquad); }
         return;
       }
-      // ביטול בחירה — אזהרה לפי סך נוכחות המועמד בנבחרות (כולל הנוכחית)
+      // ודאי → הורדה לרגיל (לחיצה ראשונה — הופכי לשריון, מיידי ללא דיאלוג)
+      if (isVadai) {
+        state.vadai = state.vadai.filter(x => x !== name);
+        autoLog(name, 'הוסר מ-ודאי');
+        saveState(state);
+        updateStatusBar();
+        if (activeMonkey) { renderMonkeySquad(false); } else { renderSquad(activeSquad); }
+        return;
+      }
+      // רגיל → ביטול בחירה (לחיצה שנייה) — אזהרה לפי נוכחות המועמד בנבחרות
       const squads = squadMembershipTitles(name); // כל הנבחרות שבהן מוצג כחבר
       let msg = 'ביטול הבחירה של ' + name + ' יסיר את סימון הנבחר בכל המסכים.\n\n';
       if (squads.length === 0) {
@@ -3461,6 +3477,7 @@
         const st = loadState();
         st.selected = (st.selected || []).filter(x => x !== name);
         st.shiryun  = (st.shiryun  || []).filter(x => x !== name);
+        st.vadai    = (st.vadai    || []).filter(x => x !== name);
         autoLog(name, 'בוטל');
         saveState(st);
         state = st;

@@ -655,17 +655,19 @@
   }
 
   let primState = loadState();
-  // שמירת snapshot של ★ ודאי משלב 1 — נשמר פעם אחת בלבד בכניסה הראשונה לשלב 3
-  if (!primState.vadai_step1) {
-    primState.vadai_step1 = [...(primState.vadai || [])];
+  // פתק הבחירה (ballot) נפרד מ-vadai (סימוני ודאי משלב 1/2). בכניסה ראשונה
+  // הפתק נזרע מהבחירות הוודאיות, אבל מכאן הוא מפתח עצמאי שלא נוגע ב-vadai.
+  if (!Array.isArray(primState.ballot)) {
+    primState.ballot = [...(primState.vadai || [])];
     saveState(primState);
   }
-  const initialVadai = new Set(primState.vadai_step1);
+  // ★ מקור = מי שסומן ודאי (לצביעת הכוכב הזהב מול הכחול "נוסף בשלב זה")
+  const initialVadai = new Set(primState.vadai || []);
 
   // אם בדיוק 6 מועמדים סה"כ — כולם עולים אוטומטית מעל קו ההכרעה
   const _allInit = [...new Set([...(primState.shiryun || []), ...(primState.dbr_picks || [])])];
-  if (_allInit.length === 6 && (primState.vadai || []).length < 6) {
-    primState.vadai = [..._allInit];
+  if (_allInit.length === 6 && (primState.ballot || []).length < 6) {
+    primState.ballot = [..._allInit];
     saveState(primState);
   }
 
@@ -846,7 +848,7 @@
   }
 
   function getVadai() {
-    return Array.isArray(primState.vadai) ? [...primState.vadai] : [];
+    return Array.isArray(primState.ballot) ? [...primState.ballot] : [];
   }
 
   function isFromShiryun(name) {
@@ -971,17 +973,17 @@
   //  Toggle vadai
   // ═══════════════════════════════════════════
   function toggleVadai(name) {
-    if (!Array.isArray(primState.vadai)) primState.vadai = [];
+    if (!Array.isArray(primState.ballot)) primState.ballot = [];
 
-    const idx = primState.vadai.indexOf(name);
+    const idx = primState.ballot.indexOf(name);
     if (idx >= 0) {
-      primState.vadai.splice(idx, 1);
+      primState.ballot.splice(idx, 1);
     } else {
-      if (primState.vadai.length >= MAX_VADAI) {
+      if (primState.ballot.length >= MAX_VADAI) {
         showToast('אפשר לסמן עד ' + MAX_VADAI + ' מועמדים בפתק');
         return;
       }
-      primState.vadai.push(name);
+      primState.ballot.push(name);
     }
 
     saveState(primState);
@@ -1007,7 +1009,7 @@
   // ═══════════════════════════════════════════
   function finishAndGo() {
     saveState(primState);
-    try { gtag('event', 'filter_done', { vadai_count: (primState.vadai || []).length }); } catch(e) {}
+    try { gtag('event', 'filter_done', { vadai_count: (primState.ballot || []).length }); } catch(e) {}
     window.location.href = 'dbr_P_01_process.html';
   }
 
