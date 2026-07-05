@@ -199,7 +199,7 @@
       align-items: stretch;
       gap: 10px;
       margin: 0 0 8px;
-      padding: 6px 14px;
+      padding: 6px 14px 6px 8px;
       background: var(--white);
       border: 1px solid var(--border-soft);
       border-radius: var(--radius-small);
@@ -219,7 +219,7 @@
       padding: 0;
       cursor: pointer;
       color: var(--blue-main);
-      font-size: .72rem;
+      font-size: .95rem;
       font-weight: 700;
       font-family: inherit;
       line-height: 1;
@@ -237,7 +237,7 @@
     .sim-bar-detail strong { color: var(--blue-dark); font-weight: 800; }
     .sim-bar-detail .sep { margin: 0 6px; opacity: .45; }
     .sim-next-btn {
-      padding: 10px 26px;
+      padding: 10px 14px;
       border-radius: 10px;
       font-weight: 800;
       font-size: 1rem;
@@ -266,12 +266,25 @@
       max-width: 130px;
     }
 
-    /* ── Tab bar ── */
+    /* ── מסגרת בולטת המקיפה את הלשוניות + כל התוכן שמתחתן — נפרדת מהכותרת הדביקה ── */
+    .tabs-frame {
+      margin-top: 14px;
+      padding: 14px 16px 4px;
+      background: var(--white);
+      border: 1.5px solid var(--border-soft);
+      border-radius: var(--radius-medium);
+      box-shadow: var(--shadow-soft);
+    }
+
+    /* ── Tab bar — דביק מתחת לכותרת (top נקבע ב-JS, ראו alignTabsSticky) ── */
     .rec-tabs {
       display: flex;
       gap: 2px;
       border-bottom: 2px solid var(--border-soft);
       margin-bottom: 16px;
+      position: sticky;
+      z-index: 35;
+      background: var(--white);
     }
     .rec-tab {
       flex: 1;
@@ -1822,31 +1835,34 @@
     <div class="sticky-controls">
       <div class="sim-status-bar">
         <div style="display:flex;flex-direction:column;align-items:flex-start;flex-shrink:0;justify-content:space-between">
-          <span class="sim-bar-title">משחק הכסאות</span>
-          <button class="sim-bar-help" onclick="document.getElementById('intro-overlay').style.display=''">ⓘ הסבר</button>
+          <div style="display:flex;align-items:center;gap:4px">
+            <button class="sim-bar-help" onclick="document.getElementById('intro-overlay').style.display=''" title="הסבר">ⓘ</button>
+            <span class="sim-bar-title">משחק הכסאות</span>
+          </div>
+          <span id="sim-lock-hint" style="font-size:.68rem;color:var(--text-muted);font-weight:600;white-space:nowrap"><span style="color:#dc2626">⚠</span> בחרו 6-12 לקראת סיום</span>
         </div>
-        <div style="flex:1;min-width:0;padding:0 12px;display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between">
+        <div id="sim-status-mid" style="flex:1;min-width:0;padding:0 22px 0 12px;display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between">
           <div class="sim-bar-count">
             <strong id="sim-total-count">0</strong> נבחרים
-            <span id="sim-lock-hint" style="font-size:.72rem;color:var(--text-muted);font-weight:400;margin-right:6px"> · <span style="color:#dc2626">⚠</span> נדרשים לפחות 6 כדי להתקדם</span>
           </div>
           <div class="sim-bar-detail">
-            <strong id="sim-origin-count">0</strong> נבחרי פתיחה
-            <span class="sep">·</span>
-            <strong id="sim-added-count">0</strong> נוספו בשלב זה
+            <strong id="sim-origin-count">0</strong> בפתיחה, <strong id="sim-added-count">0</strong> נוספו
           </div>
         </div>
         <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0;align-self:center">
           <button class="sim-next-btn" id="sim-next-btn" onclick="window.location.href='dbr_P_01_process.html'">לשלב הבא</button>
         </div>
       </div>
+    </div>
+
+    <!-- מסגרת בולטת, מופרדת מהכותרת — הלשוניות וכל התוכן שמתחתן -->
+    <div class="tabs-frame">
       <div class="rec-tabs" id="rec-tabs">
         <button class="rec-tab" id="tab-historical_sim" onclick="switchTab(this,'historical_sim')">סימולציה היסטורית</button>
         <button class="rec-tab"        id="tab-ai_squads"      onclick="switchTab(this,'ai_squads')">נושאי ליבה</button>
         <button class="rec-tab"        id="tab-other_topics"   onclick="switchTab(this,'other_topics')">נושאים אחרים</button>
         <button class="rec-tab soon">נבחרות מהשטח</button>
       </div>
-    </div>
 
     <!-- בחירת נבחרת -->
     <div class="team-picker" id="team-picker" style="display:none">
@@ -2026,6 +2042,7 @@
         </div>
       </div>
     </div>
+    </div> <!-- /.tabs-frame -->
 
     <!-- Modal הסבר בחירה -->
     <div id="reason-modal" class="reason-overlay" style="display:none;" onclick="closeReasonModal()">
@@ -2769,6 +2786,8 @@
       document.querySelectorAll('.rec-tab').forEach(t => t.classList.remove('active'));
       el.classList.add('active');
       localStorage.setItem('primeris_last_tab', type);
+      // מסך בחירת נושא (לשוניות + גלריה) — אין בו בחירת מועמדים, אז אין סטטוס
+      setSelectionStatusVisible(false);
       const committeePanel = document.getElementById('committee-panel');
       if (type === 'historical_sim') {
         committeePanel.style.display = '';
@@ -2780,6 +2799,20 @@
         committeePanel.style.display = 'none';
         selectRecType(type);
       }
+      requestAnimationFrame(alignTabsSticky);
+    }
+
+    // מציג/מסתיר את מונה הנבחרים, האזהרה, וכפתור "לשלב הבא" בשורת הכותרת
+    function setSelectionStatusVisible(show) {
+      const mid  = document.getElementById('sim-status-mid');
+      const hint = document.getElementById('sim-lock-hint');
+      const btn  = document.getElementById('sim-next-btn');
+      const disp = show ? '' : 'none';
+      if (mid)  mid.style.display  = disp;
+      if (hint) hint.style.display = disp;
+      if (btn)  btn.parentElement.style.display = disp;
+      // שינוי גובה הכותרת → יישור מחדש של מיקום הלשוניות הדביקות
+      if (typeof alignTabsSticky === 'function') requestAnimationFrame(alignTabsSticky);
     }
 
     // ── ועדה מסדרת — רינדור ─────────────────────────────────────────
@@ -2892,6 +2925,7 @@
     function handleBack() {
       if (inRankingView) {
         inRankingView = false;
+        setSelectionStatusVisible(false);   // חזרה לגלריית הבחירה — אין סטטוס
         document.getElementById('ranking-section').style.display = 'none';
         document.getElementById('team-picker').style.display = '';
         activeSquad = null;
@@ -2908,6 +2942,7 @@
 
     function selectTeam(val) {
       inRankingView = true;
+      setSelectionStatusVisible(true);    // נכנסים לדירוג נושא — כאן בוחרים, מציגים סטטוס
       document.getElementById('team-picker').style.display = 'none';
       document.getElementById('team-select').value = val;
       updateSquadHdrTitle();
@@ -3810,8 +3845,7 @@
         btn.classList.toggle('ready', ready);
         btn.disabled = !ready;
       }
-      const hint = document.getElementById('sim-lock-hint');
-      if (hint) hint.style.display = ready ? 'none' : '';
+      // הודעת "נדרשים לפחות 6" קבועה — מוצגת תמיד, לא רק לפני שהושלם
     }
 
     // מחזיר את שם הנבחרת הפעילה כרגע (לרישום מקור הבחירה)
@@ -4043,23 +4077,27 @@
       rankList.sort((a,b) => (b.scoreC??-1) - (a.scoreC??-1));
     }
 
-    // ── פתיחת לשונית — ראשונה בכניסה ראשונה, אחרת האחרונה שנשמרה ──
+    // ── כניסה לדף — מציגים רק את הלשוניות, בלי לפתוח תוכן אוטומטית ──
+    // (הבחירה בפועל נעשית ע"י המשתמש דרך switchTab; שני הפאנלים נשארים
+    // display:none כברירת המחדל שלהם ב-HTML עד שנבחרת לשונית)
     (function initTab() {
-      const saved = localStorage.getItem('primeris_last_tab') || 'historical_sim';
       document.querySelectorAll('.rec-tab').forEach(t => t.classList.remove('active'));
-      const btn = document.getElementById('tab-' + saved);
-      if (btn) btn.classList.add('active');
-      const committeePanel = document.getElementById('committee-panel');
-      if (saved === 'historical_sim') {
-        committeePanel.style.display = '';
-        document.getElementById('team-picker').style.display = 'none';
-        loadCommitteeData();
-      } else {
-        committeePanel.style.display = 'none';
-        selectRecType(saved);
-      }
+      setSelectionStatusVisible(false);   // מסך פתיחה — בוחרים נושא, אין סטטוס
     })();
     updateStatusBar();
+
+    // ── הלשוניות דביקות מתחת לכותרת הדביקה — ה-top נמדד בפועל (לא מספר קבוע),
+    // כדי להישאר מדויק גם כשגובה הכותרת משתנה (טקסט ה"הסבר"/האזהרה) ──
+    function alignTabsSticky() {
+      const stickyControls = document.querySelector('.sticky-controls');
+      const tabs = document.getElementById('rec-tabs');
+      if (!stickyControls || !tabs) return;
+      const bottom = stickyControls.getBoundingClientRect().bottom;
+      tabs.style.top = Math.max(0, bottom) + 'px';
+    }
+    alignTabsSticky();
+    window.addEventListener('resize', () => requestAnimationFrame(alignTabsSticky));
+    window.addEventListener('load',   () => requestAnimationFrame(alignTabsSticky));
 
     // ══════════════════════════════════════════
     // ספירת קליקים במסך הדירוג להעלמת הסבר אוטומטית

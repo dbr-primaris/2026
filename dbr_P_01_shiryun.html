@@ -238,7 +238,7 @@
       gap: 10px;
       flex-wrap: wrap;
       margin: 0 0 10px;
-      padding: 6px 14px;
+      padding: 6px 14px 6px 8px;
       background: var(--white);
       border: 1px solid var(--border-soft);
       border-radius: var(--radius-small);
@@ -269,7 +269,7 @@
     }
 
     .continue-btn {
-      padding: 10px 26px;
+      padding: 10px 14px;
       border-radius: 10px;
       font-weight: 800;
       font-size: 1rem;
@@ -598,7 +598,7 @@
       .brand span:last-child { font-size: .85rem; }
       .candidates-list { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
       .photo-wrap { width: 76px; height: 95px; }
-      .status-bar { padding: 10px 12px; gap: 8px; }
+      .status-bar { padding: 10px 12px 10px 8px; gap: 8px; }
       .status-pill { font-size: 0.85rem; }
       .status-divider { height: 16px; }
       .page { padding-inline: 8px; }
@@ -756,9 +756,9 @@
                   title="הסבר"
                   style="background:none;border:none;padding:0;cursor:pointer;color:var(--blue-main);font-size:.72rem;font-weight:700;font-family:inherit;line-height:1">ⓘ הסבר</button>
         </div>
-        <div style="flex:1;min-width:0;padding:0 12px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:2px">
-          <div id="counter-summary" style="font-size:1rem;font-weight:800;color:var(--blue-dark)">0 נבחרו</div>
-          <div style="font-size:.72rem;color:var(--text-muted);line-height:1">בשלב זה ניתן לבחור 0-12 שמות</div>
+        <div style="flex:1;min-width:0;padding:0 12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;text-align:center">
+          <div id="counter-summary" style="font-size:.85rem;font-weight:800;color:var(--blue-dark);white-space:nowrap">0 נבחרו</div>
+          <div style="font-size:.72rem;color:var(--text-muted);line-height:1;white-space:nowrap">מוגבל ל-12 שמות</div>
         </div>
         <button class="continue-btn" onclick="saveAndReturn()">לשלב הבא</button>
       </div>
@@ -1128,8 +1128,8 @@
       const vadaiN = (primState.vadai || []).length;
       const elSummary = document.getElementById('counter-summary');
       if (elSummary) {
-        const vadaiSuffix = vadaiN > 0 ? `, מתוכם ${vadaiN} ודאי` : '';
-        elSummary.innerHTML = `<strong style="font-size:1.2rem">${shiryunN}</strong> נבחרו${vadaiSuffix}`;
+        const vadaiSuffix = vadaiN > 0 ? ` (${vadaiN} ודאי)` : '';
+        elSummary.innerHTML = `<strong style="font-size:1rem">${shiryunN}</strong> נבחרו${vadaiSuffix}`;
       }
       const elFooter = document.getElementById('footer-selected');
       if (elFooter) elFooter.textContent = totalN;

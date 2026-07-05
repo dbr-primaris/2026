@@ -160,7 +160,7 @@
     .step-card.active .sc-title { color: var(--blue-dark); }
     .step-card.done   .sc-title { color: #3a6fa0; }
     .sc-status { font-size: .72rem; color: #9bafc7; margin-top: 2px; }
-    .step-card.active .sc-status { color: var(--blue-main); font-weight: 700; }
+    .step-card.active .sc-status { color: var(--blue-main); font-weight: 800; font-size: .82rem; }
     .step-card.done   .sc-status { color: #7ba3cc; }
 
     /* ── Page title ── */
@@ -409,17 +409,31 @@
       .paths-grid { grid-template-columns: 1fr; }
       .status-bar { flex-direction: column; align-items: stretch; }
       .manage-btn { text-align: center; justify-content: center; }
+
+      /* מובייל: כרטיסי השלבים גדולים יותר, פונטים גדולים יותר */
+      .steps-list { gap: 14px; }
+      .step-card { padding: 20px 18px; gap: 16px; }
+      .sc-num { width: 44px; height: 44px; font-size: 1.1rem; }
+      .step-card.done .sc-num { font-size: .95rem; }
+      .sc-title { font-size: 1.15rem; }
+      .sc-status { font-size: .88rem; margin-top: 4px; }
+      .flow-connector { font-size: 1.7rem; margin: 0; }
+
+      /* מובייל: צמצום רווחים בחלק התחתון */
+      .foot-row { margin-bottom: 6px !important; }
+      .footer { margin-top: 18px; padding-top: 14px; font-size: .8rem; }
     }
     @media (max-width: 480px) { .page { padding-inline: 8px; } }
   
     .flow-connector {
       text-align: center;
-      font-size: 1.1rem;
+      font-size: 1.5rem;
       color: var(--blue-main);
-      opacity: .45;
-      margin: -4px 0;
+      opacity: .9;
+      margin: -2px 0;
       line-height: 1;
       user-select: none;
+      font-weight: 700;
     }
     .flow-side-label {
       display: flex;
@@ -432,25 +446,18 @@
     }
     .flow-side-line {
       flex: 1;
-      width: 2.5px;
+      width: 3px;
       background: var(--blue-main);
-      opacity: .28;
-      border-radius: 0 0 2px 2px;
+      opacity: .5;
+      border-radius: 2px;
       position: relative;
     }
-    .flow-side-line:first-child {
-      border-radius: 2px 2px 0 0;
-    }
-    .flow-side-line:first-child::before {
-      content: '';
+    /* מרפק שיוצא מהקו ומצביע אל ראש תיבה 3 — ממוקם ומצויר ב-JS (alignFlowElbow) */
+    .flow-elbow-svg {
       position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%) translateY(-100%);
-      border-left: 5px solid transparent;
-      border-right: 5px solid transparent;
-      border-bottom: 7px solid var(--blue-main);
-      opacity: 1;
+      top: 0; left: 0;
+      overflow: visible;
+      pointer-events: none;
     }
     .flow-side-text {
       font-size: .7rem;
@@ -460,7 +467,7 @@
       letter-spacing: .09em;
       white-space: nowrap;
       color: var(--blue-main);
-      opacity: .52;
+      opacity: .68;
       padding: 7px 0;
     }
     .step-card.passive {
@@ -520,47 +527,48 @@
       </div>
     </div>
 
-    <!-- Step cards — reversed order: 3 top → 1 bottom -->
+    <!-- Step cards — סדר רגיל: 1 למעלה → 3 למטה -->
     <div style="max-width:640px;margin:0 auto 20px">
-      <div style="display:flex;gap:0;align-items:stretch">
+      <div id="flow-side-wrap" style="display:flex;gap:0;align-items:stretch;position:relative">
 
-        <!-- קו אנכי "סדר המשחק" -->
+        <!-- קו אנכי "סדר המשחק" + מרפק שנכנס לתיבה 3 (מיושר ב-JS) -->
         <div class="flow-side-label">
-          <div class="flow-side-line"></div>
-          <span class="flow-side-text">סדר המשחק</span>
-          <div class="flow-side-line"></div>
+          <div class="flow-side-line" id="flow-line-top"></div>
+          <span class="flow-side-text" id="flow-side-text">סדר המשחק</span>
+          <div class="flow-side-line" id="flow-line-bottom"></div>
         </div>
+        <svg id="flow-elbow-svg" class="flow-elbow-svg" aria-hidden="true"></svg>
 
         <div class="steps-list" style="flex:1;margin:0;max-width:none">
 
-        <!-- שלב 3: פתק הבחירה (ראש — נעול עד שמוכן) -->
-        <div class="step-card locked" id="card-filter" onclick="goToFilter()">
-          <div class="sc-num" id="num-filter">3</div>
+        <!-- שלב 1: בחירה (ראש — תמיד זמין) -->
+        <div class="step-card active" id="card-shiryun" onclick="goToShiryun()">
+          <div class="sc-num" id="num-shiryun">1</div>
           <div class="sc-info">
-            <div class="sc-title">פתק הבחירה שלי</div>
-            <div class="sc-status" id="status-filter">6–8 מועמדים לפתק הבחירה הסופי</div>
+            <div class="sc-title">נקודת הפתיחה שלי</div>
+            <div class="sc-status" id="status-shiryun">בשלב זה, ניתן לסמן מועמדים לבחירה טנטטיבית או וודאית, כולל צפייה במידע המפורט עליהם</div>
           </div>
         </div>
 
-        <div class="flow-connector">↑</div>
+        <div class="flow-connector">↓</div>
 
         <!-- שלב 2: סימולציה -->
         <div class="step-card locked" id="card-state" onclick="goToState()">
           <div class="sc-num" id="num-state">2</div>
           <div class="sc-info">
             <div class="sc-title">משחק הכסאות</div>
-            <div class="sc-status" id="status-state">בשלב זה יש להשלים בחירה של 6-12 שמות</div>
+            <div class="sc-status" id="status-state">בשלב זה ניתן לעבור בין סימולציות שונות שנעשו ע"י הבינות המלאכותיות, כשהמועמדים שנבחרו משתלבים היטב בסימולציות</div>
           </div>
         </div>
 
-        <div class="flow-connector">↑</div>
+        <div class="flow-connector">↓</div>
 
-        <!-- שלב 1: בחירה (תחתון — תמיד זמין) -->
-        <div class="step-card active" id="card-shiryun" onclick="goToShiryun()">
-          <div class="sc-num" id="num-shiryun">1</div>
+        <!-- שלב 3: פתק הבחירה (תחתון — נעול עד שמוכן) -->
+        <div class="step-card locked" id="card-filter" onclick="goToFilter()">
+          <div class="sc-num" id="num-filter">3</div>
           <div class="sc-info">
-            <div class="sc-title">נקודת הפתיחה שלי</div>
-            <div class="sc-status" id="status-shiryun">התחל כאן</div>
+            <div class="sc-title">פתק הבחירה שלי</div>
+            <div class="sc-status" id="status-filter">זהו סוף התהליך שבו יש להתאים את מספר המועמדים לדרישות המפלגה (6-8 שמות)</div>
           </div>
         </div>
 
@@ -569,18 +577,19 @@
     </div>
 
     <!-- קישור לאתר הרשמי -->
-    <div style="text-align:center;margin-bottom:20px">
-      <a href="dbr_P_01_official_frame.html" onclick="trackPath('official_frame')" style="font-size:.8rem;color:var(--blue-main);text-decoration:underline;">רשימת המועמדים הרשמית ←</a>
+    <div class="foot-row" style="text-align:center;margin-bottom:20px">
+      <a href="dbr_P_01_official_frame.html" onclick="trackPath('official_frame')" style="font-size:.8rem;color:var(--blue-main);text-decoration:underline;">רשימת המועמדים הרשמית</a>
     </div>
 
-    <div style="text-align:center;margin-bottom:12px">
+    <div class="foot-row" style="text-align:center;margin-bottom:12px">
       <button onclick="resetAllSelections()" style="background:none;border:none;color:var(--text-muted);font-size:.82rem;cursor:pointer;text-decoration:underline;font-family:inherit">איפוס כל הבחירות</button>
     </div>
 
 
 
     <footer class="footer">
-      מערכת תומכת החלטה לפריימריז של מפלגת הדמוקרטים · הנתונים נשמרים מקומית בדפדפן בלבד.
+      משחקי סימולציות לסיוע בתהליך הבחירה לפריימריז של מפלגת הדמוקרטים.<br>
+      הנתונים נשמרים מקומית בדפדפן שלכם ואינם נשלחים לשום גורם.
     </footer>
   </div>
 
@@ -654,7 +663,7 @@
           : `${originShiryun.length} נבחרו`;
         setCard('card-shiryun','num-shiryun','status-shiryun','done','✓', s1txt);
       } else {
-        setCard('card-shiryun','num-shiryun','status-shiryun','active','1','בשלב זה ניתן לסמן 0-12 שמות');
+        setCard('card-shiryun','num-shiryun','status-shiryun','active','1','בשלב זה, ניתן לסמן מועמדים לבחירה טנטטיבית או וודאית, כולל צפייה במידע המפורט עליהם');
       }
 
       // ── כרטיסית 2: סימולציה (אמצע) — תמיד פתוחה (שלב 1 אופציונלי) ──
@@ -663,18 +672,18 @@
         const s2txt = `${shiryun.length} נבחרו, מתוכם ${originShiryun.length} מוצא ו-${addedCount} נוספו בשלב זה`;
         setCard('card-state','num-state','status-state','done','✓', s2txt);
       } else if (step1Done) {
-        setCard('card-state','num-state','status-state','active','2','בשלב זה יש להשלים בחירה של 6-12 שמות');
+        setCard('card-state','num-state','status-state','active','2','בשלב זה ניתן לעבור בין סימולציות שונות שנעשו ע"י הבינות המלאכותיות, כשהמועמדים שנבחרו משתלבים היטב בסימולציות');
       } else {
-        setCard('card-state','num-state','status-state','passive','2','בשלב זה יש להשלים בחירה של 6-12 שמות');
+        setCard('card-state','num-state','status-state','passive','2','בשלב זה ניתן לעבור בין סימולציות שונות שנעשו ע"י הבינות המלאכותיות, כשהמועמדים שנבחרו משתלבים היטב בסימולציות');
       }
 
       // ── כרטיסית 3: פתק הבחירה (ראש) — נפתחת רק כשיש לפחות 6 נבחרים סה"כ ──
       if (step3Done) {
         setCard('card-filter','num-filter','status-filter','done','✓',`${ballot.length} נבחרים בפתק שלך`);
       } else if (shiryun.length >= 6) {
-        setCard('card-filter','num-filter','status-filter','active','3','הבחירה שלך מוכנה, הכנס כדי לראות.');
+        setCard('card-filter','num-filter','status-filter','active','3','זהו סוף התהליך שבו יש להתאים את מספר המועמדים לדרישות המפלגה (6-8 שמות)');
       } else {
-        setCard('card-filter','num-filter','status-filter','locked','3','6–8 מועמדים לפתק הבחירה הסופי');
+        setCard('card-filter','num-filter','status-filter','locked','3','זהו סוף התהליך שבו יש להתאים את מספר המועמדים לדרישות המפלגה (6-8 שמות)');
       }
 
       // ── סרגל שלבים אופקי ──
@@ -687,7 +696,58 @@
       else { document.getElementById('sn2').classList.add('active'); }
       if (step3Done) { document.getElementById('sn3').classList.add('done'); document.getElementById('sl2').classList.add('done'); }
       else if (step1EnoughForStep3 || step2Done) { document.getElementById('sn3').classList.add('active'); }
+
+      requestAnimationFrame(alignFlowElbow);
     }
+
+    // ── מרפק "סדר המשחק" — קו יורד מהראש ונכנס לראש תיבה 3 (פתק הבחירה) ──
+    // ממוקם ומצויר לפי מדידה אמיתית של DOM (לא אחוזים קבועים), כדי להישאר מדויק
+    // גם כשגובה התיבות משתנה (טקסט סטטוס שונה, רוחב מסך שונה).
+    function alignFlowElbow() {
+      const wrap       = document.getElementById('flow-side-wrap');
+      const lineTop    = document.getElementById('flow-line-top');
+      const lineBottom = document.getElementById('flow-line-bottom');
+      const label      = document.getElementById('flow-side-text');
+      const cardState  = document.getElementById('card-state');
+      const cardFilter = document.getElementById('card-filter');
+      const svg        = document.getElementById('flow-elbow-svg');
+      if (!wrap || !lineTop || !lineBottom || !label || !cardState || !cardFilter || !svg) return;
+
+      const wrapRect  = wrap.getBoundingClientRect();
+      const labelRect = label.getBoundingClientRect();
+      const stateRect = cardState.getBoundingClientRect();
+      const cardRect  = cardFilter.getBoundingClientRect();
+      if (!wrapRect.height || !stateRect.height || !cardRect.height) return;
+
+      const centerX     = (labelRect.left + labelRect.right) / 2 - wrapRect.left;
+      // הכתב האנכי — באמצע תיבה 2 לאורכה
+      const textCenterY = stateRect.top - wrapRect.top + stateRect.height / 2;
+      const textHalfH   = labelRect.height / 2;
+      // השבירה — אמצע הדופן הימנית של תיבה 3; החץ נושק לדופן ונכנס רק טיפה פנימה (לא עד העיגול)
+      const bendY       = cardRect.top   - wrapRect.top + cardRect.height / 2;
+      const tipX        = cardRect.right - wrapRect.left - 4;
+
+      // שני קטעי הקו נקבעים במפורש (לא flex:1 חופשי) — כך שהטקסט לא "בורח"
+      // והקו התחתון נעצר בדיוק בנקודת השבירה, בלי להמשיך מעבר לה.
+      lineTop.style.flex      = 'none';
+      lineTop.style.height    = Math.max(0, textCenterY - textHalfH) + 'px';
+      lineBottom.style.flex   = 'none';
+      lineBottom.style.height = Math.max(0, bendY - (textCenterY + textHalfH)) + 'px';
+
+      const W = wrapRect.width, H = wrapRect.height;
+      svg.setAttribute('width', W);
+      svg.setAttribute('height', H);
+      svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+      svg.innerHTML =
+        '<path d="M ' + centerX + ' ' + bendY + ' L ' + tipX + ' ' + bendY + '" '
+          + 'fill="none" stroke="#1d5fa7" stroke-width="3" stroke-linecap="round"/>'
+        + '<polygon points="' + (tipX + 9) + ',' + (bendY - 6) + ' '
+                              + (tipX + 9) + ',' + (bendY + 6) + ' '
+                              + (tipX - 3) + ',' + bendY
+          + '" fill="#1d5fa7"/>';
+    }
+    window.addEventListener('resize', () => requestAnimationFrame(alignFlowElbow));
+    window.addEventListener('load', () => requestAnimationFrame(alignFlowElbow)); // אחרי טעינת גופן Heebo
 
     function trackPath(path) {
       primState.meta = primState.meta || {};
