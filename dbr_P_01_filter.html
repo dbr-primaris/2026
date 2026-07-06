@@ -832,6 +832,15 @@
     primState.ballot = [..._allInit];
     saveState(primState);
   }
+  // סימון התמדה: הגענו לשלב 3 (פתק הבחירה) — נשאר גם אם הפתק יורד זמנית מ-6.
+  // דף פרוסס קורא את הדגל כדי לסמן שהשלב השלישי נפתח.
+  if (_allInit.length > 0) {
+    primState.meta = primState.meta || {};
+    if (!primState.meta.reachedStep3) {
+      primState.meta.reachedStep3 = true;
+      saveState(primState);
+    }
+  }
   // ★ מקור = מי שסומן ודאי (לצביעת הכוכב הזהב מול הכחול "נוסף בשלב זה")
   const initialVadai = new Set(primState.vadai || []);
 

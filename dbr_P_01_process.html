@@ -667,6 +667,8 @@
       const step1EnoughForStep3 = originShiryun.length >= 6;
       const step2Done           = selected.length >= 6;
       const step3Done           = ballot.length   >= 6;
+      // הגענו לפתק (שלב 3) — דגל התמדה שנדלק בכניסה לדף הפתק
+      const step3Reached        = !!(primState.meta && primState.meta.reachedStep3);
 
       // ── כרטיסית 1: בחירה (תחתון) ──
       if (step1Done) {
@@ -694,7 +696,7 @@
       // ── כרטיסית 3: פתק הבחירה (ראש) — נפתחת רק כשיש לפחות 6 נבחרים סה"כ ──
       if (step3Done) {
         setCard('card-filter','num-filter','status-filter','done','✓',`${ballot.length} נבחרים בפתק שלך`);
-      } else if (shiryun.length >= 6) {
+      } else if (step3Reached || shiryun.length >= 6) {
         setCard('card-filter','num-filter','status-filter','active','3','זהו סוף התהליך שבו יש להתאים את מספר המועמדים לדרישות המפלגה (6-8 שמות)');
       } else {
         setCard('card-filter','num-filter','status-filter','locked','3','זהו סוף התהליך שבו יש להתאים את מספר המועמדים לדרישות המפלגה (6-8 שמות)');
@@ -708,7 +710,7 @@
       else           { document.getElementById('sn1').classList.add('active'); }
       if (step2Done) { document.getElementById('sn2').classList.add('done'); document.getElementById('sl1').classList.add('done'); }
       else { document.getElementById('sn2').classList.add('active'); }
-      if (step3Done) { document.getElementById('sn3').classList.add('done'); document.getElementById('sl2').classList.add('done'); }
+      if (step3Done || step3Reached) { document.getElementById('sn3').classList.add('done'); document.getElementById('sl2').classList.add('done'); }
       else if (step1EnoughForStep3 || step2Done) { document.getElementById('sn3').classList.add('active'); }
 
       requestAnimationFrame(alignFlowElbow);
