@@ -511,26 +511,27 @@
   }
 
   /* ── Finish screen ── */
-  .finish-screen { padding: 12px 0 32px; }
-  .finish-header { padding: 14px 0 16px; }
-  .finish-title { font-size: 1.25rem; font-weight: 900; color: var(--blue-dark); }
-  .finish-subtitle { font-size: .88rem; color: var(--text-muted); margin-top: 5px; }
+  .finish-screen { padding: 8px 0 40px; }
   .finish-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 28px;
   }
   .finish-card {
+    flex: 0 0 calc(25% - 6px);
+    max-width: calc(25% - 6px);
     background: var(--white);
-    border-radius: 14px;
-    border: 2px solid var(--border-soft);
+    border-radius: 10px;
+    border: 1.5px solid var(--border-soft);
     overflow: hidden;
     text-align: center;
-    padding-bottom: 10px;
   }
-  .finish-card.is-origin { border-color: #C9A017; background: #fffbeb; }
-  .finish-card.is-added  { border-color: var(--blue-main); background: var(--blue-soft); }
+  .finish-grid-3col .finish-card {
+    flex: 0 0 calc(33.333% - 6px);
+    max-width: calc(33.333% - 6px);
+  }
   .finish-card-photo {
     width: 100%;
     aspect-ratio: 3/4;
@@ -539,7 +540,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2.5rem;
+    font-size: 2rem;
   }
   .finish-card-photo img {
     width: 100%; height: 100%;
@@ -547,62 +548,83 @@
     display: block;
   }
   .finish-card-name {
-    padding: 8px 8px 3px;
-    font-size: .92rem;
+    padding: 5px 4px 7px;
+    font-size: .78rem;
     font-weight: 800;
     color: var(--blue-dark);
     line-height: 1.3;
+    word-break: break-word;
   }
-  .finish-card.is-origin .finish-card-name { color: #7c5a00; }
-  .finish-card-squad {
-    font-size: .7rem;
-    color: var(--text-muted);
-    padding: 0 8px;
-    line-height: 1.3;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  .finish-message {
+    background: var(--blue-soft);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-medium);
+    padding: 22px 20px;
   }
-  .finish-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 8px;
-  }
-  .btn-back-edit {
-    flex: 1;
-    padding: 12px;
-    border: 1.5px solid var(--border-soft);
-    border-radius: 12px;
-    background: var(--white);
-    color: var(--text-muted);
-    font-family: inherit;
-    font-size: .92rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: border-color .15s;
-  }
-  .btn-back-edit:hover { border-color: var(--blue-main); color: var(--blue-main); }
-  .btn-done-final {
-    flex: 2;
-    padding: 12px;
-    border: none;
-    border-radius: 12px;
-    background: var(--blue-main);
-    color: white;
-    font-family: inherit;
+  .finish-msg-main {
     font-size: .95rem;
     font-weight: 800;
-    cursor: pointer;
-    transition: background .15s;
+    color: var(--blue-dark);
+    line-height: 1.7;
+    margin-bottom: 16px;
   }
-  .btn-done-final:hover { background: var(--blue-dark); }
+  .finish-msg-body {
+    font-size: .88rem;
+    color: var(--text-main);
+    line-height: 1.8;
+    margin-bottom: 14px;
+  }
+  .finish-share-label {
+    font-size: .88rem;
+    font-weight: 800;
+    color: var(--blue-dark);
+    margin-bottom: 8px;
+  }
+  .finish-share-url {
+    font-size: .82rem;
+    color: var(--blue-main);
+    background: var(--white);
+    border: 1px solid var(--border-soft);
+    border-radius: 8px;
+    padding: 8px 12px;
+    word-break: break-all;
+    margin-bottom: 12px;
+    direction: ltr;
+    text-align: left;
+  }
+  .finish-footer-btns {
+    display: flex;
+    gap: 10px;
+    margin-top: 4px;
+  }
+  .finish-copy-btn, .finish-back-btn {
+    flex: 1;
+    padding: 11px;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: .9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background .15s, border-color .15s, color .15s;
+  }
+  .finish-copy-btn {
+    border: 1.5px solid var(--blue-main);
+    background: var(--blue-soft);
+    color: var(--blue-main);
+  }
+  .finish-copy-btn:hover { background: #dceaff; }
+  .finish-copy-btn.copied { border-color: var(--green); background: #dcfce7; color: var(--green); }
+  .finish-back-btn {
+    border: 1.5px solid var(--border-soft);
+    background: var(--white);
+    color: var(--text-muted);
+  }
+  .finish-back-btn:hover { border-color: #b0c8e8; color: var(--blue-dark); }
 
   @media (max-width: 480px) {
     .brand-label { display: none; }
     .slot-name { font-size: .92rem; }
     .slot-photo { width: 44px; height: 56px; }
-    .finish-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
-    .finish-card-name { font-size: .85rem; }
   }
 
   /* ── Intro overlay ── */
@@ -675,7 +697,7 @@
       <span class="brand-mark">ד.ב.ר</span>
       <span class="brand-label">דמוקרטים בוחרים רציונלית</span>
     </a>
-    <span style="color:#ffd24d;font-size:.8rem;font-weight:800;flex-shrink:0;margin-inline-start:auto;padding-inline:8px">V240</span>
+    <span style="color:#ffd24d;font-size:.8rem;font-weight:800;flex-shrink:0;margin-inline-start:auto;padding-inline:8px">V242</span>
     <a href="dbr_P_01_process.html" style="color:rgba(255,255,255,.65);font-size:.85rem;font-weight:600;text-decoration:none;flex-shrink:0">☰</a>
   </div>
   <div class="step-nav">
@@ -768,14 +790,17 @@
 
   <!-- ── Finish screen: הפתק שלי עם תמונות ── -->
   <div id="finish-screen" style="display:none" class="finish-screen">
-    <div class="finish-header">
-      <div class="finish-title">הפתק שלי ✓</div>
-      <div class="finish-subtitle" id="finish-subtitle"></div>
-    </div>
     <div class="finish-grid" id="finish-grid"></div>
-    <div class="finish-actions">
-      <button class="btn-back-edit" onclick="backToEdit()">← חזרה לעריכה</button>
-      <button class="btn-done-final" onclick="confirmAndGo()">שמרו וסיימו</button>
+    <div class="finish-message">
+      <p class="finish-msg-main">הפתק שלך מוכן. אלו המועמדות והמועמדים שבחרת לאחר שעברת את משחק הבחירה של ד.ב.ר.</p>
+      <p class="finish-msg-body">תודה שעבדת עם היישום שלנו, בדקת, השווית, חשבת — ובנית לעצמך פתק בחירה אישי.</p>
+      <p class="finish-msg-body">אם לדעתך המשחק הזה יכול לעזור גם לבוחרות ולבוחרים אחרים בדמוקרטים להכיר טוב יותר את המועמדים, לחשוב על ההרכב שלהם, ולהגיע לבחירה מודעת יותר — נשמח שתשתף את הקישור בקבוצות, ברשתות ובמדיות שבהן אתה פעיל.</p>
+      <p class="finish-share-label">לשיתוף המשחק:</p>
+      <div class="finish-share-url">https://dbr-primaris.github.io/2026/dbr_P_01_index.html</div>
+      <div class="finish-footer-btns">
+        <button class="finish-copy-btn" id="copy-link-btn" onclick="copyShareLink()">העתקת הקישור</button>
+        <button class="finish-back-btn" onclick="backToEdit()">← חזרה לעריכה</button>
+      </div>
     </div>
   </div>
 
@@ -1242,41 +1267,63 @@
     const vadaiList = vadai.filter(n => all.includes(n));
 
     const grid = document.getElementById('finish-grid');
-    grid.innerHTML = vadaiList.map(name => {
-      const isOrigin  = initialVadai.has(name);
-      const cls       = isOrigin ? 'is-origin' : 'is-added';
-      const topSquad  = squadsOf(name)[0] || '';
-      const squadLine = topSquad
-        ? `<div class="finish-card-squad">${escapeHtml(topSquad)}</div>`
-        : '';
-      return `<div class="finish-card ${cls}">
+    // 3 עמודות ל-6 מועמדים (2×3 שורות שוות), 4 עמודות ל-7–8
+    grid.classList.toggle('finish-grid-3col', vadaiList.length <= 6);
+
+    grid.innerHTML = vadaiList.map(name =>
+      `<div class="finish-card">
         <div class="finish-card-photo">
           <img src="${escapeHtml(imgSrc(name))}"
                alt="${escapeHtml(name)}"
                onerror="${escapeHtml(imgFallback(name))}">
         </div>
         <div class="finish-card-name">${escapeHtml(name)}</div>
-        ${squadLine}
-      </div>`;
-    }).join('');
+      </div>`
+    ).join('');
 
-    document.getElementById('finish-subtitle').textContent =
-      vadaiList.length + ' מועמדים בפתק';
+    saveState(primState);
+    try { gtag('event', 'filter_done', { vadai_count: vadaiList.length }); } catch(e) {}
 
-    document.getElementById('filter-ui').style.display    = 'none';
+    document.querySelector('.progress-bar').style.display  = 'none';
+    document.getElementById('filter-ui').style.display     = 'none';
     document.getElementById('finish-screen').style.display = '';
     window.scrollTo(0, 0);
   }
 
   function backToEdit() {
     document.getElementById('finish-screen').style.display = 'none';
-    document.getElementById('filter-ui').style.display    = '';
+    document.getElementById('filter-ui').style.display     = '';
+    document.querySelector('.progress-bar').style.display  = '';
   }
 
-  function confirmAndGo() {
-    saveState(primState);
-    try { gtag('event', 'filter_done', { vadai_count: (primState.ballot || []).length }); } catch(e) {}
-    window.location.href = 'dbr_P_01_process.html';
+  function copyShareLink() {
+    const url = 'https://dbr-primaris.github.io/2026/dbr_P_01_index.html';
+    const btn = document.getElementById('copy-link-btn');
+    const reset = () => {
+      btn.textContent = 'העתקת הקישור';
+      btn.classList.remove('copied');
+    };
+    const done = () => {
+      btn.textContent = 'הועתק ✓';
+      btn.classList.add('copied');
+      setTimeout(reset, 2500);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(done).catch(() => fallbackCopy(url, done));
+    } else {
+      fallbackCopy(url, done);
+    }
+  }
+
+  function fallbackCopy(text, cb) {
+    const el = document.createElement('textarea');
+    el.value = text;
+    el.style.cssText = 'position:fixed;top:-9999px;opacity:0';
+    document.body.appendChild(el);
+    el.select();
+    try { document.execCommand('copy'); } catch(e) {}
+    document.body.removeChild(el);
+    cb();
   }
 
   // ═══════════════════════════════════════════
