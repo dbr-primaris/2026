@@ -294,12 +294,18 @@
       color: var(--text-muted);
       background: none;
       border: none;
+      border-inline-end: 1px solid var(--border-soft);
       border-bottom: 3px solid transparent;
       margin-bottom: -2px;
       cursor: pointer;
       font-family: inherit;
-      transition: color .15s;
+      transition: color .15s, background .15s;
       text-align: center;
+    }
+    .rec-tab:last-child { border-inline-end: none; }
+    .rec-tab:not(.soon):not(.active) {
+      background: rgba(29,95,167,.04);
+      border-radius: 8px 8px 0 0;
     }
     .rec-tab:hover { color: var(--blue-main); }
     .rec-tab.active {
@@ -309,7 +315,7 @@
       border-radius: 8px 8px 0 0;
       font-weight: 800;
     }
-    .rec-tab.soon { opacity: .4; cursor: default; pointer-events: none; }
+    .rec-tab.soon { opacity: .4; cursor: default; pointer-events: none; background: none; }
 
     /* ── Back link ── */
     .back-link {
@@ -830,7 +836,7 @@
     .reason-overlay {
       position: fixed; inset: 0;
       background: rgba(23,32,51,.45);
-      z-index: 60;
+      z-index: 200;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -1357,7 +1363,7 @@
     .rank-section--imitation { border-color: #7c3aed; border-width: 2px; border-radius: 4px; border-left: 5px solid #7c3aed; }
 
     /* ── Modal ── */
-    .mbk{display:none;position:fixed;inset:0;background:rgba(23,32,51,.45);z-index:10;align-items:center;justify-content:center;padding:16px}
+    .mbk{display:none;position:fixed;inset:0;background:rgba(23,32,51,.45);z-index:200;align-items:center;justify-content:center;padding:16px}
     .mbk.open{display:flex}
     .mbox{background:#fff;border-radius:22px;padding:22px;max-width:680px;width:100%;max-height:88vh;overflow:auto;box-shadow:0 28px 70px rgba(16,24,40,.25)}
     .mhdr{display:flex;justify-content:space-between;gap:12px;padding-bottom:12px;border-bottom:1px solid var(--border-soft);margin-bottom:14px}
@@ -1833,7 +1839,7 @@
 
     <!-- סרגל סטטוס + לשוניות — sticky -->
     <div class="sticky-controls">
-      <div class="sim-status-bar">
+      <div class="sim-status-bar" id="sim-status-bar">
         <div style="display:flex;flex-direction:column;align-items:flex-start;flex-shrink:0;justify-content:space-between">
           <div style="display:flex;align-items:center;gap:4px">
             <button class="sim-bar-help" onclick="document.getElementById('intro-overlay').style.display=''" title="הסבר">ⓘ</button>
@@ -1862,6 +1868,16 @@
         <button class="rec-tab"        id="tab-ai_squads"      onclick="switchTab(this,'ai_squads')">נושאי ליבה</button>
         <button class="rec-tab"        id="tab-other_topics"   onclick="switchTab(this,'other_topics')">נושאים אחרים</button>
         <button class="rec-tab soon">נבחרות מהשטח</button>
+      </div>
+
+      <div class="empty-state" id="tabs-empty-state">
+        <div class="empty-icon">👆</div>
+        <h2>בחרו כיצד להתחיל</h2>
+        <p style="margin-bottom:8px">לחצו על אחת הלשוניות למעלה:</p>
+        <ul style="text-align:start;max-width:420px;margin:0 auto;padding-inline-start:20px;color:var(--text-muted);font-size:.97rem;line-height:1.6">
+          <li>סימולציה היסטורית כדוגמא לסימולציה שהבינות עשו.</li>
+          <li>נושאי ליבה או נושאים אחרים, כדי לראות את הנבחרות והמועמדים ולהמשיך לשחק.</li>
+        </ul>
       </div>
 
     <!-- בחירת נבחרת -->
@@ -2081,7 +2097,8 @@
     </div>
 
     <footer class="footer">
-      יישום תומך החלטה אישי, הנתונים נשמרים בדפדפן שלך בלבד. · v1.1
+      משחקי סימולציות לסיוע בתהליך הבחירה לפריימריז של מפלגת הדמוקרטים.<br>
+      הנתונים נשמרים מקומית בדפדפן שלכם ואינם נשלחים לשום גורם.
     </footer>
   </div>
 
@@ -2785,6 +2802,8 @@
     function switchTab(el, type) {
       document.querySelectorAll('.rec-tab').forEach(t => t.classList.remove('active'));
       el.classList.add('active');
+      const emptyState = document.getElementById('tabs-empty-state');
+      if (emptyState) emptyState.style.display = 'none';
       localStorage.setItem('primeris_last_tab', type);
       // מסך בחירת נושא (לשוניות + גלריה) — אין בו בחירת מועמדים, אז אין סטטוס
       setSelectionStatusVisible(false);
@@ -2802,15 +2821,12 @@
       requestAnimationFrame(alignTabsSticky);
     }
 
-    // מציג/מסתיר את מונה הנבחרים, האזהרה, וכפתור "לשלב הבא" בשורת הכותרת
+    // מציג/מסתיר את כל שורת הכותרת (כותרת+מונה+אזהרה+כפתור "לשלב הבא") —
+    // מוצגת רק בתצוגת דירוג נושא; במסך בחירת נושא (לשוניות+גלריה) מיותרת
+    // כי כבר ברור שאנחנו במשחק הכסאות.
     function setSelectionStatusVisible(show) {
-      const mid  = document.getElementById('sim-status-mid');
-      const hint = document.getElementById('sim-lock-hint');
-      const btn  = document.getElementById('sim-next-btn');
-      const disp = show ? '' : 'none';
-      if (mid)  mid.style.display  = disp;
-      if (hint) hint.style.display = disp;
-      if (btn)  btn.parentElement.style.display = disp;
+      const bar = document.getElementById('sim-status-bar');
+      if (bar) bar.style.display = show ? '' : 'none';
       // שינוי גובה הכותרת → יישור מחדש של מיקום הלשוניות הדביקות
       if (typeof alignTabsSticky === 'function') requestAnimationFrame(alignTabsSticky);
     }

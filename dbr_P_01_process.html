@@ -472,6 +472,7 @@
     }
     .step-card.passive {
       background: transparent;
+      border: 1.5px solid #b8cfe8;
     }
     .step-card.passive .sc-num { background: transparent; }
   </style>
@@ -553,7 +554,7 @@
         <div class="flow-connector">↓</div>
 
         <!-- שלב 2: סימולציה -->
-        <div class="step-card locked" id="card-state" onclick="goToState()">
+        <div class="step-card locked" id="card-state" onclick="handleStateClick()">
           <div class="sc-num" id="num-state">2</div>
           <div class="sc-info">
             <div class="sc-title">משחק הכסאות</div>
@@ -630,6 +631,17 @@
     function goToState()   { _ensureDisclaimer(); trackPath('committee'); window.location.href = 'dbr_P_01_state.html'; }
     function goToFilter()  { _ensureDisclaimer(); trackPath('filter'); window.location.href = 'dbr_P_01_filter.html'; }
 
+    // לחיצה ראשונה על תיבת שלב 2 רק "מעבירה" אליה במסך הזה (כדי לא לקפוץ ישר
+    // לדף הסימולציה בטעות); לחיצה שנייה על אותה תיבה היא זו שמנווטת בפועל.
+    let stateArmed = false;
+    function handleStateClick() {
+      const card = document.getElementById('card-state');
+      if (card && card.classList.contains('done')) { goToState(); return; }
+      if (stateArmed) { goToState(); return; }
+      stateArmed = true;
+      renderAll();
+    }
+
 
     function setCard(cardId, numId, statusId, state, numText, statusText) {
       const card = document.getElementById(cardId);
@@ -671,6 +683,8 @@
         const addedCount = shiryun.filter(n => sources[n]).length;
         const s2txt = `${shiryun.length} נבחרו, מתוכם ${originShiryun.length} מוצא ו-${addedCount} נוספו בשלב זה`;
         setCard('card-state','num-state','status-state','done','✓', s2txt);
+      } else if (stateArmed) {
+        setCard('card-state','num-state','status-state','active','2','עברתם לשלב 2 — לחצו שוב על התיבה כדי להמשיך לדף הסימולציה');
       } else if (step1Done) {
         setCard('card-state','num-state','status-state','active','2','בשלב זה ניתן לעבור בין סימולציות שונות שנעשו ע"י הבינות המלאכותיות, כשהמועמדים שנבחרו משתלבים היטב בסימולציות');
       } else {

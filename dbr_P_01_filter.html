@@ -231,8 +231,54 @@
   }
   .zone-badge.vadai-badge { background: var(--blue-soft); color: var(--blue-main); }
   .zone-badge.pending-badge { background: #f1f5f9; color: var(--text-muted); }
+  .zone-badge.over-badge { background: var(--amber-soft); color: var(--amber); }
+  .zone-badge.ok-badge { background: #dcfce7; color: #15803d; }
 
   /* ── Candidate cards ── */
+  /* ── גריד שמות קומפקטי (צעד 1) — שמות בלבד, 3–4 בשורה ── */
+  .name-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+  }
+  /* ── מסגרת הפתק — מסמנת חוקי (ירוק) / לא־חוקי (כתום) ── */
+  .ballot-frame {
+    border: 2px solid var(--border-soft);
+    border-radius: 14px;
+    padding: 4px 14px 12px;
+    transition: border-color .2s, background .2s;
+  }
+  .ballot-frame.is-valid   { border-color: #16a34a; background: #f0fdf4; }
+  .ballot-frame.is-invalid { border-color: var(--amber); background: var(--amber-soft); }
+
+  /* ── תצוגת כיסוי הנושאים (4 רמות עוצמה) ── */
+  .coverage { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border-soft); }
+  .cov-legend { font-size: .72rem; color: var(--text-muted); margin-bottom: 10px; display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
+  .coverage-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .cov-head { font-size: .78rem; font-weight: 800; color: var(--blue-dark); margin-bottom: 6px; }
+  .cov-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+  .cov-chip { font-size: .72rem; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+  .cov-l1 { background: #bbf7d0; color: #14532d; font-weight: 800; }
+  .cov-l2 { background: #dcfce7; color: #15803d; }
+  .cov-l3 { background: transparent; border: 1px dashed #86efac; color: #15803d; }
+  .cov-l4 { background: transparent; border: 1px dashed var(--border-soft); color: var(--text-muted); text-decoration: line-through; }
+  .name-chip {
+    padding: 5px 10px;
+    border-radius: 8px;
+    border: 1.5px solid var(--border-soft);
+    background: var(--white);
+    font-weight: 700;
+    font-size: .85rem;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: border-color .15s, background .15s;
+  }
+  .name-chip:hover { border-color: #b0c8e8; }
+  .name-chip.in-ballot { border-color: var(--blue-main); background: var(--blue-soft); color: var(--blue-dark); }
+  .name-chip.is-vadai-origin { border-color: #C9A017; background: #fdf6e3; color: #7c5a00; }
+
   .candidate-slot {
     display: flex;
     align-items: center;
@@ -464,10 +510,99 @@
     line-height: 1.6;
   }
 
+  /* ── Finish screen ── */
+  .finish-screen { padding: 12px 0 32px; }
+  .finish-header { padding: 14px 0 16px; }
+  .finish-title { font-size: 1.25rem; font-weight: 900; color: var(--blue-dark); }
+  .finish-subtitle { font-size: .88rem; color: var(--text-muted); margin-top: 5px; }
+  .finish-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .finish-card {
+    background: var(--white);
+    border-radius: 14px;
+    border: 2px solid var(--border-soft);
+    overflow: hidden;
+    text-align: center;
+    padding-bottom: 10px;
+  }
+  .finish-card.is-origin { border-color: #C9A017; background: #fffbeb; }
+  .finish-card.is-added  { border-color: var(--blue-main); background: var(--blue-soft); }
+  .finish-card-photo {
+    width: 100%;
+    aspect-ratio: 3/4;
+    overflow: hidden;
+    background: #e8eff8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+  }
+  .finish-card-photo img {
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: top center;
+    display: block;
+  }
+  .finish-card-name {
+    padding: 8px 8px 3px;
+    font-size: .92rem;
+    font-weight: 800;
+    color: var(--blue-dark);
+    line-height: 1.3;
+  }
+  .finish-card.is-origin .finish-card-name { color: #7c5a00; }
+  .finish-card-squad {
+    font-size: .7rem;
+    color: var(--text-muted);
+    padding: 0 8px;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .finish-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 8px;
+  }
+  .btn-back-edit {
+    flex: 1;
+    padding: 12px;
+    border: 1.5px solid var(--border-soft);
+    border-radius: 12px;
+    background: var(--white);
+    color: var(--text-muted);
+    font-family: inherit;
+    font-size: .92rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: border-color .15s;
+  }
+  .btn-back-edit:hover { border-color: var(--blue-main); color: var(--blue-main); }
+  .btn-done-final {
+    flex: 2;
+    padding: 12px;
+    border: none;
+    border-radius: 12px;
+    background: var(--blue-main);
+    color: white;
+    font-family: inherit;
+    font-size: .95rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: background .15s;
+  }
+  .btn-done-final:hover { background: var(--blue-dark); }
+
   @media (max-width: 480px) {
     .brand-label { display: none; }
     .slot-name { font-size: .92rem; }
     .slot-photo { width: 44px; height: 56px; }
+    .finish-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .finish-card-name { font-size: .85rem; }
   }
 
   /* ── Intro overlay ── */
@@ -528,7 +663,7 @@
     <h2>פתק הבחירה</h2>
     <p>כאן בונים את פתק הבחירה הסופי — 6 עד 8 מועמדות ומועמדים שתרצו לסמן ביום ההצבעה.</p>
     <p>המועמדים שצברתם בשלבים הקודמים מחכים לכם כאן. לחצו על שם כדי להוסיפו לפתק או להוציאו ממנו.</p>
-    <div class="intro-note">הפתק תקף רק עם לפחות 6 שמות ולא יותר מ-8. ✓</div>
+    <div class="intro-note">הפתק תקף רק עם 6 עד 8 שמות. ✓</div>
     <button class="intro-btn" onclick="dismissIntro()">הבנתי, אפשר להמשיך</button>
   </div>
 </div>
@@ -540,6 +675,7 @@
       <span class="brand-mark">ד.ב.ר</span>
       <span class="brand-label">דמוקרטים בוחרים רציונלית</span>
     </a>
+    <span style="color:#ffd24d;font-size:.8rem;font-weight:800;flex-shrink:0;margin-inline-start:auto;padding-inline:8px">V240</span>
     <a href="dbr_P_01_process.html" style="color:rgba(255,255,255,.65);font-size:.85rem;font-weight:600;text-decoration:none;flex-shrink:0">☰</a>
   </div>
   <div class="step-nav">
@@ -574,7 +710,7 @@
       <strong id="pf-added">0</strong> נוספו בשלב זה
     </div>
   </div>
-  <button class="done-btn" id="done-btn" onclick="finishAndGo()" disabled>יש לבחור 6–8 כדי לסיים</button>
+  <button class="done-btn" id="done-btn" onclick="finishAndGo()" disabled>יש לבחור 8 כדי לסיים</button>
 </div>
 
 <!-- ── Main content ── -->
@@ -584,37 +720,65 @@
   <div class="no-picks-screen" id="no-picks-screen" style="display:none">
     <div style="font-size:3rem;margin-bottom:16px">🗳️</div>
     <h2>עוד לא בחרת מועמדים</h2>
-    <p>כדי להגיע לשלב הסינון, קודם כל בחרי מועמדים בשלב הבחירה העצמאית או במשחקי הסימולציה.</p>
+    <p>כדי להגיע לשלב הסינון, קודם כל בחרו מועמדים בשלב הבחירה העצמאית או במשחקי הסימולציה.</p>
     <a class="back-link" href="dbr_P_01_process.html">חזרה לתהליך</a>
   </div>
 
   <!-- main filter UI (hidden until JS populates it) -->
   <div id="filter-ui" style="display:none">
 
-    <p class="page-intro">
-      סמני 6–8 מועמדים לפתק הבחירה הסופי. לחצי על מועמד/ת להוסיף או להוציא.
-    </p>
+    <!-- ── Zone A: בפתק הבחירה — במסגרת שמסמנת חוקי/לא־חוקי ── -->
+    <div class="ballot-frame" id="ballot-frame">
+      <div class="zone-header" style="padding-top:6px">
+        <span class="zone-title">בפתק הבחירה</span>
+        <span class="zone-badge vadai-badge" id="vadai-zone-badge">0 מועמדים</span>
+      </div>
+      <div id="vadai-list"></div>
 
-    <!-- ── Zone A: ודאיים ── -->
-    <div class="zone-header">
-      <span class="zone-title">בפתק הבחירה שלי</span>
-      <span class="zone-badge vadai-badge" id="vadai-zone-badge">0 מועמדים</span>
+      <!-- ── כיסוי הנושאים ע"י המועמדים שבפתק (4 רמות עוצמה) ── -->
+      <div id="coverage" class="coverage">
+        <div class="cov-legend">
+          כיסוי הנושאים בפתק:
+          <span class="cov-chip cov-l1">עוגן</span>
+          <span class="cov-chip cov-l2">מבוסס</span>
+          <span class="cov-chip cov-l3">דליל</span>
+          <span class="cov-chip cov-l4">חסר</span>
+        </div>
+        <div class="coverage-cols">
+          <div class="cov-col">
+            <div class="cov-head">נושאי ליבה</div>
+            <div id="cov-core" class="cov-chips"></div>
+          </div>
+          <div class="cov-col">
+            <div class="cov-head">נושאים ייחודיים</div>
+            <div id="cov-special" class="cov-chips"></div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div id="vadai-list"></div>
 
-    <!-- ── Dividing line ── -->
-    <div class="cut-line">
-      <span class="cut-label">— קו ההכרעה: 6-8 מקומות (אין חשיבות לסדר ביניהם) —</span>
-    </div>
-
-    <!-- ── Zone B: עדיין שוקל/ת ── -->
+    <!-- ── Zone B: נבחרו אך מחוץ לפתק ── -->
     <div class="zone-header" style="padding-top:12px">
-      <span class="zone-title">עדיין שוקל/ת</span>
+      <span class="zone-title">מחוץ לפתק הבחירה</span>
       <span class="zone-badge pending-badge" id="pending-zone-badge">0 מועמדים</span>
     </div>
     <div id="pending-list"></div>
 
   </div>
+
+  <!-- ── Finish screen: הפתק שלי עם תמונות ── -->
+  <div id="finish-screen" style="display:none" class="finish-screen">
+    <div class="finish-header">
+      <div class="finish-title">הפתק שלי ✓</div>
+      <div class="finish-subtitle" id="finish-subtitle"></div>
+    </div>
+    <div class="finish-grid" id="finish-grid"></div>
+    <div class="finish-actions">
+      <button class="btn-back-edit" onclick="backToEdit()">← חזרה לעריכה</button>
+      <button class="btn-done-final" onclick="confirmAndGo()">שמרו וסיימו</button>
+    </div>
+  </div>
+
 </div>
 
 <!-- ── Toast ── -->
@@ -655,21 +819,15 @@
   }
 
   let primState = loadState();
-  // פתק הבחירה (ballot) נפרד מ-vadai (סימוני ודאי משלב 1/2). בכניסה ראשונה
-  // הפתק נזרע מהבחירות הוודאיות, אבל מכאן הוא מפתח עצמאי שלא נוגע ב-vadai.
+  // צעד 1: בכניסה, כל הנבחרים (רגילים + ודאיים) מתחילים בתוך הפתק.
+  // ballot נפרד מ-vadai (סימוני ודאי משלב 1/2) ומכאן מתפתח עצמאית.
+  const _allInit = [...new Set([...(primState.shiryun || []), ...(primState.dbr_picks || [])])];
   if (!Array.isArray(primState.ballot)) {
-    primState.ballot = [...(primState.vadai || [])];
+    primState.ballot = [..._allInit];
     saveState(primState);
   }
   // ★ מקור = מי שסומן ודאי (לצביעת הכוכב הזהב מול הכחול "נוסף בשלב זה")
   const initialVadai = new Set(primState.vadai || []);
-
-  // אם בדיוק 6 מועמדים סה"כ — כולם עולים אוטומטית מעל קו ההכרעה
-  const _allInit = [...new Set([...(primState.shiryun || []), ...(primState.dbr_picks || [])])];
-  if (_allInit.length === 6 && (primState.ballot || []).length < 6) {
-    primState.ballot = [..._allInit];
-    saveState(primState);
-  }
 
   // מיפוי מגדר לכינוי ודאי/ודאית + תגיות נושא
   let genderMap = {};
@@ -767,6 +925,46 @@
   }
 
   function squadsOf(name) { return candidateSquads[name] || []; }
+
+  // ═══════════════════════════════════════════
+  //  עוצמת תמיכה קבוצתית בנושא (4 רמות)
+  //  ניקוד לפי רצועה: ליבה(100)=3, חזקה(80)=2, משמעותית(60)=1, מתחת=0
+  //  S = סכום הקבוצה לנושא → רמה: 0=חסר(קו חוצה) · 1–2=דליל · 3–6=מבוסס · 7+=עוגן
+  // ═══════════════════════════════════════════
+  function topicPts(v) { return v >= 100 ? 3 : (v >= 80 ? 2 : (v >= 60 ? 1 : 0)); }
+  function topicStrength(names, squadId) {
+    let S = 0, c = 0;
+    names.forEach(n => {
+      const row = squadData[n];
+      if (!row) return;
+      const v = parseInt(row[squadId] || '0', 10) || 0;
+      S += topicPts(v);
+      if (v >= 60) c++;
+    });
+    return { S, c };
+  }
+  function topicLevel(S) { return S === 0 ? 4 : (S <= 2 ? 3 : (S <= 6 ? 2 : 1)); }
+  // ליבה מול ייחודיים — נגזר מהקונפיג (squad_norm מלא = ליבה)
+  function coreTopicIds()    { return Object.keys(squadConfig).filter(id => (squadConfig[id].squad_norm || '').trim()); }
+  function specialTopicIds() { return Object.keys(squadConfig).filter(id => !(squadConfig[id].squad_norm || '').trim()); }
+
+  function renderCoverage(ballotNames) {
+    const build = (ids, el) => {
+      if (!el) return;
+      el.innerHTML = '';
+      ids.map(id => {
+        const { S, c } = topicStrength(ballotNames, id);
+        return { title: squadConfig[id].title || id, S, c, L: topicLevel(S) };
+      }).sort((a, b) => b.S - a.S).forEach(x => {
+        const chip = document.createElement('span');
+        chip.className = 'cov-chip cov-l' + x.L;
+        chip.textContent = x.title;
+        el.appendChild(chip);
+      });
+    };
+    build(coreTopicIds(),    document.getElementById('cov-core'));
+    build(specialTopicIds(), document.getElementById('cov-special'));
+  }
 
   // טעינת שלושת הקבצים + המודחים, בניית המפה, ורנדר מחדש
   Promise.all([
@@ -878,25 +1076,42 @@
     const vadaiList  = vadai.filter(n => all.includes(n)); // only if still in pool
     const pendingList = all.filter(n => !vadaiSet.has(n));
 
-    // ── Vadai zone ──
+    // ── Vadai zone — גריד שמות קומפקטי ──
     const vadaiEl = document.getElementById('vadai-list');
+    vadaiEl.classList.add('name-grid');
     if (vadaiList.length === 0) {
-      vadaiEl.innerHTML = '<div class="empty-zone">לחצי על מועמד/ת מהרשימה למטה כדי להוסיף לפתק</div>';
+      vadaiEl.classList.remove('name-grid');
+      vadaiEl.innerHTML = '<div class="empty-zone">לחצו על מועמד/ת מהרשימה למטה כדי להוסיף לפתק</div>';
     } else {
-      vadaiEl.innerHTML = vadaiList.map((name, i) => cardHTML(name, i + 1, true)).join('');
+      vadaiEl.innerHTML = vadaiList.map(name => chipHTML(name, true)).join('');
     }
 
-    // ── Pending zone ──
+    // ── Pending zone — גריד שמות קומפקטי ──
     const pendingEl = document.getElementById('pending-list');
+    pendingEl.classList.add('name-grid');
     if (pendingList.length === 0) {
+      pendingEl.classList.remove('name-grid');
       pendingEl.innerHTML = '<div class="empty-zone">כל המועמדים שלך כבר בפתק הבחירה 🎉</div>';
     } else {
-      pendingEl.innerHTML = pendingList.map((name, i) => cardHTML(name, null, false)).join('');
+      pendingEl.innerHTML = pendingList.map(name => chipHTML(name, false)).join('');
     }
 
-    // ── Badges ──
-    document.getElementById('vadai-zone-badge').textContent  = vadaiList.length  + ' מועמדים';
+    // ── סימון חוקיות: מסגרת הפתק + תג הכותרת ──
+    const isValid = vadaiList.length >= MIN_VADAI && vadaiList.length <= MAX_VADAI;
+    const frame = document.getElementById('ballot-frame');
+    frame.classList.toggle('is-valid', isValid);
+    frame.classList.toggle('is-invalid', !isValid);
+
+    const vadaiBadge = document.getElementById('vadai-zone-badge');
+    vadaiBadge.textContent = isValid
+      ? '✓ חוקי · ' + vadaiList.length
+      : '⚠ לא חוקי · ' + vadaiList.length;
+    vadaiBadge.classList.toggle('over-badge', !isValid);
+    vadaiBadge.classList.toggle('ok-badge', isValid);
     document.getElementById('pending-zone-badge').textContent = pendingList.length + ' מועמדים';
+
+    // ── כיסוי הנושאים ע"י המועמדים שבפתק ──
+    renderCoverage(vadaiList);
 
     // ── Progress counter ──
     const total       = vadaiList.length;
@@ -909,12 +1124,28 @@
     if (pfOrigin) pfOrigin.textContent = originCount;
     if (pfAdded)  pfAdded.textContent  = addedCount;
 
-    // ── Done button — נפתח רק כשיש 6-8 מעל קו ההכרעה ──
+    // ── Done button — נפתח כשהפתק חוקי (6–8 בפתק) ──
+    // המלל מבחין בין "צריך עוד" ל"יש להוריד", כדי שיהיה ברור מה כיוון הפעולה
     const readyToFinish = total >= MIN_VADAI && total <= MAX_VADAI;
     const doneBtn = document.getElementById('done-btn');
     doneBtn.disabled = !readyToFinish;
     doneBtn.classList.toggle('ready', readyToFinish);
-    doneBtn.textContent = readyToFinish ? 'סיום' : 'יש לבחור 6–8 כדי לסיים';
+    let doneLabel = 'סיום';
+    if (!readyToFinish) {
+      doneLabel = total > MAX_VADAI
+        ? `יש להוריד ${total - MAX_VADAI} כדי לסיים`
+        : `יש לבחור עוד ${MIN_VADAI - total} כדי לסיים`;
+    }
+    doneBtn.textContent = doneLabel;
+  }
+
+  // ── צ'יפ שם קומפקטי (צעד 1) — שם בלבד, ללא נבחרות/תמונה ──
+  function chipHTML(name, isVadai) {
+    let cls = 'name-chip';
+    if (isVadai) cls += initialVadai.has(name) ? ' is-vadai-origin' : ' in-ballot';
+    return `<div class="${cls}"
+                 onclick="toggleVadai('${escapeHtml(name)}')"
+                 title="${isVadai ? 'לחצו להוצאה מהפתק' : 'לחצו להוספה לפתק'}">${escapeHtml(name)}</div>`;
   }
 
   function cardHTML(name, position, isVadai) {
@@ -954,7 +1185,7 @@
     return `
       <div class="candidate-slot${vadaiClass}"
            onclick="toggleVadai('${escapeHtml(name)}')"
-           title="${isVadai ? 'לחצי להוצאה מהפתק' : 'לחצי להוספה לפתק'}">
+           title="${isVadai ? 'לחצו להוצאה מהפתק' : 'לחצו להוספה לפתק'}">
         ${numHtml}
         <div class="slot-photo">
           <img src="${escapeHtml(imgSrc(name))}"
@@ -975,14 +1206,12 @@
   function toggleVadai(name) {
     if (!Array.isArray(primState.ballot)) primState.ballot = [];
 
+    // אין מגבלה על מספר המועמדים בפתק — כל שם קופץ חופשי בין המצבים.
+    // החוקיות (6–8) מסומנת ויזואלית בלבד, לא נאכפת בהוספה.
     const idx = primState.ballot.indexOf(name);
     if (idx >= 0) {
       primState.ballot.splice(idx, 1);
     } else {
-      if (primState.ballot.length >= MAX_VADAI) {
-        showToast('אפשר לסמן עד ' + MAX_VADAI + ' מועמדים בפתק');
-        return;
-      }
       primState.ballot.push(name);
     }
 
@@ -1005,9 +1234,46 @@
   }
 
   // ═══════════════════════════════════════════
-  //  Finish
+  //  Finish screen
   // ═══════════════════════════════════════════
   function finishAndGo() {
+    const all       = buildCandidateList();
+    const vadai     = getVadai();
+    const vadaiList = vadai.filter(n => all.includes(n));
+
+    const grid = document.getElementById('finish-grid');
+    grid.innerHTML = vadaiList.map(name => {
+      const isOrigin  = initialVadai.has(name);
+      const cls       = isOrigin ? 'is-origin' : 'is-added';
+      const topSquad  = squadsOf(name)[0] || '';
+      const squadLine = topSquad
+        ? `<div class="finish-card-squad">${escapeHtml(topSquad)}</div>`
+        : '';
+      return `<div class="finish-card ${cls}">
+        <div class="finish-card-photo">
+          <img src="${escapeHtml(imgSrc(name))}"
+               alt="${escapeHtml(name)}"
+               onerror="${escapeHtml(imgFallback(name))}">
+        </div>
+        <div class="finish-card-name">${escapeHtml(name)}</div>
+        ${squadLine}
+      </div>`;
+    }).join('');
+
+    document.getElementById('finish-subtitle').textContent =
+      vadaiList.length + ' מועמדים בפתק';
+
+    document.getElementById('filter-ui').style.display    = 'none';
+    document.getElementById('finish-screen').style.display = '';
+    window.scrollTo(0, 0);
+  }
+
+  function backToEdit() {
+    document.getElementById('finish-screen').style.display = 'none';
+    document.getElementById('filter-ui').style.display    = '';
+  }
+
+  function confirmAndGo() {
     saveState(primState);
     try { gtag('event', 'filter_done', { vadai_count: (primState.ballot || []).length }); } catch(e) {}
     window.location.href = 'dbr_P_01_process.html';
