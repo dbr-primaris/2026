@@ -2147,6 +2147,14 @@
     function escapeHtml(s) {
       return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
+    // עבור ערכים המוזרקים לתוך onclick="...('...')" — גרש גולמי בשם (כמו
+    // "בנימין מיניץ'") היה שובר את מחרוזת ה-JS. \' שורד את פענוח ה-HTML ומגיע
+    // ל-JS כברירה תקנית.
+    function jsAttr(s) {
+      return String(s || '')
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')
+        .replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+    }
 
     let state = loadState();
 
@@ -3057,19 +3065,20 @@
       return '<span style="font-size:.85rem;color:var(--text-muted);flex-shrink:0;">—</span>';
     }
     function monkeyRowHtml(name, picked, divider) {
-      const eName = escapeHtml(name);
+      const eName = escapeHtml(name);   // לטקסט מוצג
+      const jName = jsAttr(name);       // לתוך onclick('...')
       const icon = monkeyGenderIcon(name);
       const dv = divider ? ' squad-divider' : '';
       if (picked) {
-        return '<div class="rank-row is-picked' + dv + '" onclick="toggleSquadPick(\'' + eName + '\')">'
+        return '<div class="rank-row is-picked' + dv + '" onclick="toggleSquadPick(\'' + jName + '\')">'
           + icon
           + '<span class="rank-name picked">' + eName + '</span>'
           + '</div>';
       }
-      return '<div class="rank-row' + dv + '" onclick="toggleSquadPick(\'' + eName + '\')">'
+      return '<div class="rank-row' + dv + '" onclick="toggleSquadPick(\'' + jName + '\')">'
         + icon
         + '<span class="rank-name unpicked" style="font-size:1.05rem;">' + eName + '</span>'
-        + '<span class="rank-card" style="margin-inline-start:auto" onclick="event.stopPropagation();openSquadCard(\'' + eName + '\')" title="כרטיס הסבר">📋</span>'
+        + '<span class="rank-card" style="margin-inline-start:auto" onclick="event.stopPropagation();openSquadCard(\'' + jName + '\')" title="כרטיס הסבר">📋</span>'
         + '</div>';
     }
 
@@ -3241,7 +3250,8 @@
     }
 
     function squadRowHtml(c, cfg, divider) {
-      const eName = escapeHtml(c.name);
+      const eName = escapeHtml(c.name);   // לטקסט מוצג
+      const jName = jsAttr(c.name);       // לתוך onclick('...')
       // השם הראשון בשורה (עמודה ימנית, כשיש לו זוג) מקבל גבול שמאלי כמפריד מהשם השני
       const dv = divider ? ' squad-divider' : '';
       // צבע הנקודה — תמיד לפי ערך הזיקה המקורי (100/80/60/40)
@@ -3251,17 +3261,17 @@
         const dot = c.inSquad ? squadDotHtml(c.value, cfg.color_family, dotBand) : '';
         const vadaiCls   = c.vadai ? ' vadai-name' : '';
         const vadaiBadge = c.vadai ? '<span class="vadai-badge">ודאי</span>' : '';
-        return '<div class="rank-row is-picked' + (c.inSquad ? '' : ' squad-extra') + dv + '" onclick="toggleSquadPick(\'' + eName + '\')">'
+        return '<div class="rank-row is-picked' + (c.inSquad ? '' : ' squad-extra') + dv + '" onclick="toggleSquadPick(\'' + jName + '\')">'
           + dot
           + '<span class="rank-name picked' + vadaiCls + '">' + eName + vadaiBadge + '</span>'
           + '</div>';
       }
       // העיגול + המקרא למטה מספרים את הרצועה — אין צורך במילת התאמה בשורה
       const dot = squadDotHtml(c.value, cfg.color_family, dotBand);
-      return '<div class="rank-row' + dv + '" onclick="toggleSquadPick(\'' + eName + '\')">'
+      return '<div class="rank-row' + dv + '" onclick="toggleSquadPick(\'' + jName + '\')">'
         + dot
         + '<span class="rank-name unpicked">' + eName + '</span>'
-        + '<span class="rank-card" style="margin-inline-start:auto" onclick="event.stopPropagation();openSquadCard(\'' + eName + '\')" title="כרטיס הסבר">📋</span>'
+        + '<span class="rank-card" style="margin-inline-start:auto" onclick="event.stopPropagation();openSquadCard(\'' + jName + '\')" title="כרטיס הסבר">📋</span>'
         + '</div>';
     }
 
@@ -3676,7 +3686,8 @@
 
     function rankRow(c, rank, allPicks) {
       const picked = allPicks.has(c.name);
-      const eName = escapeHtml(c.name);
+      const eName = escapeHtml(c.name);   // לטקסט מוצג
+      const jName = jsAttr(c.name);       // לתוך onclick('...')
       const dName = escapeHtml(shortName(c.name));
 
       const shiryuned = (state.shiryun || []).includes(c.name);
@@ -3727,15 +3738,15 @@
         ? '<span class="vadai-badge">ודאי</span>'
         : '';
       const vadaiAttr = (isVadai && picked) ? ' data-vadai="1"' : '';
-      const rowClick = (isVadai && picked) ? ' onclick="showStateToast(\'סומן/ה כ-ודאי — הסרה רק דרך שלב 1\')"' : ' onclick="togglePick(\'' + eName + '\')"';
+      const rowClick = (isVadai && picked) ? ' onclick="showStateToast(\'סומן/ה כ-ודאי — הסרה רק דרך שלב 1\')"' : ' onclick="togglePick(\'' + jName + '\')"';
 
       var row = '<div class="rank-row' + (picked ? ' is-picked' : '') + '"' + vadaiAttr + rowClick + '>'
         + '<span style="display:inline-flex;align-items:center;gap:2px;flex-shrink:0">' + gDot + (picked ? '' : '<span class="rank-num">' + rank + '</span>') + '</span>'
         + '<span class="rank-name' + (picked ? ' picked' : ' unpicked') + (isVadai && picked ? ' vadai-name' : '') + '"' + (picked ? ' style="color:' + nameColor + (isVadai ? ';font-weight:900' : '') + '"' : '') + '>' + eName + vadaiBadge + targetHtml + '</span>'
         + (c.manualFix ? '<span title="מיקום שתוקן ידנית — הנוסחה לא שקללה ביטחון/מגורים בצפון" style="flex-shrink:0;font-size:.62rem;font-weight:700;color:#b45309;background:#fef3c7;border:1px solid #fcd34d;border-radius:6px;padding:1px 5px;margin-inline-start:6px">תיקון ידני</span>' : '')
         + reasonToggleHtml
-        + (filterShiryun || filterPicked || shiryuned ? '' : '<span class="' + pickCls + '" onclick="event.stopPropagation();toggleShiryunState(\'' + eName + '\')" title="' + pickTitle + '">' + pickIcon + '</span>')
-        + (filterShiryun || filterPicked || picked ? '' : '<span class="rank-card" onclick="event.stopPropagation();openProfile(\'' + eName + '\')" title="כרטיס ועדה מסדרת">📋</span>')
+        + (filterShiryun || filterPicked || shiryuned ? '' : '<span class="' + pickCls + '" onclick="event.stopPropagation();toggleShiryunState(\'' + jName + '\')" title="' + pickTitle + '">' + pickIcon + '</span>')
+        + (filterShiryun || filterPicked || picked ? '' : '<span class="rank-card" onclick="event.stopPropagation();openProfile(\'' + jName + '\')" title="כרטיס ועדה מסדרת">📋</span>')
         + '</div>';
       if (filterShiryun && shiryuned && typeof reasonHtml !== 'undefined') {
         row += reasonHtml;

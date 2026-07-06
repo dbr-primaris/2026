@@ -908,8 +908,8 @@
     function cardButtonsHTML(id) {
       const s = selectBtnState(id);
       return `<div class="card-btns">`
-        + `<button class="btn-pick" onclick="event.stopPropagation();openDossier('${escapeHtml(id)}')">פרופיל</button>`
-        + `<button class="${s.cls}" onclick="event.stopPropagation();cycleSelection('${escapeHtml(id)}')">${s.txt}</button>`
+        + `<button class="btn-pick" onclick="event.stopPropagation();openDossier('${jsAttr(id)}')">פרופיל</button>`
+        + `<button class="${s.cls}" onclick="event.stopPropagation();cycleSelection('${jsAttr(id)}')">${s.txt}</button>`
         + `</div>`;
     }
 
@@ -1115,6 +1115,18 @@
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#39;');
     }
+    // עבור ערכים המוזרקים לתוך onclick="...('...')" — הדפדפן מפענח ישויות HTML
+    // (כמו &#39;) לפני הרצת ה-JS, כך שגרש בשם (כמו "בנימין מיניץ'") היה שובר את
+    // המחרוזת חזרה. ה-\' שורד את פענוח ה-HTML ומגיע ל-JS כברירה תקנית.
+    function jsAttr(s) {
+      return String(s || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/\\/g, '\\\\')
+        .replace(/'/g, "\\'");
+    }
 
     // ============ Rendering ============
     function renderCounters() {
@@ -1221,7 +1233,7 @@
         const cardCls = vd ? ' vadai' : sel ? ' selected' : picked ? ' picked' : dbr ? ' dbr-picked' : '';
         return `
           <div class="candidate-card${cardCls}" data-id="${escapeHtml(c.id)}">
-            <div class="photo-wrap" onclick="openDossier('${escapeHtml(c.id)}')" style="cursor:pointer" title="לפרופיל המועמד/ת">
+            <div class="photo-wrap" onclick="openDossier('${jsAttr(c.id)}')" style="cursor:pointer" title="לפרופיל המועמד/ת">
               <img src="${escapeHtml(localImageUrl(c.name))}" alt="${escapeHtml(c.name)}"
                    onerror="${WIKI_PHOTOS[c.name]
                      ? `this.src='${escapeHtml(WIKI_PHOTOS[c.name])}';this.onerror=function(){this.outerHTML='<span style=\\'font-size:3rem\\'>${c.gender==='נשים'?'👩':'👨'}</span>'}`
@@ -1230,7 +1242,7 @@
               ${isVadai(c.id) ? '<div class="photo-check photo-check-gold">★</div>' : sel ? '<div class="photo-check photo-check-green">✓</div>' : picked ? '<div class="photo-check">?</div>' : ''}
             </div>
             <div style="display:flex;align-items:center;justify-content:center;padding:2px 8px 1px">
-              <span class="candidate-name" onclick="openDossier('${escapeHtml(c.id)}')" style="margin:0;padding:0;cursor:pointer">${escapeHtml(displayName(c.name))}</span>
+              <span class="candidate-name" onclick="openDossier('${jsAttr(c.id)}')" style="margin:0;padding:0;cursor:pointer">${escapeHtml(displayName(c.name))}</span>
             </div>
             ${cardButtonsHTML(c.id)}
           </div>

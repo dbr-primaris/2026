@@ -1068,6 +1068,14 @@
   function escapeHtml(s) {
     return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
+  // עבור ערכים המוזרקים לתוך onclick="...('...')" — גרש גולמי בשם (כמו
+  // "בנימין מיניץ'") היה שובר את מחרוזת ה-JS. \' שורד את פענוח ה-HTML ומגיע
+  // ל-JS כברירה תקנית.
+  function jsAttr(s) {
+    return String(s || '')
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')
+      .replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+  }
 
   // ═══════════════════════════════════════════
   //  Build candidate list from state
@@ -1165,7 +1173,7 @@
     let cls = 'name-chip';
     if (isVadai) cls += initialVadai.has(name) ? ' is-vadai-origin' : ' in-ballot';
     return `<div class="${cls}"
-                 onclick="toggleVadai('${escapeHtml(name)}')"
+                 onclick="toggleVadai('${jsAttr(name)}')"
                  title="${isVadai ? 'לחצו להוצאה מהפתק' : 'לחצו להוספה לפתק'}">${escapeHtml(name)}</div>`;
   }
 
@@ -1205,7 +1213,7 @@
 
     return `
       <div class="candidate-slot${vadaiClass}"
-           onclick="toggleVadai('${escapeHtml(name)}')"
+           onclick="toggleVadai('${jsAttr(name)}')"
            title="${isVadai ? 'לחצו להוצאה מהפתק' : 'לחצו להוספה לפתק'}">
         ${numHtml}
         <div class="slot-photo">
