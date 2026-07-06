@@ -200,12 +200,6 @@
     border-radius: 999px;
     white-space: nowrap;
   }
-  /* כפתור הסיום בתחתית המסגרת, מיושר לפינה השמאלית (RTL → flex-end) */
-  .ballot-footer {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 14px;
-  }
   .zone-badge.vadai-badge { background: var(--blue-soft); color: var(--blue-main); }
   .zone-badge.pending-badge { background: #f1f5f9; color: var(--text-muted); }
   .zone-badge.over-badge { background: var(--amber-soft); color: var(--amber); }
@@ -255,8 +249,11 @@
     margin: 4px 0 9px;
     height: 0;
   }
-  .cov-legend { font-size: .82rem; color: var(--text-muted); margin-top: 12px; padding-top: 8px; border-top: 1px dashed var(--border-soft); display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
+  .cov-legend-row { display: flex; align-items: center; gap: 10px; margin-top: 12px; padding-top: 8px; border-top: 1px dashed var(--border-soft); }
+  .cov-legend { font-size: .82rem; color: var(--text-muted); display: flex; flex-wrap: wrap; gap: 5px; align-items: center; flex: 1; min-width: 0; }
   .cov-legend-label { font-weight: 800; color: var(--blue-dark); }
+  /* כפתור הסיום צמוד לפינה השמאלית של שורת הביאור */
+  .cov-legend-row .done-btn { margin-inline-start: auto; flex-shrink: 0; }
   .cov-chip { font-size: .82rem; padding: 3px 9px; border-radius: 999px; white-space: nowrap; }
   .cov-clickable { cursor: pointer; transition: filter .12s, transform .12s; }
   .cov-clickable:hover { filter: brightness(.94); transform: translateY(-1px); }
@@ -750,18 +747,17 @@
       <div id="coverage" class="coverage">
         <div class="cov-title">כיסוי נושאי הליבה והנושאים הייחודיים <span class="cov-title-hint">— לחצו על נושא כדי לערוך אותו</span></div>
         <div id="cov-flow" class="cov-flow"></div>
-        <div class="cov-legend">
-          <span class="cov-legend-label">ביאור:</span>
-          <span class="cov-chip cov-l1">עוגן</span>
-          <span class="cov-chip cov-l2">מבוסס</span>
-          <span class="cov-chip cov-l3">דליל</span>
-          <span class="cov-chip cov-l4">חסר</span>
+        <div class="cov-legend-row">
+          <div class="cov-legend">
+            <span class="cov-legend-label">ביאור:</span>
+            <span class="cov-chip cov-l1">עוגן</span>
+            <span class="cov-chip cov-l2">מבוסס</span>
+            <span class="cov-chip cov-l3">דליל</span>
+            <span class="cov-chip cov-l4">חסר</span>
+          </div>
+          <!-- כפתור סיום — בשורת הביאור, צמוד לפינה השמאלית -->
+          <button class="done-btn" id="done-btn" onclick="finishAndGo()" disabled>סיום</button>
         </div>
-      </div>
-
-      <!-- ── כפתור סיום — בתחתית המסגרת, פינה שמאלית ── -->
-      <div class="ballot-footer">
-        <button class="done-btn" id="done-btn" onclick="finishAndGo()" disabled>סיום</button>
       </div>
     </div>
 
