@@ -237,10 +237,13 @@
 
   /* ── תצוגת כיסוי הנושאים (4 רמות עוצמה) ── */
   .coverage { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border-soft); }
-  .cov-legend { font-size: .72rem; color: var(--text-muted); margin-bottom: 10px; display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
-  .coverage-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .cov-head { font-size: .78rem; font-weight: 800; color: var(--blue-dark); margin-bottom: 6px; }
-  .cov-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+  .cov-title { font-size: .82rem; font-weight: 800; color: var(--blue-dark); margin-bottom: 8px; }
+  .coverage-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+  #cov-core    { padding-inline-end: 12px; }
+  #cov-special { padding-inline-start: 12px; border-inline-start: 2px solid var(--border-soft); }
+  .cov-chips { display: flex; flex-wrap: wrap; gap: 5px; align-content: flex-start; }
+  .cov-legend { font-size: .72rem; color: var(--text-muted); margin-top: 12px; padding-top: 8px; border-top: 1px dashed var(--border-soft); display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
+  .cov-legend-label { font-weight: 800; color: var(--blue-dark); }
   .cov-chip { font-size: .72rem; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
   .cov-l1 { background: #bbf7d0; color: #14532d; font-weight: 800; }
   .cov-l2 { background: #dcfce7; color: #15803d; }
@@ -681,7 +684,7 @@
       <span class="brand-mark">ד.ב.ר</span>
       <span class="brand-label">דמוקרטים בוחרים רציונלית</span>
     </a>
-    <span style="color:#ffd24d;font-size:.8rem;font-weight:800;flex-shrink:0;margin-inline-start:auto;padding-inline:8px">V248</span>
+    <span style="color:#ffd24d;font-size:.8rem;font-weight:800;flex-shrink:0;margin-inline-start:auto;padding-inline:8px">V249</span>
     <a href="dbr_P_01_process.html" style="color:rgba(255,255,255,.65);font-size:.85rem;font-weight:600;text-decoration:none;flex-shrink:0">☰</a>
   </div>
   <div class="step-nav">
@@ -733,22 +736,17 @@
 
       <!-- ── כיסוי הנושאים ע"י המועמדים שבפתק (4 רמות עוצמה) ── -->
       <div id="coverage" class="coverage">
+        <div class="cov-title">כיסוי נושאי הליבה והנושאים הייחודיים</div>
+        <div class="coverage-cols">
+          <div id="cov-core" class="cov-chips"></div>
+          <div id="cov-special" class="cov-chips"></div>
+        </div>
         <div class="cov-legend">
-          כיסוי הנושאים בפתק:
+          <span class="cov-legend-label">ביאור:</span>
           <span class="cov-chip cov-l1">עוגן</span>
           <span class="cov-chip cov-l2">מבוסס</span>
           <span class="cov-chip cov-l3">דליל</span>
           <span class="cov-chip cov-l4">חסר</span>
-        </div>
-        <div class="coverage-cols">
-          <div class="cov-col">
-            <div class="cov-head">נושאי ליבה</div>
-            <div id="cov-core" class="cov-chips"></div>
-          </div>
-          <div class="cov-col">
-            <div class="cov-head">נושאים ייחודיים</div>
-            <div id="cov-special" class="cov-chips"></div>
-          </div>
         </div>
       </div>
     </div>
@@ -1124,12 +1122,10 @@
     // ── כיסוי הנושאים ע"י המועמדים שבפתק ──
     renderCoverage(vadaiList);
 
-    // ── Done button — נפתח כשהפתק חוקי (6–8 בפתק) ──
-    // המלל מבחין בין "צריך עוד" ל"יש להוריד", כדי שיהיה ברור מה כיוון הפעולה
-    const readyToFinish = total >= MIN_VADAI && total <= MAX_VADAI;
+    // ── Done button — לחיץ רק כשהפתק חוקי (6–8 בפתק) ──
     const doneBtn = document.getElementById('done-btn');
-    doneBtn.disabled = !readyToFinish;
-    doneBtn.classList.toggle('ready', readyToFinish);
+    doneBtn.disabled = !isValid;
+    doneBtn.classList.toggle('ready', isValid);
     doneBtn.textContent = 'סיום';
   }
 
