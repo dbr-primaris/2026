@@ -228,8 +228,9 @@
   .ballot-frame {
     border: 2px solid var(--border-soft);
     border-radius: 0;
-    padding: 0 16px 14px;
-    margin: 6px -16px 0;
+    padding: 0 14px 14px;
+    /* גאפ מינימלי מקצה המסך כדי שהמסגרת הצידית תיראה גם בסלולר */
+    margin: 6px -12px 0;
     transition: border-color .2s, background .2s;
   }
   .ballot-frame.is-valid   { border-color: #16a34a; background: #f0fdf4; }
@@ -237,7 +238,7 @@
 
   /* ── תצוגת כיסוי הנושאים (4 רמות עוצמה) ── */
   .coverage { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border-soft); }
-  .cov-title { font-size: .82rem; font-weight: 800; color: var(--blue-dark); margin-bottom: 8px; }
+  .cov-title { font-size: .95rem; font-weight: 800; color: var(--blue-dark); margin-bottom: 8px; }
   /* זרימה רציפה בשני טורים: ליבה ממלאת טור 1 וזולגת ל-2, מפריד, ואז ייחודיים */
   .cov-flow { column-count: 2; column-gap: 16px; }
   .cov-flow .cov-chip {
@@ -252,9 +253,9 @@
     margin: 4px 0 9px;
     height: 0;
   }
-  .cov-legend { font-size: .72rem; color: var(--text-muted); margin-top: 12px; padding-top: 8px; border-top: 1px dashed var(--border-soft); display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
+  .cov-legend { font-size: .82rem; color: var(--text-muted); margin-top: 12px; padding-top: 8px; border-top: 1px dashed var(--border-soft); display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
   .cov-legend-label { font-weight: 800; color: var(--blue-dark); }
-  .cov-chip { font-size: .72rem; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+  .cov-chip { font-size: .82rem; padding: 3px 9px; border-radius: 999px; white-space: nowrap; }
   .cov-l1 { background: #bbf7d0; color: #14532d; font-weight: 800; }
   .cov-l2 { background: #dcfce7; color: #15803d; }
   .cov-l3 { background: transparent; border: 1px dashed #86efac; color: #15803d; }
@@ -694,7 +695,7 @@
       <span class="brand-mark">ד.ב.ר</span>
       <span class="brand-label">דמוקרטים בוחרים רציונלית</span>
     </a>
-    <span style="color:#ffd24d;font-size:.8rem;font-weight:800;flex-shrink:0;margin-inline-start:auto;padding-inline:8px">V250</span>
+    <span style="color:#ffd24d;font-size:.8rem;font-weight:800;flex-shrink:0;margin-inline-start:auto;padding-inline:8px">V251</span>
     <a href="dbr_P_01_process.html" style="color:rgba(255,255,255,.65);font-size:.85rem;font-weight:600;text-decoration:none;flex-shrink:0">☰</a>
   </div>
   <div class="step-nav">
