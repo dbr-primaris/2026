@@ -177,15 +177,25 @@
 
   /* ── Section headers ── */
   .zone-header {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px 10px;
+  }
+  .zone-title-group {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 18px 0 10px;
+    gap: 5px;
+    justify-self: start;
   }
   .zone-title {
-    font-size: 1.05rem;
+    font-size: 1rem;
     font-weight: 800;
     color: var(--blue-dark);
+  }
+  .zone-header-end {
+    justify-self: end;
   }
   .zone-badge {
     font-size: .78rem;
@@ -193,24 +203,35 @@
     padding: 2px 10px;
     border-radius: 999px;
     white-space: nowrap;
+    justify-self: center;
   }
   .zone-badge.vadai-badge { background: var(--blue-soft); color: var(--blue-main); }
   .zone-badge.pending-badge { background: #f1f5f9; color: var(--text-muted); }
   .zone-badge.over-badge { background: var(--amber-soft); color: var(--amber); }
   .zone-badge.ok-badge { background: #dcfce7; color: #15803d; }
 
-  /* ── Candidate cards ── */
-  /* ── גריד שמות קומפקטי (צעד 1) — שמות בלבד, 3–4 בשורה ── */
+  /* ── Section headers (Zone B — outside ballot) ── */
+  .zone-header-b {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 0 10px;
+  }
+
+  /* ── גריד שמות קומפקטי — שמות בלבד, 3 בשורה ── */
   .name-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 6px;
   }
-  /* ── מסגרת הפתק — מסמנת חוקי (ירוק) / לא־חוקי (כתום) ── */
+  /* ── מסגרת הפתק — רוחב מלא, מסמנת חוקי/לא־חוקי ── */
   .ballot-frame {
-    border: 2px solid var(--border-soft);
-    border-radius: 14px;
-    padding: 4px 14px 12px;
+    border-top: 2px solid var(--border-soft);
+    border-bottom: 2px solid var(--border-soft);
+    border-left: none;
+    border-right: none;
+    padding: 0 16px 14px;
+    margin: 6px -16px 0;
     transition: border-color .2s, background .2s;
   }
   .ballot-frame.is-valid   { border-color: #16a34a; background: #f0fdf4; }
@@ -662,7 +683,7 @@
       <span class="brand-mark">ד.ב.ר</span>
       <span class="brand-label">דמוקרטים בוחרים רציונלית</span>
     </a>
-    <span style="color:#ffd24d;font-size:.8rem;font-weight:800;flex-shrink:0;margin-inline-start:auto;padding-inline:8px">V246</span>
+    <span style="color:#ffd24d;font-size:.8rem;font-weight:800;flex-shrink:0;margin-inline-start:auto;padding-inline:8px">V247</span>
     <a href="dbr_P_01_process.html" style="color:rgba(255,255,255,.65);font-size:.85rem;font-weight:600;text-decoration:none;flex-shrink:0">☰</a>
   </div>
   <div class="step-nav">
@@ -700,12 +721,15 @@
 
     <!-- ── Zone A: בפתק הבחירה — במסגרת שמסמנת חוקי/לא־חוקי ── -->
     <div class="ballot-frame" id="ballot-frame">
-      <div class="zone-header" style="padding-top:6px">
-        <span class="zone-title">פתק הבחירה</span>
-        <button class="pf-bar-help" onclick="document.getElementById('intro-overlay').style.display=''">ⓘ</button>
-        <span style="flex:1"></span>
+      <div class="zone-header">
+        <div class="zone-title-group">
+          <span class="zone-title">פתק הבחירה</span>
+          <button class="pf-bar-help" onclick="document.getElementById('intro-overlay').style.display=''">ⓘ</button>
+        </div>
         <span class="zone-badge vadai-badge" id="vadai-zone-badge">0 מועמדים</span>
-        <button class="done-btn" id="done-btn" onclick="finishAndGo()" disabled>סיום</button>
+        <div class="zone-header-end">
+          <button class="done-btn" id="done-btn" onclick="finishAndGo()" disabled>סיום</button>
+        </div>
       </div>
       <div id="vadai-list"></div>
 
@@ -732,7 +756,7 @@
     </div>
 
     <!-- ── Zone B: נבחרו אך מחוץ לפתק ── -->
-    <div class="zone-header" style="padding-top:12px">
+    <div class="zone-header-b">
       <span class="zone-title">מחוץ לפתק הבחירה</span>
       <span class="zone-badge pending-badge" id="pending-zone-badge">0 מועמדים</span>
     </div>
@@ -1108,13 +1132,7 @@
     const doneBtn = document.getElementById('done-btn');
     doneBtn.disabled = !readyToFinish;
     doneBtn.classList.toggle('ready', readyToFinish);
-    let doneLabel = 'סיום';
-    if (!readyToFinish) {
-      doneLabel = total > MAX_VADAI
-        ? `יש להוריד ${total - MAX_VADAI} כדי לסיים`
-        : `יש לבחור עוד ${MIN_VADAI - total} כדי לסיים`;
-    }
-    doneBtn.textContent = doneLabel;
+    doneBtn.textContent = 'סיום';
   }
 
   // ── צ'יפ שם קומפקטי (צעד 1) — שם בלבד, ללא נבחרות/תמונה ──
