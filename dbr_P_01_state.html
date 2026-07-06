@@ -2369,7 +2369,7 @@
       const poolCounter = document.getElementById('pool-counter');
       if (poolCounter) {
         poolCounter.style.display = shiryunCount > 0 ? '' : 'none';
-        poolCounter.textContent = shiryunCount + '/' + MAX_SHIRYUN + ' בפול';
+        poolCounter.textContent = shiryunCount + '/' + currentCap() + ' בפול';
       }
       const goFilterBtn = document.getElementById('go-filter-btn');
       if (goFilterBtn) goFilterBtn.style.display = shiryunCount > 0 ? '' : 'none';
@@ -2460,7 +2460,7 @@
       // pool counter + go-to-filter button (expanded mode)
       const _sc2 = (loadState().shiryun || []).length;
       const _pc2 = document.getElementById('pool-counter');
-      if (_pc2) { _pc2.style.display = _sc2 > 0 ? '' : 'none'; _pc2.textContent = _sc2 + '/' + MAX_SHIRYUN + ' בפול'; }
+      if (_pc2) { _pc2.style.display = _sc2 > 0 ? '' : 'none'; _pc2.textContent = _sc2 + '/' + currentCap() + ' בפול'; }
       const _gf2 = document.getElementById('go-filter-btn');
       if (_gf2) _gf2.style.display = _sc2 > 0 ? '' : 'none';
     }
@@ -3488,10 +3488,11 @@
       const isVadai   = state.vadai.indexOf(name) >= 0;
       // לא נבחר → בחירה רגילה (קדימה, לבחירת מועמד/ת חדש/ה)
       if (!inShiryun) {
-        if (state.shiryun.length >= MAX_SHIRYUN) { maxReached(); return; }
+        if (state.shiryun.length >= addCap(state)) { maxReached(); return; }
         if (state.selected.indexOf(name) < 0) state.selected.push(name);
         state.shiryun.push(name);
         _recordTeamSource(state, name);
+        ballotRouteOnAdd(state, name);
         autoLog(name, 'נבחר');
         saveState(state);
         updateStatusBar();
@@ -3531,6 +3532,7 @@
         st.selected = (st.selected || []).filter(x => x !== name);
         st.shiryun  = (st.shiryun  || []).filter(x => x !== name);
         st.vadai    = (st.vadai    || []).filter(x => x !== name);
+        ballotRouteOnRemove(st, name);
         autoLog(name, 'בוטל');
         saveState(st);
         state = st;
@@ -3764,7 +3766,7 @@
     // הגבלת המקסימום הגיעה — צליל + הודעת toast מסבירה
     function maxReached() {
       beepError();
-      showStateToast('הגעת למקסימום ' + MAX_SHIRYUN + ' נבחרים. בטל בחירה קיימת כדי להוסיף אחר.');
+      showStateToast('הגעת למקסימום ' + addCap() + ' נבחרים. בטל בחירה קיימת כדי להוסיף אחר.');
     }
 
     function showStateToast(msg) {
@@ -3797,10 +3799,11 @@
 
       if (!inShiryun) {
         // ריק / מתלבט → נבחר
-        if (state.shiryun.length >= MAX_SHIRYUN) { maxReached(); return; }
+        if (state.shiryun.length >= addCap(state)) { maxReached(); return; }
         if (!inSelected) state.selected.push(name);
         state.shiryun.push(name);
         _recordTeamSource(state, name);
+        ballotRouteOnAdd(state, name);
         autoLog(name, 'נבחר');
       } else {
         // נבחר → ביטול
@@ -3812,6 +3815,7 @@
         }
         state.selected = state.selected.filter(x => x !== name);
         state.shiryun  = state.shiryun.filter(x => x !== name);
+        ballotRouteOnRemove(state, name);
         autoLog(name, 'בוטל');
       }
       saveState(state);
@@ -3829,8 +3833,40 @@
       savePickReasons(reasons);
     }
 
-    const MAX_SHIRYUN = 12;
-    const MIN_SHIRYUN = 6;
+    // חסם דינמי: ברירת מחדל 12, ניתן להרמה עד תקרה קשיחה 16 — רק דרך מסלול "פתק→נושא".
+    const BASE_SHIRYUN = 12;
+    const HARD_SHIRYUN = 16;
+    const MIN_SHIRYUN  = 6;
+    // האם הגענו למסך הנושא מתוך פתק הבחירה (URL ?editTopic=) — מאפשר לפרוץ את החסם.
+    let fromBallotRoute = false;
+    // החסם הנוכחי (קו-שיא נשמר ב-state.capShiryun), מוגבל תמיד ל-[12,16].
+    function currentCap(st) {
+      const s = st || loadState();
+      const c = Number(s.capShiryun) || BASE_SHIRYUN;
+      return Math.min(HARD_SHIRYUN, Math.max(BASE_SHIRYUN, c));
+    }
+    // חסם ההוספה בפועל: במסלול הפתק — עד התקרה הקשיחה; אחרת — החסם הנוכחי.
+    function addCap(st) { return fromBallotRoute ? HARD_SHIRYUN : currentCap(st); }
+    // אחרי הוספה במסלול הפתק: הרם את קו-השיא (ratchet חד-כיווני) ומרר את המועמד לפתק.
+    function ballotRouteOnAdd(st, name) {
+      if (!fromBallotRoute) return;
+      st.capShiryun = Math.min(HARD_SHIRYUN, Math.max(currentCap(st), (st.shiryun || []).length));
+      st.ballot = Array.isArray(st.ballot) ? st.ballot : [];
+      if (st.ballot.indexOf(name) < 0) st.ballot.push(name);
+    }
+    // אחרי הסרה במסלול הפתק: הסר גם מהפתק (החסם עצמו לא יורד — ratchet).
+    function ballotRouteOnRemove(st, name) {
+      if (!fromBallotRoute) return;
+      if (Array.isArray(st.ballot)) st.ballot = st.ballot.filter(x => x !== name);
+    }
+    // פתיחת טבלת הדירוג של נושא ישירות מ-URL (?editTopic=<squad_id>)
+    function openEditTopicFromUrl() {
+      const topic = new URLSearchParams(location.search).get('editTopic');
+      if (!topic || !squadConfig[topic]) return;
+      fromBallotRoute = true;
+      selectTeam(topic);
+      updateStatusBar();
+    }
 
     function goToFilterChecked() {
       const count = (loadState().shiryun || []).length;
@@ -3863,7 +3899,9 @@
         btn.classList.toggle('ready', ready);
         btn.disabled = !ready;
       }
-      // הודעת "נדרשים לפחות 6" קבועה — מוצגת תמיד, לא רק לפני שהושלם
+      // רמז הטווח — דינמי לפי החסם הנוכחי (12, או מורם עד 16 דרך מסלול הפתק)
+      const hint = document.getElementById('sim-lock-hint');
+      if (hint) hint.innerHTML = '<span style="color:#dc2626">⚠</span> בחרו ' + MIN_SHIRYUN + '-' + currentCap(st) + ' לקראת סיום';
     }
 
     // מחזיר את שם הנבחרת הפעילה כרגע (לרישום מקור הבחירה)
@@ -3893,15 +3931,17 @@
       if (isShiryuned) {
         const i = state.shiryun.indexOf(name);
         if (i >= 0) state.shiryun.splice(i, 1);
+        ballotRouteOnRemove(state, name);
         autoLog(name, 'בוטל שריון');
       } else {
-        if (state.shiryun.length >= MAX_SHIRYUN) {
+        if (state.shiryun.length >= addCap(state)) {
           maxReached();
           return;
         }
         if (state.selected.indexOf(name) < 0) state.selected.push(name);
         if (state.shiryun.indexOf(name) < 0) state.shiryun.push(name);
         _recordTeamSource(state, name);
+        ballotRouteOnAdd(state, name);
         autoLog(name, 'שוריין');
       }
       saveState(state);
@@ -4053,6 +4093,8 @@
       // אם גלריית הנושאים גלויה כבר עכשיו — הצג עליה את הבחירות משנטענו הנתונים
       const _picker = document.getElementById('team-picker');
       if (_picker && _picker.style.display !== 'none') highlightMyTopics();
+      // מסלול "פתק→נושא": פתיחת טבלת הדירוג ישירות (אחרי שהקונפיג נטען)
+      openEditTopicFromUrl();
     }).catch(() => {});
 
     // בונה את rankList לפי הנבחרת הפעילה (activeCommittee)
