@@ -177,9 +177,9 @@
 
   /* ── Section headers ── */
   .zone-header {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
+    display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 8px;
     padding: 4px 0 8px;
   }
@@ -187,15 +187,11 @@
     display: flex;
     align-items: center;
     gap: 5px;
-    justify-self: start;
   }
   .zone-title {
     font-size: 1rem;
     font-weight: 800;
     color: var(--blue-dark);
-  }
-  .zone-header-end {
-    justify-self: end;
   }
   .zone-badge {
     font-size: .78rem;
@@ -203,7 +199,12 @@
     padding: 2px 10px;
     border-radius: 999px;
     white-space: nowrap;
-    justify-self: center;
+  }
+  /* כפתור הסיום בתחתית המסגרת, מיושר לפינה השמאלית (RTL → flex-end) */
+  .ballot-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 14px;
   }
   .zone-badge.vadai-badge { background: var(--blue-soft); color: var(--blue-main); }
   .zone-badge.pending-badge { background: #f1f5f9; color: var(--text-muted); }
@@ -699,7 +700,7 @@
       <span class="brand-mark">ד.ב.ר</span>
       <span class="brand-label">דמוקרטים בוחרים רציונלית</span>
     </a>
-    <span style="color:#ffd24d;font-size:.8rem;font-weight:800;flex-shrink:0;margin-inline-start:auto;padding-inline:8px">V253</span>
+    <span style="color:#ffd24d;font-size:.8rem;font-weight:800;flex-shrink:0;margin-inline-start:auto;padding-inline:8px">V254</span>
     <a href="dbr_P_01_process.html" style="color:rgba(255,255,255,.65);font-size:.85rem;font-weight:600;text-decoration:none;flex-shrink:0">☰</a>
   </div>
   <div class="step-nav">
@@ -743,9 +744,6 @@
           <button class="pf-bar-help" onclick="document.getElementById('intro-overlay').style.display=''">ⓘ</button>
         </div>
         <span class="zone-badge vadai-badge" id="vadai-zone-badge">0 מועמדים</span>
-        <div class="zone-header-end">
-          <button class="done-btn" id="done-btn" onclick="finishAndGo()" disabled>סיום</button>
-        </div>
       </div>
       <div id="vadai-list"></div>
 
@@ -760,6 +758,11 @@
           <span class="cov-chip cov-l3">דליל</span>
           <span class="cov-chip cov-l4">חסר</span>
         </div>
+      </div>
+
+      <!-- ── כפתור סיום — בתחתית המסגרת, פינה שמאלית ── -->
+      <div class="ballot-footer">
+        <button class="done-btn" id="done-btn" onclick="finishAndGo()" disabled>סיום</button>
       </div>
     </div>
 
