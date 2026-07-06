@@ -1042,8 +1042,8 @@
       const extra = n - REQUIRED_SHIRYUN;
       const el = document.getElementById('overlimit-modal');
       document.getElementById('overlimit-msg').innerHTML =
-        `עד עתה בחרת <strong>${n} מועמדים</strong>, ${extra} יותר מעבר לשמונה הנדרשים.<br><br>` +
-        `בשלבים מאוחרים יותר בתהליך, תוכל לשנות ולהחליף, אבל בשלב הסיום תחזור לשמונה בלבד, על פי הנחיית הפריימריז.`;
+        `בחרת <strong>${n} מועמדים</strong>, ${extra} יותר מעבר לשמונה הנדרשים בפתק הבחירה.<br><br>` +
+        `בשלבים הבאים תוכל לשנות, להחליף, להסיר או להוריד, כל זאת כדי להגיע לשלב הסופי ולהתמקד בשמונה המועמדים הסופיים.`;
       el.style.display = 'flex';
     }
 
@@ -1487,8 +1487,8 @@
       <div style="font-size:2rem;margin-bottom:12px">⚠️</div>
       <div id="overlimit-msg" style="font-size:1rem;color:#1f2933;line-height:1.75;margin-bottom:22px"></div>
       <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
-        <button onclick="overlimitBack()" style="flex:1;min-width:130px;padding:11px 18px;border-radius:12px;border:1.5px solid #d7e3f3;background:#fff;color:#12355b;font-weight:800;font-size:.95rem;cursor:pointer;font-family:inherit">חזרה לעריכה</button>
-        <button onclick="overlimitContinue()" style="flex:1;min-width:130px;padding:11px 18px;border-radius:12px;border:none;background:#1d5fa7;color:#fff;font-weight:800;font-size:.95rem;cursor:pointer;font-family:inherit">המשך בכל זאת ←</button>
+        <button onclick="overlimitBack()" style="flex:1;min-width:130px;padding:11px 18px;border-radius:12px;border:1.5px solid #d7e3f3;background:#fff;color:#12355b;font-weight:800;font-size:.95rem;cursor:pointer;font-family:inherit">חזרה לבחירה</button>
+        <button onclick="overlimitContinue()" style="flex:1;min-width:130px;padding:11px 18px;border-radius:12px;border:none;background:#1d5fa7;color:#fff;font-weight:800;font-size:.95rem;cursor:pointer;font-family:inherit">המשך לשלב הבא</button>
       </div>
     </div>
   </div>
