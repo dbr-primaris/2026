@@ -197,15 +197,17 @@
     .sim-status-bar {
       display: flex;
       align-items: stretch;
-      gap: 10px;
-      margin: 0 0 8px;
-      padding: 6px 14px 6px 8px;
+      gap: 16px;
+      /* margin שלילי מרחיב את התיבה → יותר רווח בין האובייקטים (space-between) */
+      margin: 0 -12px 8px;
+      padding: 6px 18px;
       background: var(--white);
       border: 1px solid var(--border-soft);
       border-radius: var(--radius-small);
       box-shadow: var(--shadow-soft);
       justify-content: space-between;
     }
+    @media (max-width: 480px) { .sim-status-bar { margin-inline: -4px; padding-inline: 12px; } }
     .sim-bar-title {
       font-size: 1.15rem;
       font-weight: 900;
@@ -237,10 +239,10 @@
     .sim-bar-detail strong { color: var(--blue-dark); font-weight: 800; }
     .sim-bar-detail .sep { margin: 0 6px; opacity: .45; }
     .sim-next-btn {
-      padding: 10px 14px;
+      padding: 10px 16px;
       border-radius: 10px;
       font-weight: 800;
-      font-size: 1rem;
+      font-size: .85rem;
       font-family: inherit;
       cursor: not-allowed;
       white-space: nowrap;
@@ -1856,7 +1858,7 @@
           </div>
         </div>
         <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0;align-self:center">
-          <button class="sim-next-btn" id="sim-next-btn" onclick="window.location.href='dbr_P_01_process.html'">לשלב הבא</button>
+          <button class="sim-next-btn" id="sim-next-btn" onclick="goToFilterChecked()">פתק הבחירה</button>
         </div>
       </div>
     </div>
