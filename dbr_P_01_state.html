@@ -2114,8 +2114,9 @@
       document.getElementById('intro-overlay').style.display = 'none';
       try { localStorage.setItem(INTRO_KEY, 'yes'); } catch(e) {}
     }
-    // הצג בכניסה ראשונה
-    if (localStorage.getItem(INTRO_KEY) !== 'yes') {
+    // הצג בכניסה ראשונה — למעט במסלול "פתק→נושא" (?editTopic), שם נכנסים ישר לטבלה
+    if (!new URLSearchParams(location.search).has('editTopic')
+        && localStorage.getItem(INTRO_KEY) !== 'yes') {
       document.getElementById('intro-overlay').style.display = '';
     }
 
@@ -3864,6 +3865,11 @@
       const topic = new URLSearchParams(location.search).get('editTopic');
       if (!topic || !squadConfig[topic]) return;
       fromBallotRoute = true;
+      // מסלול ישיר: בלי סרגל הלשוניות ובלי תיבת ה-empty-state — ישר לטבלת הדירוג
+      const tabs = document.getElementById('rec-tabs');
+      if (tabs) tabs.style.display = 'none';
+      const empty = document.getElementById('tabs-empty-state');
+      if (empty) empty.style.display = 'none';
       selectTeam(topic);
       updateStatusBar();
     }
