@@ -475,6 +475,36 @@
       border: 1.5px solid #b8cfe8;
     }
     .step-card.passive .sc-num { background: transparent; }
+
+    /* ── קישורים חיצוניים — מתחת למלבנים הראשיים, מופרד בקו בולט ── */
+    .external-links {
+      margin-top: 28px;
+      padding-top: 22px;
+      border-top: 2px solid var(--border-soft);
+    }
+    .external-links-title {
+      font-size: .82rem;
+      font-weight: 800;
+      color: var(--text-muted);
+      letter-spacing: .03em;
+      margin-bottom: 10px;
+    }
+    .external-links-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .external-links-list li {
+      font-size: .88rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .external-links-list a {
+      color: var(--blue-main);
+      font-weight: 700;
+      text-decoration: underline;
+    }
   </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -577,12 +607,22 @@
       </div>
     </div>
 
-    <!-- קישור לאתר הרשמי -->
-    <div class="foot-row" style="text-align:center;margin-bottom:20px">
-      <a href="dbr_P_01_official_frame.html" onclick="trackPath('official_frame')" style="font-size:.8rem;color:var(--blue-main);text-decoration:underline;">רשימת המועמדים הרשמית</a>
+    <!-- קישורים חיצוניים -->
+    <div class="external-links">
+      <div class="external-links-title">קריאה נוספת</div>
+      <ul class="external-links-list">
+        <li>
+          <a href="https://www.zman.co.il/698948/" target="_blank" rel="noopener noreferrer">מאמר של אורי כנרות</a>
+          על הבעיתיות בבחירות הפריימריז, שמציג
+          <a href="https://urikinrot.org/RandomWeightedSortDemocratsIL.html" target="_blank" rel="noopener noreferrer">יישום של הגרלה משוקללת</a>.
+        </li>
+        <li>
+          <a href="https://democrats.org.il/candidates/" target="_blank" rel="noopener noreferrer" onclick="trackPath('official_frame')">רשימת המועמדים הרשמית של המפלגה</a>
+        </li>
+      </ul>
     </div>
 
-    <div class="foot-row" style="text-align:center;margin-bottom:12px">
+    <div class="foot-row" style="text-align:center;margin-top:16px;margin-bottom:12px">
       <button onclick="resetAllSelections()" style="background:none;border:none;color:var(--text-muted);font-size:.82rem;cursor:pointer;text-decoration:underline;font-family:inherit">איפוס כל הבחירות</button>
     </div>
 
