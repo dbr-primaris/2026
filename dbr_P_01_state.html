@@ -3743,7 +3743,6 @@
       var row = '<div class="rank-row' + (picked ? ' is-picked' : '') + '"' + vadaiAttr + rowClick + '>'
         + '<span style="display:inline-flex;align-items:center;gap:2px;flex-shrink:0">' + gDot + (picked ? '' : '<span class="rank-num">' + rank + '</span>') + '</span>'
         + '<span class="rank-name' + (picked ? ' picked' : ' unpicked') + (isVadai && picked ? ' vadai-name' : '') + '"' + (picked ? ' style="color:' + nameColor + (isVadai ? ';font-weight:900' : '') + '"' : '') + '>' + eName + vadaiBadge + targetHtml + '</span>'
-        + (c.manualFix ? '<span title="מיקום שתוקן ידנית — הנוסחה לא שקללה ביטחון/מגורים בצפון" style="flex-shrink:0;font-size:.62rem;font-weight:700;color:#b45309;background:#fef3c7;border:1px solid #fcd34d;border-radius:6px;padding:1px 5px;margin-inline-start:6px">תיקון ידני</span>' : '')
         + reasonToggleHtml
         + (filterShiryun || filterPicked || shiryuned ? '' : '<span class="' + pickCls + '" onclick="event.stopPropagation();toggleShiryunState(\'' + jName + '\')" title="' + pickTitle + '">' + pickIcon + '</span>')
         + (filterShiryun || filterPicked || picked ? '' : '<span class="rank-card" onclick="event.stopPropagation();openProfile(\'' + jName + '\')" title="כרטיס ועדה מסדרת">📋</span>')
