@@ -9,14 +9,14 @@
       if (step === 1) window.location.href = 'dbr_P_01_shiryun.html';
       else if (step === 2) window.location.href = 'dbr_P_01_state.html';
       else if (step === 3) {
-        if (count >= 6) window.location.href = 'dbr_P_01_filter.html';
+        window.location.href = 'dbr_P_01_filter.html';
       }
     }
     function initStepNav() {
       var st = {}; try { st = JSON.parse(localStorage.getItem('primeris_state_v1')||'{}'); } catch(e){}
       var count = (st.shiryun || []).length;
       var s3 = document.getElementById('step3-nav');
-      if (s3) { s3.classList.toggle('locked', count < 6); }
+      if (s3) { s3.classList.remove('locked'); }
     }
   </script>
 <!-- Google tag (gtag.js) -->
@@ -725,8 +725,11 @@
   <div class="no-picks-screen" id="no-picks-screen" style="display:none">
     <div style="font-size:3rem;margin-bottom:16px">🗳️</div>
     <h2>עוד לא בחרת מועמדים</h2>
-    <p>כדי להגיע לשלב הסינון, קודם כל בחרו מועמדים בשלב הבחירה העצמאית או במשחקי הסימולציה.</p>
-    <a class="back-link" href="dbr_P_01_process.html">חזרה לתהליך</a>
+    <p>אפשר להתחיל להרכיב את פתק הבחירה גם מכאן: בפתק מוצגת רשימת הנושאים (ליבה וייחודיים). בחרו נושא שמעניין אתכם, ומתוכו בחרו מועמדים ישירות לפתק — וכך תבנו אותו נושא אחר נושא.</p>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:10px">
+      <button onclick="enterEmptyPicker()" style="background:var(--blue-main,#1d5fa7);color:#fff;border:none;border-radius:10px;padding:9px 18px;font-size:.95rem;font-weight:700;cursor:pointer;font-family:inherit">כניסה לפתק הבחירה</button>
+      <a class="back-link" href="dbr_P_01_process.html">חזרה לתהליך</a>
+    </div>
   </div>
 
   <!-- main filter UI (hidden until JS populates it) -->
@@ -761,12 +764,30 @@
       </div>
     </div>
 
-    <!-- ── Zone B: נבחרו אך מחוץ לפתק ── -->
+    <!-- ── Zone B: נבחרו אך מחוץ לפתק — במסגרת נפרדת ובולטת ── -->
+    <div class="pending-frame" style="margin-top:24px;border:2px solid #b8c4d4;border-radius:14px;padding:12px 16px 14px;background:#f8fafc">
     <div class="zone-header-b">
       <span class="zone-title">מחוץ לפתק הבחירה</span>
       <span class="zone-badge pending-badge" id="pending-zone-badge">0 מועמדים</span>
     </div>
     <div id="pending-list"></div>
+
+    <!-- ── הוספה/הסרה ידנית של מועמדים (דרופדאון א-ב) ── -->
+    <div class="manual-picker" style="margin-top:16px;padding-top:12px;border-top:1px dashed #d7e3f3;display:flex;flex-wrap:wrap;gap:12px">
+      <div style="flex:1;min-width:150px;display:flex;flex-direction:column;gap:4px">
+        <span style="font-size:.82rem;font-weight:700;color:#5a7d64">הוספת מועמד/ת</span>
+        <select id="add-cand-select" onchange="addTentative(this.value); this.selectedIndex=0;" style="font-family:inherit;font-size:.9rem;padding:8px 10px;border:1px solid #cfe3d5;border-radius:8px;background:#f5faf6;color:#1f2933;cursor:pointer;width:100%">
+          <option value="">— בחרו מועמד/ת להוספה —</option>
+        </select>
+      </div>
+      <div id="remove-cand-block" style="flex:1;min-width:150px;display:flex;flex-direction:column;gap:4px">
+        <span style="font-size:.82rem;font-weight:700;color:#8a6a6a">הסרת מועמד/ת</span>
+        <select id="remove-cand-select" onchange="removeCandidate(this.value); this.selectedIndex=0;" style="font-family:inherit;font-size:.9rem;padding:8px 10px;border:1px solid #e6d3d3;border-radius:8px;background:#fbf5f5;color:#1f2933;cursor:pointer;width:100%">
+          <option value="">— בחרו מועמד/ת להסרה —</option>
+        </select>
+      </div>
+    </div>
+    </div><!-- /pending-frame -->
 
   </div>
 
@@ -1107,11 +1128,14 @@
   // ═══════════════════════════════════════════
   //  Render
   // ═══════════════════════════════════════════
+  let enteredEmpty = false;   // מאפשר כניסה לפתק גם ללא בחירות (לפי בקשה)
+  function enterEmptyPicker() { enteredEmpty = true; render(); }
+
   function render() {
     const all    = buildCandidateList();
     const vadai  = getVadai();
 
-    if (all.length === 0) {
+    if (all.length === 0 && !enteredEmpty) {
       document.getElementById('no-picks-screen').style.display = '';
       document.getElementById('filter-ui').style.display = 'none';
       return;
@@ -1129,7 +1153,9 @@
     vadaiEl.classList.add('name-grid');
     if (vadaiList.length === 0) {
       vadaiEl.classList.remove('name-grid');
-      vadaiEl.innerHTML = '<div class="empty-zone">לחצו על מועמד/ת מהרשימה למטה כדי להוסיף לפתק</div>';
+      vadaiEl.innerHTML = all.length === 0
+        ? '<div class="empty-zone">הפתק ריק — בחרו נושא מרשימת הנושאים למטה, ומתוכו בחרו מועמדים ישירות לפתק</div>'
+        : '<div class="empty-zone">לחצו על מועמד/ת מהרשימה למטה כדי להוסיף לפתק</div>';
     } else {
       vadaiEl.innerHTML = vadaiList.map(name => chipHTML(name, true)).join('');
     }
@@ -1139,7 +1165,9 @@
     pendingEl.classList.add('name-grid');
     if (pendingList.length === 0) {
       pendingEl.classList.remove('name-grid');
-      pendingEl.innerHTML = '<div class="empty-zone">כל המועמדים שלך כבר בפתק הבחירה 🎉</div>';
+      pendingEl.innerHTML = all.length === 0
+        ? '<div class="empty-zone">בחרו נושא מרשימת הנושאים שלמעלה כדי לבחור מועמדים</div>'
+        : '';
     } else {
       pendingEl.innerHTML = pendingList.map(name => chipHTML(name, false)).join('');
     }
@@ -1160,6 +1188,9 @@
 
     // ── כיסוי הנושאים ע"י המועמדים שבפתק ──
     renderCoverage(vadaiList);
+
+    // ── דרופדאוני הוספה/הסרה ידנית ──
+    populateManualSelects(all, vadaiList);
 
     // ── Done button — לחיץ רק כשהפתק חוקי (6–8 בפתק) ──
     const doneBtn = document.getElementById('done-btn');
@@ -1232,6 +1263,47 @@
   // ═══════════════════════════════════════════
   //  Toggle vadai
   // ═══════════════════════════════════════════
+  // ── הוספה/הסרה ידנית של מועמדים דרך דרופדאון (א-ב) ──
+  function allRosterSorted() {
+    return Object.keys(flatDB)
+      .filter(n => !droppedSet.has(n))
+      .sort((a, b) => a.localeCompare(b, 'he'));
+  }
+  function addTentative(name) {
+    if (!name || buildCandidateList().includes(name)) return;   // ריק או כבר בפול
+    if (!Array.isArray(primState.dbr_picks)) primState.dbr_picks = [];
+    primState.dbr_picks.push(name);   // נכנס לפול, מחוץ לפתק (בחירה טנטטיבית)
+    saveState(primState);
+    render();
+  }
+  function removeCandidate(name) {
+    if (!name) return;
+    if (Array.isArray(primState.shiryun))   primState.shiryun   = primState.shiryun.filter(n => n !== name);
+    if (Array.isArray(primState.dbr_picks)) primState.dbr_picks = primState.dbr_picks.filter(n => n !== name);
+    if (Array.isArray(primState.ballot))    primState.ballot    = primState.ballot.filter(n => n !== name);
+    saveState(primState);
+    render();
+  }
+  function populateManualSelects(pool, vadaiList) {
+    const addSel = document.getElementById('add-cand-select');
+    const remSel = document.getElementById('remove-cand-select');
+    const poolSet  = new Set(pool);
+    const vadaiSet = new Set(vadaiList);
+    if (addSel) {                                    // רק מי שלא בפול
+      const notInPool = allRosterSorted().filter(n => !poolSet.has(n));
+      addSel.innerHTML = '<option value="">— בחרו מרשימת המועמדים —</option>' +
+        notInPool.map(n => '<option value="' + escapeHtml(n) + '">' + escapeHtml(n) + '</option>').join('');
+    }
+    if (remSel) {                                    // רק מי שמחוץ לפתק (pending)
+      const pending = pool.filter(n => !vadaiSet.has(n)).sort((a, b) => a.localeCompare(b, 'he'));
+      remSel.innerHTML = '<option value="">— בחרו מועמד/ת להסרה —</option>' +
+        pending.map(n => '<option value="' + escapeHtml(n) + '">' + escapeHtml(n) + '</option>').join('');
+      // הסתר את "הסרת מועמד" כשאין מועמדים מחוץ לפתק
+      const remBlock = document.getElementById('remove-cand-block');
+      if (remBlock) remBlock.style.display = pending.length ? '' : 'none';
+    }
+  }
+
   function toggleVadai(name) {
     if (!Array.isArray(primState.ballot)) primState.ballot = [];
 

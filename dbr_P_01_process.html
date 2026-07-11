@@ -709,6 +709,7 @@
       const step3Done           = ballot.length   >= 6;
       // הגענו לפתק (שלב 3) — דגל התמדה שנדלק בכניסה לדף הפתק
       const step3Reached        = !!(primState.meta && primState.meta.reachedStep3);
+      const step2Reached        = !!(primState.meta && primState.meta.reachedStep2);
 
       // ── כרטיסית 1: בחירה (תחתון) ──
       if (step1Done) {
@@ -733,13 +734,13 @@
         setCard('card-state','num-state','status-state','passive','2','בשלב זה ניתן לעבור בין סימולציות שונות שנעשו ע"י הבינות המלאכותיות, כשהמועמדים שנבחרו משתלבים היטב בסימולציות');
       }
 
-      // ── כרטיסית 3: פתק הבחירה (ראש) — נפתחת רק כשיש לפחות 6 נבחרים סה"כ ──
+      // ── כרטיסית 3: פתק הבחירה (ראש) — כמו משחק הכיסאות: passive בכניסה ראשונה, active אחרי כניסה לסטייט/פילטר ──
       if (step3Done) {
         setCard('card-filter','num-filter','status-filter','done','✓',`${ballot.length} נבחרים בפתק שלך`);
-      } else if (step3Reached || shiryun.length >= 6) {
+      } else if (step3Reached || step2Reached) {
         setCard('card-filter','num-filter','status-filter','active','3','זהו סוף התהליך שבו יש להתאים את מספר המועמדים לדרישות המפלגה (6-8 שמות)');
       } else {
-        setCard('card-filter','num-filter','status-filter','locked','3','זהו סוף התהליך שבו יש להתאים את מספר המועמדים לדרישות המפלגה (6-8 שמות)');
+        setCard('card-filter','num-filter','status-filter','passive','3','זהו סוף התהליך שבו יש להתאים את מספר המועמדים לדרישות המפלגה (6-8 שמות)');
       }
 
       // ── סרגל שלבים אופקי ──

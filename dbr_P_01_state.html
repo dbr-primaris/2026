@@ -9,15 +9,17 @@
       if (step === 1) window.location.href = 'dbr_P_01_shiryun.html';
       else if (step === 2) window.location.href = 'dbr_P_01_state.html';
       else if (step === 3) {
-        if (count >= 6) window.location.href = 'dbr_P_01_filter.html';
+        window.location.href = 'dbr_P_01_filter.html';
       }
     }
     function initStepNav() {
       var st = {}; try { st = JSON.parse(localStorage.getItem('primeris_state_v1')||'{}'); } catch(e){}
       var count = (st.shiryun || []).length;
       var s3 = document.getElementById('step3-nav');
-      if (s3) { s3.classList.toggle('locked', count < 6); }
+      if (s3) { s3.classList.remove('locked'); }
     }
+    // סימון: נכנסנו לדף הסטייט (שלב 2) — משמש את דף פרוסס לצביעת "פתק הבחירה" כרגיל
+    (function(){ try { var _s = JSON.parse(localStorage.getItem('primeris_state_v1')||'{}'); _s.meta = _s.meta || {}; if (!_s.meta.reachedStep2) { _s.meta.reachedStep2 = true; localStorage.setItem('primeris_state_v1', JSON.stringify(_s)); } } catch(e){} })();
   </script>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-TJNJTZQF1F"></script>
@@ -244,7 +246,7 @@
       font-weight: 800;
       font-size: .85rem;
       font-family: inherit;
-      cursor: not-allowed;
+      cursor: pointer;
       white-space: nowrap;
       background: #f1f5f9;
       color: #94a3b8;
@@ -1800,10 +1802,10 @@
   gtag('config', 'G-TJNJTZQF1F');
 </script>
       <div class="topbar-row">
-        <div class="brand">
+        <a class="brand" href="dbr_P_01_index.html" style="text-decoration:none;cursor:pointer" title="לדף הבית">
           <span class="brand-mark">ד.ב.ר</span>
           <span>דמוקרטים בוחרים רציונלית</span>
-        </div>
+        </a>
         <a href="dbr_P_01_process.html" style="color:rgba(255,255,255,.65);font-size:.85rem;font-weight:600;text-decoration:none;flex-shrink:0">☰</a>
       </div>
       <div class="step-nav">
@@ -3899,11 +3901,7 @@
     }
 
     function goToFilterChecked() {
-      const count = (loadState().shiryun || []).length;
-      if (count < MIN_SHIRYUN) {
-        showStateToast('יש לבחור לפחות 6 שמות כדי להמשיך לשלב הבא (נבחרו ' + count + ')');
-        return;
-      }
+      // פתק הבחירה נגיש בכל מצב — גם ללא מועמדים נבחרים
       window.location.href = 'dbr_P_01_filter.html';
     }
 
@@ -3926,8 +3924,9 @@
       if (oc)  oc.textContent  = originCount;
       if (ac)  ac.textContent  = addedCount;
       if (btn) {
-        btn.classList.toggle('ready', ready);
-        btn.disabled = !ready;
+        // גישה חופשית לפתק הבחירה — הכפתור נגיש בכל מצב, גם ללא בחירות
+        btn.classList.add('ready');
+        btn.disabled = false;
       }
       // רמז הטווח — דינמי לפי החסם הנוכחי (12, או מורם עד 16 דרך מסלול הפתק)
       const hint = document.getElementById('sim-lock-hint');

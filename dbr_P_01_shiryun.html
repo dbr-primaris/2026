@@ -9,14 +9,14 @@
       if (step === 1) window.location.href = 'dbr_P_01_shiryun.html';
       else if (step === 2) window.location.href = 'dbr_P_01_state.html';
       else if (step === 3) {
-        if (count >= 6) window.location.href = 'dbr_P_01_filter.html';
+        window.location.href = 'dbr_P_01_filter.html';
       }
     }
     function initStepNav() {
       var st = {}; try { st = JSON.parse(localStorage.getItem('primeris_state_v1')||'{}'); } catch(e){}
       var count = (st.shiryun || []).length;
       var s3 = document.getElementById('step3-nav');
-      if (s3) { s3.classList.toggle('locked', count < 6); }
+      if (s3) { s3.classList.remove('locked'); }
     }
   </script>
 <!-- Google tag (gtag.js) -->
