@@ -1619,12 +1619,19 @@
     padding: 2px 8px;
     margin-bottom: 5px;
   }
+  .topic-my-sep {
+    height: 1px;
+    background: var(--border-soft);
+    opacity: .55;
+    border-radius: 1px;
+    margin: 5px 0;
+  }
   .topic-my-names {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 4px;
-    margin: 4px 0 6px;
+    font-size: .82rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    line-height: 1.4;
+    margin: 0 0 4px;
   }
   .topic-my-name-chip {
     font-size: .82rem;
@@ -1866,10 +1873,10 @@
     <!-- מסגרת בולטת, מופרדת מהכותרת — הלשוניות וכל התוכן שמתחתן -->
     <div class="tabs-frame">
       <div class="rec-tabs" id="rec-tabs">
-        <button class="rec-tab" id="tab-historical_sim" onclick="switchTab(this,'historical_sim')">סימולציה היסטורית</button>
-        <button class="rec-tab"        id="tab-ai_squads"      onclick="switchTab(this,'ai_squads')">נושאי ליבה</button>
-        <button class="rec-tab"        id="tab-other_topics"   onclick="switchTab(this,'other_topics')">נושאים אחרים</button>
-        <button class="rec-tab soon">נבחרות מהשטח</button>
+        <button class="rec-tab" id="tab-historical_sim" onclick="switchTab(this,'historical_sim')">היסטורית</button>
+        <button class="rec-tab" id="tab-topics"       onclick="switchTab(this,'topics')">נושאים</button>
+        <button class="rec-tab" id="tab-simulations"  onclick="switchTab(this,'simulations')">סימולציות</button>
+        <button class="rec-tab" id="tab-goto-filter"  onclick="goToFilterChecked()">פתק הבחירה</button>
       </div>
 
       <div class="empty-state" id="tabs-empty-state">
@@ -1904,12 +1911,12 @@
           <div class="team-card-status active">✓ זמינה</div>
         </div>
         <div class="team-card team-card--ai" data-rec-type="ai_squads" onclick="selectTeam('cost_of_living')">
-          <div class="team-card-name">בטחון כלכלי</div>
+          <div class="team-card-name">יוקר המחיה ובטחון כלכלי</div>
           <div class="team-card-desc">הורדת יוקר המחיה, חיזוק מעמד הביניים וביטחון כלכלי למשפחות</div>
           <div class="team-card-status active">✓ זמינה</div>
         </div>
         <div class="team-card team-card--ai" data-rec-type="ai_squads" onclick="selectTeam('peace_security')">
-          <div class="team-card-name">מדיניות חוץ ובטחון</div>
+          <div class="team-card-name">שלום וביטחון לאומי</div>
           <div class="team-card-desc">אחריות לשלום לצד הגנה מקיפה</div>
           <div class="team-card-status active">✓ זמינה</div>
         </div>
@@ -1945,7 +1952,7 @@
           <div class="team-card-status active">✓ זמינה</div>
         </div>
         <div class="team-card team-card--ai" data-rec-type="ai_squads" onclick="selectTeam('directors')">
-          <div class="team-card-name">הנהגה /  ניהול ציבורי / דירקטוריון</div>
+          <div class="team-card-name">ניהול ציבורי בכיר</div>
           <div class="team-card-desc">הנהגה, ניסיון ניהולי ויכולת ביצוע</div>
           <div class="team-card-status active">✓ זמינה</div>
         </div>
@@ -2011,7 +2018,8 @@
         <span id="stat-picked" style="display:none"></span>
         <span id="stat-shiryun" style="display:none"></span>
         <div class="summary-pills">
-          <span class="pill" id="all-filter-btn" style="cursor:pointer;margin:0 auto" onclick="togglePickedFilter()"><span id="all-filter-label">הצגת פתק הבחירה</span></span>
+          <!-- כפתור "הצגת פתק הבחירה" (all-filter-btn) הוסר לפי בקשה -->
+
           <span id="no-picks-hint" style="display:none;margin:0 auto;font-size:.85rem;color:var(--text-muted);text-align:center;font-family:inherit;">לחץ על השם לבחירה</span>
           <span id="pool-counter" style="display:none;font-size:.88rem;font-weight:800;color:var(--blue-main);border:1.5px solid #d7e3f3;border-radius:999px;padding:3px 10px;background:#f0f6ff;white-space:nowrap;"></span>
           <button id="go-filter-btn" onclick="goToFilterChecked()" style="display:none;background:var(--blue-main);color:#fff;border:none;border-radius:9px;padding:7px 14px;font-size:.88rem;font-weight:700;cursor:pointer;white-space:nowrap;font-family:inherit;">← לפתק שלי</button>
@@ -2546,7 +2554,7 @@
     function _setFirstTwoBtnsDisabled(disabled) {
       const allBtn    = document.getElementById('all-filter-btn');
       const pickedBtn = document.getElementById('picked-filter-btn');
-      [allBtn, pickedBtn].forEach(btn => {
+      [allBtn, pickedBtn].filter(Boolean).forEach(btn => {
         if (disabled) {
           btn.style.opacity      = '0.35';
           btn.style.pointerEvents = 'none';
@@ -2827,6 +2835,10 @@
         loadCommitteeData();
       } else {
         committeePanel.style.display = 'none';
+        // אם היינו בתוך תצוגת נושא — נקה אותה לפני הצגת הבורר (אחרת הנושא הישן נשאר למטה)
+        document.getElementById('ranking-section').style.display = 'none';
+        inRankingView = false;
+        activeSquad = null;
         selectRecType(type);
       }
       requestAnimationFrame(alignTabsSticky);
@@ -2936,9 +2948,11 @@
     function selectRecType(type) {
       inRecTypePicker = false;
       // הצג רק כרטיסי נבחרת מהסוג שנבחר
-      // other_topics = מיזוג של special_topics + imitation
-      const matchTypes = type === 'other_topics'
-        ? ['special_topics', 'imitation']
+      // topics = מיזוג רציף של ai_squads (ליבה) + special_topics (ייחודיים)
+      const matchTypes = type === 'topics'
+        ? ['ai_squads', 'special_topics']
+        : type === 'simulations'
+        ? ['imitation']
         : [type];
       document.querySelectorAll('.team-card').forEach(card => {
         const cardType = card.dataset.recType;
@@ -4201,9 +4215,12 @@
       document.querySelectorAll('.team-card[onclick*="selectTeam"]').forEach(card => {
         const m = (card.getAttribute('onclick') || '').match(/selectTeam\('([^']+)'\)/);
         const cfg = m ? squadConfig[m[1]] : null;
-        if (!cfg || !cfg.title) return;
+        if (!cfg) return;
         const nameEl = card.querySelector('.team-card-name');
-        if (nameEl && nameEl.textContent.trim() !== cfg.title) nameEl.textContent = cfg.title;
+        if (nameEl && cfg.title && nameEl.textContent.trim() !== cfg.title) nameEl.textContent = cfg.title;
+        // הסבר הנושא — נטען מהקונפיג (עמודת desc), מקור אמת יחיד
+        const descEl = card.querySelector('.team-card-desc');
+        if (descEl && cfg.desc && descEl.textContent.trim() !== cfg.desc) descEl.textContent = cfg.desc;
       });
       document.querySelectorAll('#team-select option').forEach(opt => {
         const cfg = squadConfig[opt.value];
@@ -4245,17 +4262,19 @@
         const hits = topicHits[sq] || [];
 
         card.classList.remove('topic-star');
-        card.querySelectorAll('.topic-my-badge,.topic-my-names,.topic-present-badge,.topic-my-count').forEach(e => e.remove());
+        card.querySelectorAll('.topic-my-sep,.topic-my-badge,.topic-my-names,.topic-present-badge,.topic-my-count').forEach(e => e.remove());
         if (!hits.length) return;
 
         const nameEl = card.querySelector('.team-card-name');
         if (!nameEl) return;
 
         card.classList.add('topic-star');
-        const chips = hits
-          .map(h => '<span class="topic-my-name-chip">' + shortName(h.name) + '</span>').join('');
-        nameEl.insertAdjacentHTML('afterend',
-          '<div class="topic-my-names">' + chips + '</div>');
+        // שמות המועמדים כמלל רציף עם פסיק ורווח
+        const namesText = hits.map(h => escapeHtml(shortName(h.name))).join(', ');
+        // ההסבר נשאר מתחת לכותרת; אחריו קו מפריד חיוור ואז השמות
+        const descEl = card.querySelector('.team-card-desc');
+        (descEl || nameEl).insertAdjacentHTML('afterend',
+          '<div class="topic-my-sep"></div><div class="topic-my-names">' + namesText + '</div>');
       });
 
       // נבחרות שבהן יש לך בחירות — צפות לראש הגלריה
