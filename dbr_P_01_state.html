@@ -1,7 +1,24 @@
 ﻿<!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-<script>if(localStorage.getItem('dbr_disclaimer_accepted')!=='yes'&&sessionStorage.getItem('dbr_session_accepted')!=='yes'){window.location.href='dbr_P_01_index.html?redirect='+encodeURIComponent(location.pathname.split('/').pop()+location.search)}</script>
+<script>if(localStorage.getItem('dbr_disclaimer_accepted')!=='yes'&&sessionStorage.getItem('dbr_session_accepted')!=='yes'){window.location.href='dbr_P_01_index.html?redirect='+encodeURIComponent(location.pathname.split('/').pop()+location.search)}
+    function navToStep(step) {
+      try { localStorage.setItem('dbr_disclaimer_accepted','yes'); } catch(e) {}
+      var st = {}; try { st = JSON.parse(localStorage.getItem('primeris_state_v1')||'{}'); } catch(e){}
+      var count = (st.shiryun || []).length;
+      if (step === 1) window.location.href = 'dbr_P_01_shiryun.html';
+      else if (step === 2) window.location.href = 'dbr_P_01_state.html';
+      else if (step === 3) {
+        if (count >= 6) window.location.href = 'dbr_P_01_filter.html';
+      }
+    }
+    function initStepNav() {
+      var st = {}; try { st = JSON.parse(localStorage.getItem('primeris_state_v1')||'{}'); } catch(e){}
+      var count = (st.shiryun || []).length;
+      var s3 = document.getElementById('step3-nav');
+      if (s3) { s3.classList.toggle('locked', count < 6); }
+    }
+  </script>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-TJNJTZQF1F"></script>
 <script>
@@ -38,9 +55,10 @@
 
     * { box-sizing: border-box; }
 
+    html { overflow-y: scroll; }
     body {
       margin: 0;
-      font-family: Arial, "Noto Sans Hebrew", sans-serif;
+      font-family: 'Heebo', Arial, sans-serif;
       background: #f4f8ff;
       color: var(--text-main);
       line-height: 1.65;
@@ -48,30 +66,84 @@
 
     a { color: inherit; text-decoration: none; }
 
-    .page { max-width: 1100px; margin: 0 auto; padding: 0 24px 60px; }
+    .page { max-width: 1100px; margin: 0 auto; padding: 96px 24px 60px; }
 
-    /* ── Top bar ── */
+    /* ── Top bar (dark navy fixed) ── */
     .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      background: #f4f8ff;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: #0D2B5E;
+      padding: 12px 0 0;
+      display: flex;
+      flex-direction: column;
+    }
+    .topbar-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 12px;
-      padding: 4px 0 4px;
-      border-bottom: 1px solid var(--border-soft);
-      margin-bottom: 8px;
+      gap: 20px;
+      padding-bottom: 10px;
+      /* מיושר לעמודת התוכן (.page) כדי שהלוגו לא יימתח לקצה המסך */
+      width: 100%;
+      max-width: 1100px;
+      margin-inline: auto;
+      padding-inline: 24px;
     }
+
+    /* ── Step navigator (dark bg) ── */
+    .step-nav {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      max-width: 1100px;
+      margin-inline: auto;
+      padding: 4px 24px 10px;
+    }
+    .step-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+    .step-item.done { cursor: pointer; }
+    .step-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.22);
+      transition: all .2s;
+    }
+    .step-item.active .step-dot {
+      background: #fff;
+      box-shadow: 0 0 0 2px rgba(255,255,255,.2);
+    }
+    .step-item.done .step-dot { background: rgba(255,255,255,.55); }
+    .step-lbl {
+      font-size: .63rem;
+      color: rgba(255,255,255,.35);
+      white-space: nowrap;
+      line-height: 1;
+      font-weight: 800;
+    }
+    .step-item.active .step-lbl { color: #fff; }
+    .step-item.done .step-lbl   { color: rgba(255,255,255,.6); }
+    .step-line {
+      flex: 1;
+      height: 1px;
+      background: rgba(255,255,255,.12);
+      margin-bottom: 14px;
+    }
+    .step-line.done { background: rgba(255,255,255,.42); }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       font-weight: 800;
-      color: var(--blue-dark);
-      font-size: 1.2rem;
+      color: rgba(255,255,255,.92);
+      font-size: 1rem;
       min-width: 0;
       flex-shrink: 1;
     }
@@ -80,39 +152,172 @@
       text-overflow: ellipsis;
       white-space: nowrap;
     }
+    /* ── Topbar next-step indicator ── */
+    #topbar-next-count {
+      font-size: .78rem;
+      font-weight: 700;
+      color: rgba(255,255,255,.5);
+      white-space: nowrap;
+    }
+    #topbar-next-btn {
+      background: #C9A017;
+      color: #0D2B5E;
+      border: none;
+      border-radius: 8px;
+      padding: 5px 12px;
+      font-size: .8rem;
+      font-weight: 900;
+      cursor: pointer;
+      font-family: inherit;
+      white-space: nowrap;
+    }
 
     .brand-mark {
-      height: 28px;
-      padding: 0 9px;
-      border-radius: 8px;
-      background: linear-gradient(135deg, #3730a3, #1e1b4b);
+      height: 26px;
+      padding: 0 8px;
+      border-radius: 9px;
+      background: #C9A017;
       display: grid;
       place-items: center;
-      color: white;
-      font-size: .72rem;
+      color: #0D2B5E;
+      font-size: .8rem;
       font-weight: 900;
-      letter-spacing: .06em;
-      box-shadow: 0 4px 14px rgba(55,48,163,.3);
+      flex-shrink: 0;
     }
 
-    .nav {
+    /* ── Sticky controls (status bar + tabs) ── */
+    .sticky-controls {
+      position: sticky;
+      top: 96px;
+      z-index: 40;
+      background: #f4f8ff;
+      padding: 10px 0 0;
+      box-shadow: 0 6px 14px rgba(18,53,91,.06);
+    }
+    .sim-status-bar {
       display: flex;
-      gap: 6px;
-      font-size: .9rem;
-    }
-
-    .nav a {
-      padding: 7px 14px;
+      align-items: stretch;
+      gap: 16px;
+      /* margin שלילי מרחיב את התיבה → יותר רווח בין האובייקטים (space-between) */
+      margin: 0 -12px 8px;
+      padding: 6px 18px;
+      background: var(--white);
       border: 1px solid var(--border-soft);
-      border-radius: 999px;
-      background: white;
+      border-radius: var(--radius-small);
+      box-shadow: var(--shadow-soft);
+      justify-content: space-between;
+    }
+    @media (max-width: 480px) { .sim-status-bar { margin-inline: -4px; padding-inline: 12px; } }
+    .sim-bar-title {
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: var(--blue-dark);
+      letter-spacing: -0.01em;
+      margin: 0;
+    }
+    .sim-bar-help {
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      color: var(--blue-main);
+      font-size: .95rem;
+      font-weight: 700;
+      font-family: inherit;
+      line-height: 1;
+    }
+    .sim-bar-count {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--blue-dark);
+    }
+    .sim-bar-detail {
+      font-size: .72rem;
       color: var(--text-muted);
-      font-weight: 600;
-      transition: border-color .15s, color .15s;
+      margin-top: 1px;
+    }
+    .sim-bar-detail strong { color: var(--blue-dark); font-weight: 800; }
+    .sim-bar-detail .sep { margin: 0 6px; opacity: .45; }
+    .sim-next-btn {
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: .85rem;
+      font-family: inherit;
+      cursor: not-allowed;
+      white-space: nowrap;
+      background: #f1f5f9;
+      color: #94a3b8;
+      border: 1px solid #cbd5e1;
+      flex-shrink: 0;
+      transition: background .15s, color .15s, border-color .15s;
+    }
+    .sim-next-btn.ready {
+      background: var(--blue-soft);
+      color: var(--blue-main);
+      border: 1px solid var(--blue-main);
+      cursor: pointer;
+    }
+    .sim-next-btn.ready:hover { background: #dceaff; }
+    .sim-next-hint {
+      font-size: .63rem;
+      color: var(--text-muted);
+      margin-top: 3px;
+      text-align: center;
+      line-height: 1.3;
+      max-width: 130px;
     }
 
-    .nav a:hover { border-color: var(--blue-main); color: var(--blue-main); }
-    .nav a.active { background: var(--blue-main); color: white; border-color: var(--blue-main); }
+    /* ── מסגרת בולטת המקיפה את הלשוניות + כל התוכן שמתחתן — נפרדת מהכותרת הדביקה ── */
+    .tabs-frame {
+      margin-top: 14px;
+      padding: 14px 16px 4px;
+      background: var(--white);
+      border: 1.5px solid var(--border-soft);
+      border-radius: var(--radius-medium);
+      box-shadow: var(--shadow-soft);
+    }
+
+    /* ── Tab bar — דביק מתחת לכותרת (top נקבע ב-JS, ראו alignTabsSticky) ── */
+    .rec-tabs {
+      display: flex;
+      gap: 2px;
+      border-bottom: 2px solid var(--border-soft);
+      margin-bottom: 16px;
+      position: sticky;
+      z-index: 35;
+      background: var(--white);
+    }
+    .rec-tab {
+      flex: 1;
+      padding: 10px 8px;
+      font-size: .92rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      background: none;
+      border: none;
+      border-inline-end: 1px solid var(--border-soft);
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: color .15s, background .15s;
+      text-align: center;
+    }
+    .rec-tab:last-child { border-inline-end: none; }
+    .rec-tab:not(.soon):not(.active) {
+      background: rgba(29,95,167,.04);
+      border-radius: 8px 8px 0 0;
+    }
+    .rec-tab:hover { color: var(--blue-main); }
+    .rec-tab.active {
+      color: var(--blue-main);
+      border-bottom-color: var(--blue-main);
+      background: rgba(29,95,167,.08);
+      border-radius: 8px 8px 0 0;
+      font-weight: 800;
+    }
+    .rec-tab.soon { opacity: .4; cursor: default; pointer-events: none; background: none; }
 
     /* ── Back link ── */
     .back-link {
@@ -633,7 +838,7 @@
     .reason-overlay {
       position: fixed; inset: 0;
       background: rgba(23,32,51,.45);
-      z-index: 60;
+      z-index: 200;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -757,6 +962,27 @@
     }
     .rank-name.picked.outside {
       color: #111;
+    }
+    /* ══ ודאי — CSS כגיבוי לinline style ══ */
+    .rank-name.vadai-name,
+    [data-vadai="1"] .rank-name.picked {
+      color: #C9A017 !important;
+      font-weight: 900 !important;
+    }
+    [data-vadai="1"] {
+      cursor: default !important;
+    }
+    .vadai-badge {
+      font-size: .58rem;
+      font-weight: 900;
+      color: #C9A017;
+      border: 1px solid #C9A017;
+      border-radius: 4px;
+      padding: 1px 4px;
+      margin-inline-start: 5px;
+      flex-shrink: 0;
+      vertical-align: middle;
+      opacity: .85;
     }
     .rank-row.is-picked {
       background: transparent;
@@ -967,7 +1193,9 @@
     /* ── Intro overlay ── */
     .intro-overlay {
       position: fixed; inset: 0;
-      background: rgba(23,32,51,.5);
+      background: rgba(13,43,94,.12);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
       z-index: 50;
       display: grid; place-items: center;
       padding: 20px;
@@ -1007,14 +1235,14 @@
     }
     .intro-card .intro-note {
       background: var(--blue-soft);
-      border: 1px solid var(--border-soft);
-      border-radius: var(--radius-small);
-      padding: 12px 14px;
+      border-top: 1px solid var(--border-soft);
+      border-bottom: 1px solid var(--border-soft);
+      padding: 12px 28px;
+      margin: 16px -28px;
       font-size: .88rem;
       color: var(--blue-dark);
-      font-weight: 700;
-      line-height: 1.6;
-      margin: 16px 0;
+      font-weight: 400;
+      line-height: 1.75;
     }
     .intro-btn {
       display: block;
@@ -1095,7 +1323,7 @@
       gap: 12px;
     }
     @media (max-width: 600px) { .team-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 480px) { .page { padding-inline: 8px; } }
+    @media (max-width: 480px) { .page { padding-inline: 8px; } .topbar-row, .step-nav { padding-inline: 8px; } }
     .team-card {
       background: white;
       border: 2px solid var(--blue-main);
@@ -1116,26 +1344,28 @@
     .team-card-desc { font-size: .78rem; color: var(--text-muted); line-height: 1.4; }
     .team-card-status { font-size: .72rem; font-weight: 800; color: var(--text-muted); margin-top: 2px; }
     .team-card-status.active { color: var(--green); }
-    /* צורות ייחודיות לפי סוג — להסרה קלה */
-    .team-card--ai { border-radius: 16px; border-width: 2.5px; border-color: var(--blue-main); }
-    .team-card--ai:hover { box-shadow: 0 8px 20px rgba(29,95,167,.18); }
-    .team-card--imitation { border-radius: 4px; border-color: #7c3aed; border-left: 4px solid #7c3aed; }
-    .team-card--imitation .team-card-name { color: #5b21b6; }
-    .team-card--imitation:hover { box-shadow: 0 8px 20px rgba(124,58,237,.18); }
+    /* כל כרטיסי הנבחרות — עיצוב אחיד עם גוונים שונים לפי טאב */
+    .team-card--ai        { border-radius: 16px; border: 2px solid #1d5fa7; }
+    .team-card--ai:hover  { box-shadow: 0 8px 20px rgba(29,95,167,.18); }
+    .team-card--ai .team-card-name { color: #12355b; }
+
+    .team-card--imitation { border-radius: 16px; border: 2px solid #4f46e5; }
+    .team-card--imitation .team-card-name { color: #3730a3; }
+    .team-card--imitation:hover { box-shadow: 0 8px 20px rgba(79,70,229,.18); }
     .rank-section--ai { border-color: var(--blue-main); border-width: 2px; border-radius: 20px; }
     .rank-section--ai .rank-section-header { border-radius: 18px 18px 0 0; }
     .rec-type-card--special { border-radius: 14px; border-color: #b45309; border-left: 5px solid #b45309; background: #fffaf0; }
     .rec-type-card--special .rec-type-title { color: #92400e; }
     .rec-type-card--special .rec-type-arrow { color: #b45309; }
     .rec-type-card--special:hover { border-color: #92400e; box-shadow: 0 12px 28px rgba(180,83,9,.18); }
-    .team-card--special { border-radius: 14px; border-color: #b45309; border-left: 4px solid #b45309; background: #fffaf0; }
-    .team-card--special .team-card-name { color: #92400e; }
-    .team-card--special:hover { box-shadow: 0 8px 20px rgba(180,83,9,.18); }
+    .team-card--special { border-radius: 16px; border: 2px solid #0891b2; background: white; }
+    .team-card--special .team-card-name { color: #0c4a6e; }
+    .team-card--special:hover { box-shadow: 0 8px 20px rgba(8,145,178,.18); }
     .rank-section--special { border-color: #b45309; border-width: 2px; border-radius: 14px; }
     .rank-section--imitation { border-color: #7c3aed; border-width: 2px; border-radius: 4px; border-left: 5px solid #7c3aed; }
 
     /* ── Modal ── */
-    .mbk{display:none;position:fixed;inset:0;background:rgba(23,32,51,.45);z-index:10;align-items:center;justify-content:center;padding:16px}
+    .mbk{display:none;position:fixed;inset:0;background:rgba(23,32,51,.45);z-index:200;align-items:center;justify-content:center;padding:16px}
     .mbk.open{display:flex}
     .mbox{background:#fff;border-radius:22px;padding:22px;max-width:680px;width:100%;max-height:88vh;overflow:auto;box-shadow:0 28px 70px rgba(16,24,40,.25)}
     .mhdr{display:flex;justify-content:space-between;gap:12px;padding-bottom:12px;border-bottom:1px solid var(--border-soft);margin-bottom:14px}
@@ -1360,9 +1590,18 @@
     background: #f0f6ff;
   }
   /* תצוגת נושאים: כותרת ממורכזת ומעט גדולה יותר, ללא "זמינה" */
-  .team-card--ai, .team-card--special { text-align: center; }
-  .team-card--ai .team-card-name, .team-card--special .team-card-name { font-size: 1.05rem; }
-  .team-card--ai .team-card-status, .team-card--special .team-card-status { display: none; }
+  .team-card--ai, .team-card--special, .team-card--imitation { text-align: right; }
+  .team-card--ai .team-card-name,
+  .team-card--special .team-card-name,
+  .team-card--imitation .team-card-name { font-size: 1.05rem; font-weight: 900; }
+  .team-card--ai .team-card-desc,
+  .team-card--special .team-card-desc,
+  .team-card--imitation .team-card-desc { text-align: right; font-size: .82rem; }
+  .team-card--ai .team-card-status, .team-card--special .team-card-status,
+  .team-card--imitation .team-card-status { display: none; }
+  /* נושאים אחרים: special (blue) first, imitation (purple) after */
+  .team-card[data-rec-type="special_topics"] { order: 1; }
+  .team-card[data-rec-type="imitation"] { order: 2; }
   .topic-my-count {
     font-size: .68rem;
     font-weight: 700;
@@ -1406,7 +1645,141 @@
     margin-bottom: 5px;
     display: inline-block;
   }
+  
+    .step-item { cursor: pointer; }
+    .step-item.locked { cursor: not-allowed; }
+    .step-item.locked .step-dot { background: rgba(255,255,255,.10); }
+    .step-item.locked .step-lbl { color: rgba(255,255,255,.18); }
+
+    /* ── ועדה מסדרת — CSS ── */
+    :root {
+      --bg-sepia-dark:   #6b5232;
+      --bg-sepia-main:   #8b6f47;
+      --bg-sepia-soft:   #f6efe2;
+      --bg-sepia-border: #d9c9a8;
+      --rb-blue-dark:    #123a6b;
+      --rb-blue-main:    #1d5fa7;
+      --rb-blue-soft:    #e9f1fb;
+      --rb-blue-border:  #b9d1ec;
+    }
+    .cm-story {
+      background: white; border: 1px solid var(--border-soft);
+      border-radius: var(--radius-medium); padding: 16px 20px;
+      color: var(--text-main); font-size: .98rem;
+      box-shadow: var(--shadow-soft); margin-bottom: 12px;
+    }
+    .cm-disclaimer {
+      background: #fff8e1; border: 1.5px solid #fbbf24;
+      border-radius: var(--radius-small); padding: 10px 16px;
+      font-size: .85rem; color: #92400e; font-weight: 600; margin-top: 20px;
+    }
+    .committee-tabs {
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 10px; margin-bottom: 26px;
+    }
+    .ctab {
+      display: flex; align-items: center; gap: 10px;
+      border: 2px solid var(--border-soft); border-radius: var(--radius-small);
+      background: white; padding: 7px 12px; cursor: pointer; text-align: right;
+      transition: transform .16s, box-shadow .16s, border-color .16s; position: relative; min-width: 0;
+    }
+    .ctab:hover { transform: translateY(-2px); box-shadow: var(--shadow-soft); }
+    .ctab .ctab-title { font-weight: 900; font-size: .92rem; color: var(--blue-dark); line-height: 1.25; white-space: nowrap; }
+    .ctab .ctab-sub   { font-size: .7rem; color: var(--text-muted); font-weight: 600; line-height: 1.3; }
+    .ctab--bg.active, .ctab--bg:hover { border-color: var(--bg-sepia-main); }
+    .ctab--bg.active { background: var(--bg-sepia-soft); box-shadow: 0 6px 20px rgba(139,111,71,.18); }
+    .ctab--rb.active, .ctab--rb:hover { border-color: var(--rb-blue-main); }
+    .ctab--rb.active { background: var(--rb-blue-soft); box-shadow: 0 6px 20px rgba(29,95,167,.16); }
+    .ctab-portrait {
+      width: 34px; height: 34px; border-radius: 50%;
+      object-fit: cover; object-position: top; border: 2px solid var(--border-soft);
+      display: block; flex-shrink: 0;
+    }
+    .ctab--bg .ctab-portrait { border-color: var(--bg-sepia-main); filter: sepia(.25); }
+    .ctab--rb .ctab-portrait { border-color: var(--rb-blue-main); }
+    .committee-view { display: none; }
+    .committee-view.active { display: block; }
+    .cm-quote-row {
+      display: flex; align-items: flex-start; gap: 18px;
+      border-radius: var(--radius-medium); padding: 18px 22px; margin-bottom: 10px;
+    }
+    .view--bg .cm-quote-row { background: var(--bg-sepia-soft); border: 1.5px solid var(--bg-sepia-border); }
+    .view--rb .cm-quote-row { background: var(--rb-blue-soft); border: 1.5px solid var(--rb-blue-border); }
+    .cm-portrait-box { flex-shrink: 0; text-align: center; width: 108px; }
+    .cm-portrait-box img {
+      width: 108px; height: 108px; border-radius: 50%;
+      object-fit: cover; object-position: top;
+      box-shadow: 0 6px 18px rgba(0,0,0,.18); display: block;
+    }
+    .view--bg .cm-portrait-box img { border: 3px solid var(--bg-sepia-main); filter: sepia(.25); }
+    .view--rb .cm-portrait-box img { border: 3px solid var(--rb-blue-main); }
+    .cm-portrait-caption { font-size: .64rem; color: var(--text-muted); line-height: 1.35; margin-top: 6px; font-weight: 600; }
+    .cm-quote {
+      font-size: 1.02rem; font-weight: 600; line-height: 1.75;
+      position: relative; padding-top: 6px;
+    }
+    .cm-quote::before { content: "\201C"; position: absolute; top: -14px; right: -6px; font-size: 2.6rem; opacity: .25; font-family: Georgia, serif; }
+    .view--bg .cm-quote { color: #4a3a22; }
+    .view--rb .cm-quote { color: #12355b; }
+    .cm-chair-card {
+      display: flex; align-items: center; gap: 12px; background: white;
+      color: var(--text-main); border: 1px solid var(--border-soft);
+      border-radius: var(--radius-medium); padding: 12px 14px;
+      max-width: 500px; margin: 0 auto 18px; box-shadow: var(--shadow-soft);
+    }
+    .cm-chair-card img, .cm-chair-card .cm-photo-fb {
+      width: 52px; height: 52px; border-radius: 50%; object-fit: cover;
+      border: 2px solid var(--border-soft); background: var(--blue-soft);
+      display: grid; place-items: center; font-size: 1.4rem; flex-shrink: 0;
+    }
+    .cm-chair-kicker { font-size: .72rem; font-weight: 700; letter-spacing: .04em; color: var(--text-muted); }
+    .cm-chair-name   { font-size: 1rem; font-weight: 800; color: var(--blue-dark); line-height: 1.3; }
+    .cm-chair-note   { font-size: .78rem; color: var(--text-muted); }
+    .cabinet-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 14px; margin-bottom: 18px;
+    }
+    .seat {
+      background: white; border: 1.5px solid var(--border-soft);
+      border-radius: var(--radius-medium); padding: 12px 14px;
+      display: flex; flex-direction: column; gap: 8px;
+      transition: transform .15s, box-shadow .15s;
+    }
+    .seat:hover { transform: translateY(-2px); box-shadow: var(--shadow-soft); }
+    .seat-role {
+      display: inline-block; align-self: flex-start; font-size: .74rem;
+      font-weight: 900; padding: 3px 11px; border-radius: 999px; letter-spacing: .01em;
+    }
+    .view--bg .seat      { border-color: var(--bg-sepia-border); background: #fffdf8; }
+    .view--bg .seat-role { background: var(--bg-sepia-soft); color: var(--bg-sepia-dark); border: 1px solid var(--bg-sepia-border); }
+    .view--rb .seat      { border-color: var(--rb-blue-border); background: #fbfdff; }
+    .view--rb .seat-role { background: var(--rb-blue-soft); color: var(--rb-blue-dark); border: 1px solid var(--rb-blue-border); }
+    .seat-person { display: flex; align-items: center; gap: 12px; }
+    .seat-person img, .seat-person .cm-photo-fb {
+      width: 52px; height: 52px; border-radius: 50%; object-fit: cover;
+      flex-shrink: 0; border: 2px solid var(--border-soft);
+      background: var(--blue-soft); display: grid; place-items: center; font-size: 1.4rem;
+    }
+    .seat-name   { font-size: 1.08rem; font-weight: 900; color: var(--blue-dark); line-height: 1.3; }
+    .seat-reason { font-size: .88rem; color: var(--text-main); line-height: 1.6; }
+    .cm-composition-note {
+      font-size: .84rem; color: var(--text-muted); background: white;
+      border: 1px dashed var(--border-soft); border-radius: var(--radius-small);
+      padding: 9px 14px; margin-bottom: 8px;
+    }
+    @media (max-width: 720px) {
+      .ctab .ctab-title { white-space: normal; }
+      .cabinet-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 560px) {
+      .cm-quote-row { flex-direction: column; align-items: center; }
+      .cm-quote { text-align: center; }
+      .cm-quote::before { display: none; }
+    }
   </style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="page">
@@ -1419,93 +1792,103 @@
   gtag('js', new Date());
   gtag('config', 'G-TJNJTZQF1F');
 </script>
-      <div style="display:flex;flex-direction:column;width:100%;gap:2px">
-        <div style="display:flex;align-items:center;justify-content:space-between">
-          <a class="brand" href="dbr_P_01_index.html" style="min-width:0;flex-shrink:1">
-            <span class="brand-mark">ד.ב.ר</span>
-            <span>דמוקרטים בוחרים רציונלית</span>
-          </a>
-          <a id="back-btn" onclick="handleBack()" style="font-size:1.8rem;text-decoration:none;line-height:1;flex-shrink:0;cursor:pointer">⬅️</a>
+      <div class="topbar-row">
+        <div class="brand">
+          <span class="brand-mark">ד.ב.ר</span>
+          <span>דמוקרטים בוחרים רציונלית</span>
         </div>
-        <div style="text-align:center;font-size:.72rem;color:var(--text-muted)">© 2026 Silvertel Online ltd | כל הזכויות שמורות | ver_p01_t02</div>
+        <a href="dbr_P_01_process.html" style="color:rgba(255,255,255,.65);font-size:.85rem;font-weight:600;text-decoration:none;flex-shrink:0">☰</a>
+      </div>
+      <div class="step-nav">
+        <div class="step-item done" onclick="navToStep(1)">
+          <div class="step-dot"></div>
+          <div class="step-lbl">נקודת הפתיחה</div>
+        </div>
+        <div class="step-line done"></div>
+        <div class="step-item active" onclick="navToStep(2)">
+          <div class="step-dot"></div>
+          <div class="step-lbl">משחק הכסאות</div>
+        </div>
+        <div class="step-line"></div>
+        <div class="step-item" id="step3-nav" onclick="navToStep(3)">
+          <div class="step-dot"></div>
+          <div class="step-lbl">פתק הבחירה</div>
+        </div>
       </div>
     </header>
 
     <!-- Intro overlay — first visit -->
-    <div id="intro-overlay" class="intro-overlay" style="display:none">
-      <div class="intro-card">
-        <h2>משחק הבחירה</h2>
-        <p>במסך הזה אתם בונים את רשימת המועמדים שלכם דרך נבחרות פתיחה שונות.</p>
-        <p>כל נבחרת מציגה עד 20 מועמדים לפי זווית בחירה מסוימת — המבוססת על דיוקנאות המועמדים, על פי הרזומה שלהם והמוטיבציה שלהם לתפקידם הציבורי הבכיר. תוכלו להחליף בין נבחרות באמצעות הרשימה הנפתחת שבראש המסך.</p>
-        <p>איך עובדים במסך:</p>
-        <ul>
-          <li>להוספת מועמד מהנבחרת — לחצו על שמו. שמו יופיע בכחול כהה ומודגש.</li>
-          <li>מועמדים שבחרתם ואינם כלולים בנבחרת יופיעו בסוף רשימת הדירוג, בעמודה השמאלית.</li>
-          <li>להסרת מועמד — לחצו שוב על שמו. הסרה כאן מבטלת את בחירתו בכל המסכים.</li>
-          <li>לצפייה בכרטיס המועמד של הנבחרת — לחצו על 📋.</li>
+    <div id="intro-overlay" class="intro-overlay" style="display:none" onclick="if(event.target===this)dismissIntro()">
+      <div class="intro-card" onclick="event.stopPropagation()">
+        <h2 style="text-align:center">שלב 2/3 - משחק הכסאות</h2>
+
+        <p><strong>המטרה:</strong> הרחבה, החלפה, צמצום הבחירות שלך בעזרת נקודת מבט ממוקדת לפי תחומי העשייה והייצוג שמעניינים אותך.</p>
+
+        <p><strong>מה עושים?</strong> מדפדפים! בין הלשוניות ובין הנושאים שמעניינים אותך בכל לשונית. לחיצה על נושא תפתח רשימת מועמדים.</p>
+
+        <div class="intro-note">
+          <p style="margin:0 0 8px"><strong>ותכלס?!</strong> נבחרי נקודת הפתיחה כבר ממתינים לך ברשימות. ניתן להוסיף ולהסיר מועמדים ע"י לחיצה על שמם. <strong>יש להגיע ל-6–12 בחירות בסך הכל.</strong></p>
+          <p style="margin:0"><strong>חשוב!</strong> הסרת מועמד מסירה אותו מכל בחירה קודמת שלך, גם מנקודת הפתיחה, אלא אם נבחר כ<span style="color:#C9A017">ודאי</span>, ואז אינו בר-הסרה.</p>
+        </div>
+
+        <p><strong>איך נבנו הרשימות?</strong> ע"י סקירה מקיפה של רזומה המועמדים וניתוח רב-שלבי אחוד שנותן סיווג לרמת הזיקה של המועמד לכל נושא + ניקוד משוקלל.</p>
+
+        <p><strong>ואיך להבין רשימה?</strong> רשימה מציגה עד 24 מועמדים בעלי הניקוד המשוקלל הגבוה ביותר בנושא, בסדר יורד של הניקוד. לצד כל מועמד מופיע גם סיווג הזיקה הישירה שלו לתחום על פי מקרא.</p>
+
+        <button class="intro-btn" onclick="dismissIntro()">הבנתי, אפשר להמשיך</button>
+      </div>
+    </div>
+
+    <!-- סרגל סטטוס + לשוניות — sticky -->
+    <div class="sticky-controls">
+      <div class="sim-status-bar" id="sim-status-bar">
+        <div style="display:flex;flex-direction:column;align-items:flex-start;flex-shrink:0;justify-content:space-between">
+          <div style="display:flex;align-items:center;gap:4px">
+            <button class="sim-bar-help" onclick="document.getElementById('intro-overlay').style.display=''" title="הסבר">ⓘ</button>
+            <span class="sim-bar-title">משחק הכסאות</span>
+          </div>
+          <span id="sim-lock-hint" style="font-size:.68rem;color:var(--text-muted);font-weight:600;white-space:nowrap"><span style="color:#dc2626">⚠</span> בחרו 6-12 לקראת סיום</span>
+        </div>
+        <div id="sim-status-mid" style="flex:1;min-width:0;padding:0 22px 0 12px;display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between">
+          <div class="sim-bar-count">
+            <strong id="sim-total-count">0</strong> נבחרים
+          </div>
+          <div class="sim-bar-detail">
+            <strong id="sim-origin-count">0</strong> בפתיחה, <strong id="sim-added-count">0</strong> נוספו
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0;align-self:center">
+          <button class="sim-next-btn" id="sim-next-btn" onclick="goToFilterChecked()">פתק הבחירה</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- מסגרת בולטת, מופרדת מהכותרת — הלשוניות וכל התוכן שמתחתן -->
+    <div class="tabs-frame">
+      <div class="rec-tabs" id="rec-tabs">
+        <button class="rec-tab" id="tab-historical_sim" onclick="switchTab(this,'historical_sim')">סימולציה היסטורית</button>
+        <button class="rec-tab"        id="tab-ai_squads"      onclick="switchTab(this,'ai_squads')">נושאי ליבה</button>
+        <button class="rec-tab"        id="tab-other_topics"   onclick="switchTab(this,'other_topics')">נושאים אחרים</button>
+        <button class="rec-tab soon">נבחרות מהשטח</button>
+      </div>
+
+      <div class="empty-state" id="tabs-empty-state">
+        <div class="empty-icon">👆</div>
+        <h2>בחרו כיצד להתחיל</h2>
+        <p style="margin-bottom:8px">לחצו על אחת הלשוניות למעלה:</p>
+        <ul style="text-align:start;max-width:420px;margin:0 auto;padding-inline-start:20px;color:var(--text-muted);font-size:.97rem;line-height:1.6">
+          <li>סימולציה היסטורית כדוגמא לסימולציה שהבינות עשו.</li>
+          <li>נושאי ליבה או נושאים אחרים, כדי לראות את הנבחרות והמועמדים ולהמשיך לשחק.</li>
         </ul>
-        <p>בכל רגע תוכלו ללחוץ על «הצגת פתק הבחירה» כדי לראות כיצד תיראה הרשימה שבניתם.</p>
-        <div class="intro-note">הנבחרות הן נקודת פתיחה למשחק הבחירה.<br>ההחלטה הסופית נשארת שלכם.</div>
-        <button class="intro-btn" onclick="dismissIntro()">הבנתי, נתחיל</button>
       </div>
-    </div>
-
-    <section class="page-title">
-      <h1>בחרו זווית התחלה <button id="desc-toggle-btn" onclick="toggleScreenDesc()" title="הסבר על המסך" style="display:none;background:none;border:none;cursor:pointer;font-size:1.3rem;vertical-align:middle;padding:0 2px;line-height:1;color:#f59e0b;transition:color .2s">ⓘ</button></h1>
-      <p id="screen-desc">בחרו זווית התחלה — כל מסלול מציג דרך אחרת להכיר את המועמדים ו"לשחק" עם בחירתכם.</p>
-    </section>
-
-    <!-- בחירת סוג המלצה -->
-    <div class="rec-type-picker" id="rec-type-picker">
-      <div class="rec-type-grid">
-
-        <div class="rec-type-card rec-type-card--ai" onclick="selectRecType('ai_squads')">
-          <div class="rec-type-icon">🧠</div>
-          <div class="rec-type-title">מסלול נושאי הליבה</div>
-          <div class="rec-type-desc">תשעה נושאי ליבה של המפלגה — דמוקרטיה, כלכלה, ביטחון ועוד. בכל נושא מדורגים המועמדים לפי זיקתם לנושא — כמה הוא מרכזי בדרכם הציבורית — לצד היכרות כללית עם הרקע שלהם.</div>
-          <div class="rec-type-arrow">←</div>
-        </div>
-
-        <div class="rec-type-card rec-type-card--imitation" onclick="selectRecType('imitation')">
-          <div class="rec-type-icon">👥</div>
-          <div class="rec-type-title">סימולציית נבחרות</div>
-          <div class="rec-type-desc">מסלולים המדמים נקודות מבט שונות — מטבח המפלגה, בוחרי הצפון, או בחירה אקראית-משחקית.</div>
-          <div style="font-size:.78rem;font-weight:800;color:var(--blue-main);margin-top:2px">3 נבחרות זמינות</div>
-          <div class="rec-type-arrow">←</div>
-        </div>
-
-        <div class="rec-type-card rec-type-card--imitation" onclick="window.location.href='dbr_P_01_committee.html'">
-          <div class="rec-type-icon">🏛️</div>
-          <div class="rec-type-title">הוועדה המסדרת</div>
-          <div class="rec-type-desc">שתי סימולציות היסטוריות: בן־גוריון 1948 ורבין 1992 מרכיבים קבינט של תריסר מתוך המועמדים — ומסך השוואה ביניהן.</div>
-          <div style="font-size:.78rem;font-weight:800;color:var(--blue-main);margin-top:2px">2 ועדות + השוואה</div>
-          <div class="rec-type-arrow">←</div>
-        </div>
-
-        <div class="rec-type-card rec-type-card--special" onclick="selectRecType('special_topics')">
-          <div class="rec-type-icon">🎯</div>
-          <div class="rec-type-title">העמקה בנושאים ייחודיים</div>
-          <div class="rec-type-desc">מסלולי עומק סביב סוגיות ציבוריות מסוימות, שאינן תמיד מקבלות ביטוי מלא בחלוקה הכללית לנושאים.</div>
-          <div style="font-size:.78rem;font-weight:800;color:#b45309;margin-top:2px">4 נבחרות זמינות</div>
-          <div class="rec-type-arrow">←</div>
-        </div>
-
-        <div class="rec-type-card soon">
-          <div class="rec-type-icon">🌟</div>
-          <div class="rec-type-title">נבחרות מהשטח</div>
-          <div class="rec-type-desc">נבחרות שירכיבו בהמשך אנשים, קבוצות או גורמים ציבוריים מזוהים.</div>
-          <div class="rec-type-badge">בקרוב</div>
-        </div>
-
-      </div>
-    </div>
 
     <!-- בחירת נבחרת -->
     <div class="team-picker" id="team-picker" style="display:none">
       <div class="team-grid">
         <div class="team-card team-card--imitation" data-rec-type="imitation" onclick="selectTeam('dbr1')">
           <div class="team-card-name">נבחרת מטבח המפלגה</div>
-          <div class="team-card-desc">כך נראית הנבחרת כשהבינה לובשת את כובע מקבלי ההחלטות במפלגה ומאזנת בין מועמדים, ייצוג ואינטרסים.</div>
+          <div style="font-size:.72rem;color:var(--text-muted);font-weight:700;margin-top:1px">(סימולציית בינה מלאכותית)</div>
+          <div class="team-card-desc">הבינה לובשת את כובע מקבלי ההחלטות במפלגה ומאזנת בין מועמדים, ייצוג ואינטרסים</div>
           <div class="team-card-status active">✓ זמינה</div>
         </div>
         <div class="team-card team-card--imitation" data-rec-type="imitation" onclick="selectTeam('meretz')">
@@ -1516,129 +1899,123 @@
         </div>
         <!-- נבחרות נושאיות — פעילות, מבוססות נתוני main_teams.csv -->
         <div class="team-card team-card--ai" data-rec-type="ai_squads" onclick="selectTeam('law_democracy')">
-          <div class="team-card-name">שלטון החוק והדמוקרטיה</div>
-          <div class="team-card-desc">שמירה על מערכת המשפט, איזונים ובלמים וטוהר השלטון.</div>
+          <div class="team-card-name">דמוקרטיה ושלטון החוק</div>
+          <div class="team-card-desc">שמירה על מערכת המשפט, איזונים ובלמים וטוהר השלטון</div>
           <div class="team-card-status active">✓ זמינה</div>
         </div>
         <div class="team-card team-card--ai" data-rec-type="ai_squads" onclick="selectTeam('cost_of_living')">
-          <div class="team-card-name">יוקר המחיה והביטחון הכלכלי</div>
-          <div class="team-card-desc">הורדת יוקר המחיה, חיזוק מעמד הביניים וביטחון כלכלי למשפחות.</div>
+          <div class="team-card-name">בטחון כלכלי</div>
+          <div class="team-card-desc">הורדת יוקר המחיה, חיזוק מעמד הביניים וביטחון כלכלי למשפחות</div>
           <div class="team-card-status active">✓ זמינה</div>
         </div>
         <div class="team-card team-card--ai" data-rec-type="ai_squads" onclick="selectTeam('peace_security')">
-          <div class="team-card-name">שלום וביטחון לאומי</div>
-          <div class="team-card-desc">מדיניות חוץ וביטחון — אחריות לשלום לצד הגנה על המדינה.</div>
+          <div class="team-card-name">מדיניות חוץ ובטחון</div>
+          <div class="team-card-desc">אחריות לשלום לצד הגנה מקיפה</div>
           <div class="team-card-status active">✓ זמינה</div>
         </div>
         <div class="team-card team-card--ai" data-rec-type="ai_squads" onclick="selectTeam('jewish_arab')">
           <div class="team-card-name">שותפות יהודית-ערבית</div>
-          <div class="team-card-desc">שוויון אזרחי ושותפות אמיתית בין יהודים לערבים בחברה ובפוליטיקה.</div>
+          <div class="team-card-desc">שוויון אזרחי ושותפות אמיתית בין יהודים לערבים בחברה ובפוליטיקה</div>
           <div class="team-card-status active">✓ זמינה</div>
         </div>
         <div class="team-card team-card--ai" data-rec-type="ai_squads" onclick="selectTeam('negev_galil')">
           <div class="team-card-name">פיתוח הנגב והגליל</div>
-          <div class="team-card-desc">צמצום פערים, פיתוח הפריפריה וחיזוק השלטון המקומי.</div>
+          <div class="team-card-desc">צמצום פערים, פיתוח הפריפריה וחיזוק השלטון המקומי</div>
           <div class="team-card-status active">✓ זמינה</div>
         </div>
         <div class="team-card team-card--imitation" data-rec-type="imitation" onclick="selectTeam('north')">
           <div class="team-card-name">נבחרת בוחרי הצפון</div>
-          <div style="font-size:.72rem;color:var(--text-muted);font-weight:700;margin-top:1px">(סימולציה)</div>
-          <div class="team-card-desc">דגש על הצרכים הספציפים של תושבי הצפון שנשכחו</div>
+          <div style="font-size:.72rem;color:var(--text-muted);font-weight:700;margin-top:1px">(סימולציית בינה מלאכותית)</div>
+          <div class="team-card-desc">דגש על הצרכים היחודיים והדחופים של תושבי הצפון האמיצים והנחושים שנשכחו</div>
           <div class="team-card-status active">✓ זמינה</div>
         </div>
         <div class="team-card team-card--ai" data-rec-type="ai_squads" onclick="selectTeam('religion_state')">
           <div class="team-card-name">הפרדת הדת מהמדינה</div>
-          <div class="team-card-desc">חופש דת ומצפון והפרדה הוגנת בין דת למדינה.</div>
+          <div class="team-card-desc">חופש דת ומצפון והפרדה הוגנת בין דת למדינה</div>
           <div class="team-card-status active">✓ זמינה</div>
         </div>
         <div class="team-card team-card--ai" data-rec-type="ai_squads" onclick="selectTeam('next_generation')">
           <div class="team-card-name">הדור הבא והצעירים</div>
-          <div class="team-card-desc">חינוך, דיור והזדמנויות לדור הצעיר ולמשפחות צעירות.</div>
+          <div class="team-card-desc">חינוך, דיור והזדמנויות לדור הצעיר ולמשפחות צעירות</div>
           <div class="team-card-status active">✓ זמינה</div>
         </div>
         <div class="team-card team-card--ai" data-rec-type="ai_squads" onclick="selectTeam('education')">
           <div class="team-card-name">חינוך ואזרחות</div>
-          <div class="team-card-desc">מדיניות חינוך, ליבה משותפת ואזרחות — מי מוביל בשטח ובמדיניות.</div>
+          <div class="team-card-desc">מדיניות חינוך, ליבה משותפת ואזרחות</div>
           <div class="team-card-status active">✓ זמינה</div>
         </div>
         <div class="team-card team-card--ai" data-rec-type="ai_squads" onclick="selectTeam('directors')">
-          <div class="team-card-name">דירקטורים / הנהגה / יכולת ניהול ציבורית</div>
-          <div class="team-card-desc">דגש על ניסיון ניהולי, יכולת ביצוע והנהגה ציבורית.</div>
+          <div class="team-card-name">הנהגה /  ניהול ציבורי / דירקטוריון</div>
+          <div class="team-card-desc">הנהגה, ניסיון ניהולי ויכולת ביצוע</div>
           <div class="team-card-status active">✓ זמינה</div>
         </div>
         <div class="team-card team-card--ai" data-rec-type="ai_squads" onclick="selectTeam('green_social')">
-          <div class="team-card-name">ירוק-חברתי / סביבה וחברה</div>
-          <div class="team-card-desc">שילוב של צדק סביבתי, אקלים וצדק חברתי.</div>
+          <div class="team-card-name">סביבה וחברה</div>
+          <div class="team-card-desc">אקלים, צדק סביבתי, צדק חברתי</div>
           <div class="team-card-status active">✓ זמינה</div>
         </div>
         <!-- נבחרות ייחודיות — מוסתרות, יופעלו בשלב הבא -->
         <div class="team-card team-card--special" data-rec-type="special_topics" onclick="selectTeam('human_rights_territories')">
           <div class="team-card-name">זכויות אדם בשטחים</div>
-          <div class="team-card-desc">נוכחות מגינה, הגנה משפטית וציבורית על פלסטינים, תיעוד והתייצבות מול אלימות מתנחלים ופגיעות בזכויות אדם.</div>
+          <div class="team-card-desc">נוכחות מגינה, הגנה משפטית וציבורית על פלסטינים, תיעוד והתייצבות מול אלימות מתנחלים ופגיעות בזכויות אדם</div>
           <div class="team-card-status active">✓ זמינה</div>
         </div>
         <div class="team-card team-card--special" data-rec-type="special_topics" onclick="selectTeam('gender_equality')">
           <div class="team-card-name">שוויון מגדרי</div>
-          <div class="team-card-desc">מי לקח/ה את המשימה הרחבה של שוויון מגדרי — בדיבור ובמעשה: חקיקה, ארגון, מאבק ציבורי עקבי.</div>
-          <div class="team-card-status active">✓ זמינה</div>
-        </div>
-        <div class="team-card team-card--special" data-rec-type="special_topics" onclick="selectTeam('democratic_protest')">
-          <div class="team-card-name">המחאה הדמוקרטית</div>
-          <div class="team-card-desc">מי לקח/ה חלק ממשי במחאה הדמוקרטית — ברחוב, בכנסת, בבתי המשפט ובחברה האזרחית — מאז ינואר 2023 ועד היום.</div>
+          <div class="team-card-desc">חקיקה, מאבק ציבורי, הגברת מודעות</div>
           <div class="team-card-status active">✓ זמינה</div>
         </div>
         <div class="team-card team-card--special" data-rec-type="special_topics" onclick="selectTeam('health_and_welfare')">
           <div class="team-card-name">בריאות ורווחה</div>
-          <div class="team-card-desc">מומחיות ומעורבות ממשית בבריאות ורווחה — מערכת הבריאות, בריאות הנפש, סיעוד, מוגבלויות, עוני וביטחון סוציאלי.</div>
+          <div class="team-card-desc">בריאות הציבור, מדינת רווחה, צמצום פערים, שירותים ציבוריים וביטחון חברתי</div>
+          <div class="team-card-status active">✓ זמינה</div>
+        </div>
+        <div class="team-card team-card--special" data-rec-type="special_topics" onclick="selectTeam('democratic_protest')">
+          <div class="team-card-name">המחאה הדמוקרטית</div>
+          <div class="team-card-desc">נוכחות ומנהיגות במחאה נגד ההפיכה המשפטית, הגנה על זכות המחאה ופעילות פרלמנטרית וציבורית</div>
           <div class="team-card-status active">✓ זמינה</div>
         </div>
       </div>
     </div>
 
+    <!-- ── ועדה מסדרת — פאנל ── -->
+    <div id="committee-panel" style="display:none;">
+      <div class="cm-story" id="cm-story"></div>
+      <div id="cm-chair-slot"></div>
+      <div class="committee-tabs">
+        <button class="ctab ctab--bg active" id="ctab-bg1948" onclick="showCommitteeView('bg1948')">
+          <img class="ctab-portrait" src="images_new/דוד_בן_גוריון.webp" alt="דוד בן־גוריון" onerror="this.outerHTML='<span style=&quot;font-size:1.3rem&quot;>📜</span>'">
+          <div>
+            <div class="ctab-title">בן־גוריון · 1948</div>
+            <div class="ctab-sub">להקים מדינה על פי המגילה</div>
+          </div>
+        </button>
+        <button class="ctab ctab--rb" id="ctab-rabin1992" onclick="showCommitteeView('rabin1992')">
+          <img class="ctab-portrait" src="images_new/יצחק_רבין.webp" alt="יצחק רבין" onerror="this.outerHTML='<span style=&quot;font-size:1.3rem&quot;>🕊️</span>'">
+          <div>
+            <div class="ctab-title">רבין · 1992</div>
+            <div class="ctab-sub">סדר עדיפויות חדש</div>
+          </div>
+        </button>
+      </div>
+      <div class="committee-view view--bg active" id="cm-view-bg1948"></div>
+      <div class="committee-view view--rb" id="cm-view-rabin1992"></div>
+      <div class="cm-disclaimer" id="cm-disclaimer"></div>
+    </div>
+
     <!-- Ranking — two columns, all candidates -->
     <div id="ranking-section" class="rank-section" style="display:none;">
-      <div class="rank-section-header" style="gap:8px;padding:8px 10px;">
-        <button class="expand-btn" id="sq-zoom-out" onclick="squadZoomOut()" title="הקטן פונט" style="display:none">−</button>
-        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;">
-          <div id="squad-hdr-title" class="squad-hdr-title"></div>
-          <div class="squad-change-wrap">
-            <button class="squad-change-btn" type="button">↕ החלף מסלול</button>
-            <select id="team-select" onchange="onTeamChange()">
-              <option value="dbr1">נבחרת מטבח המפלגה</option>
-              <option value="meretz">נבחרת הקוף של המונדיאל</option>
-              <option value="north">נבחרת בוחרי הצפון</option>
-              <option value="law_democracy">שלטון החוק והדמוקרטיה</option>
-              <option value="religion_state">הפרדת הדת מהמדינה</option>
-              <option value="directors">דירקטורים / הנהגה</option>
-              <option value="green_social">ירוק-חברתי / סביבה וחברה</option>
-              <option value="jewish_arab">שותפות יהודית-ערבית</option>
-              <option value="cost_of_living">יוקר המחיה והביטחון הכלכלי</option>
-              <option value="peace_security">שלום וביטחון לאומי</option>
-              <option value="negev_galil">פיתוח הנגב והגליל</option>
-              <option value="next_generation">הדור הבא והצעירים</option>
-              <option value="education">חינוך ואזרחות</option>
-              <option value="human_rights_territories">זכויות אדם בשטחים</option>
-              <option value="gender_equality">שוויון מגדרי</option>
-              <option value="democratic_protest">המחאה הדמוקרטית</option>
-              <option value="health_and_welfare">בריאות ורווחה</option>
-            </select>
-          </div>
-        </div>
-        <button class="expand-btn" id="sq-zoom-in" onclick="squadZoomIn()" title="הגדל פונט" style="display:none">+</button>
-      </div>
       <!-- Summary bar -->
       <div id="summary-bar" class="summary-bar" style="display:none;">
         <span id="stat-total" style="display:none"></span>
         <span id="stat-picked" style="display:none"></span>
         <span id="stat-shiryun" style="display:none"></span>
         <div class="summary-pills">
-          <button class="expand-btn" id="zoom-out-btn" onclick="zoomOut()" title="הקטן פונט">−</button>
           <span class="pill" id="all-filter-btn" style="cursor:pointer;margin:0 auto" onclick="togglePickedFilter()"><span id="all-filter-label">הצגת פתק הבחירה</span></span>
           <span id="no-picks-hint" style="display:none;margin:0 auto;font-size:.85rem;color:var(--text-muted);text-align:center;font-family:inherit;">לחץ על השם לבחירה</span>
-          <button class="expand-btn" id="zoom-in-btn"  onclick="zoomIn()"  title="הגדל פונט">+</button>
+          <span id="pool-counter" style="display:none;font-size:.88rem;font-weight:800;color:var(--blue-main);border:1.5px solid #d7e3f3;border-radius:999px;padding:3px 10px;background:#f0f6ff;white-space:nowrap;"></span>
+          <button id="go-filter-btn" onclick="goToFilterChecked()" style="display:none;background:var(--blue-main);color:#fff;border:none;border-radius:9px;padding:7px 14px;font-size:.88rem;font-weight:700;cursor:pointer;white-space:nowrap;font-family:inherit;">← לפתק שלי</button>
         </div>
-        <span id="rank-meta-text" class="last-updated-text"></span>
-        <div id="rank-info-text" style="width:100%;font-size:.85rem;color:var(--text-muted);text-align:center;padding:4px 6px 0;border-top:1px solid var(--border-soft);margin-top:2px;display:none;"></div>
       </div>
       <div id="team-notice" class="dbr-notice" style="display:none;">
         <strong id="team-notice-name"></strong><br>
@@ -1646,6 +2023,31 @@
       </div>
       <div id="dbr1-content">
         <div class="rank-table-box">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 8px 10px;border-bottom:1px solid var(--border-soft);margin-bottom:8px;">
+            <div id="squad-hdr-title" class="squad-hdr-title"></div>
+            <div class="squad-change-wrap">
+              <button class="squad-change-btn" type="button">↕ החלף מסלול</button>
+              <select id="team-select" onchange="onTeamChange()">
+                <option value="dbr1">נבחרת מטבח המפלגה</option>
+                <option value="meretz">נבחרת הקוף של המונדיאל</option>
+                <option value="north">נבחרת בוחרי הצפון</option>
+                <option value="law_democracy">שלטון החוק והדמוקרטיה</option>
+                <option value="religion_state">הפרדת הדת מהמדינה</option>
+                <option value="directors">דירקטורים / הנהגה</option>
+                <option value="green_social">ירוק-חברתי / סביבה וחברה</option>
+                <option value="jewish_arab">שותפות יהודית-ערבית</option>
+                <option value="cost_of_living">יוקר המחיה והביטחון הכלכלי</option>
+                <option value="peace_security">שלום וביטחון לאומי</option>
+                <option value="negev_galil">פיתוח הנגב והגליל</option>
+                <option value="next_generation">הדור הבא והצעירים</option>
+                <option value="education">חינוך ואזרחות</option>
+                <option value="human_rights_territories">זכויות אדם בשטחים</option>
+                <option value="gender_equality">שוויון מגדרי</option>
+                <option value="health_and_welfare">בריאות ורווחה</option>
+                <option value="democratic_protest">המחאה הדמוקרטית</option>
+              </select>
+            </div>
+          </div>
           <div class="rank-columns">
             <div id="rank-col-1"></div>
             <div class="rank-divider"></div>
@@ -1658,6 +2060,7 @@
         </div>
       </div>
     </div>
+    </div> <!-- /.tabs-frame -->
 
     <!-- Modal הסבר בחירה -->
     <div id="reason-modal" class="reason-overlay" style="display:none;" onclick="closeReasonModal()">
@@ -1696,7 +2099,8 @@
     </div>
 
     <footer class="footer">
-      יישום תומך החלטה אישי, הנתונים נשמרים בדפדפן שלך בלבד. · v1.1
+      משחקי סימולציות לסיוע בתהליך הבחירה לפריימריז של מפלגת הדמוקרטים.<br>
+      הנתונים נשמרים מקומית בדפדפן שלכם ואינם נשלחים לשום גורם.
     </footer>
   </div>
 
@@ -1710,8 +2114,9 @@
       document.getElementById('intro-overlay').style.display = 'none';
       try { localStorage.setItem(INTRO_KEY, 'yes'); } catch(e) {}
     }
-    // הצג בכניסה ראשונה
-    if (localStorage.getItem(INTRO_KEY) !== 'yes') {
+    // הצג בכניסה ראשונה — למעט במסלול "פתק→נושא" (?editTopic), שם נכנסים ישר לטבלה
+    if (!new URLSearchParams(location.search).has('editTopic')
+        && localStorage.getItem(INTRO_KEY) !== 'yes') {
       document.getElementById('intro-overlay').style.display = '';
     }
 
@@ -1741,6 +2146,14 @@
     }
     function escapeHtml(s) {
       return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+    // עבור ערכים המוזרקים לתוך onclick="...('...')" — גרש גולמי בשם (כמו
+    // "בנימין מיניץ'") היה שובר את מחרוזת ה-JS. \' שורד את פענוח ה-HTML ומגיע
+    // ל-JS כברירה תקנית.
+    function jsAttr(s) {
+      return String(s || '')
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')
+        .replace(/\\/g,'\\\\').replace(/'/g,"\\'");
     }
 
     let state = loadState();
@@ -1865,7 +2278,8 @@
 
     // ── רינדור שתי עמודות — חצי ראשון / חצי שני ──
     function cleanPicks() {
-      /* הסר נבחרים שלא קיימים בדאטה */
+      /* הסר נבחרים שלא קיימים בדאטה — בטוח רק כשהדאטה נטענה */
+      if (rankList.length === 0) return;   // guard: אם הנתונים לא נטענו, אל תמחק בחירות
       state = loadState();
       const validNames = new Set(rankList.map(c => c.name));
       let changed = false;
@@ -1878,9 +2292,9 @@
       if (changed) saveState(state);
     }
 
-    /* גודל הנבחרת המוצגת. שאר הנבחרות = 20.
+    /* גודל הנבחרת המוצגת. נבחרת הצפון = 12, שאר הנבחרות = 20.
        נבחרים (shiryun) מעבר לגודל מתווספים עם קו מפריד, ללא מספר. */
-    function rankSlots() { return 20; }
+    function rankSlots() { return activeCommittee === 'north' ? 14 : 20; }
     function buildSlots(sorted, allPicks) {
       if (showAll) return sorted;
       const top = sorted.slice(0, rankSlots());
@@ -1907,9 +2321,11 @@
 
     function renderRanking() {
       state = loadState();
+      console.log('[DBR vadai]', JSON.stringify(state.vadai), '| shiryun:', JSON.stringify(state.shiryun));
       const allPicks = new Set([
         ...(state.shiryun || []),
-        ...(state.dbr_picks || [])
+        ...(state.dbr_picks || []),
+        ...(state.vadai || [])
       ]);
 
       const sorted = [...rankList].sort((a, b) => (b.scoreC ?? -1) - (a.scoreC ?? -1));
@@ -1958,6 +2374,14 @@
       if (stEl) stEl.textContent = shiryunCount;
       const sfBtn = document.getElementById('shiryun-filter-btn');
       if (sfBtn) sfBtn.style.display = shiryunCount > 0 ? '' : 'none';
+      // pool counter + go-to-filter button
+      const poolCounter = document.getElementById('pool-counter');
+      if (poolCounter) {
+        poolCounter.style.display = shiryunCount > 0 ? '' : 'none';
+        poolCounter.textContent = shiryunCount + '/' + currentCap() + ' בפול';
+      }
+      const goFilterBtn = document.getElementById('go-filter-btn');
+      if (goFilterBtn) goFilterBtn.style.display = shiryunCount > 0 ? '' : 'none';
 
       // טקסט מידע — כמה נבחרים בתוך/מחוץ ל-20
       const inTop = sorted.slice(0, rankSlots()).filter(c => allPicks.has(c.name)).length;
@@ -1991,8 +2415,8 @@
 
       expanded = false;
       document.getElementById('rank-col-2').style.display = '';
-      document.getElementById('zoom-out-btn').style.opacity = zoomLevel > 0 ? '1' : '0.3';
-      document.getElementById('zoom-in-btn').style.opacity  = zoomLevel < 3 ? '1' : '0.3';
+      const _zob = document.getElementById('zoom-out-btn'); if (_zob) _zob.style.opacity = zoomLevel > 0 ? '1' : '0.3';
+      const _zib = document.getElementById('zoom-in-btn');  if (_zib) _zib.style.opacity  = zoomLevel < 3 ? '1' : '0.3';
       const infoFontSizes = ['.85rem', '.92rem', '1rem', '1.1rem'];
       const infoEl = document.getElementById('rank-info-text');
       if (infoEl) infoEl.style.fontSize = infoFontSizes[zoomLevel];
@@ -2014,7 +2438,8 @@
       state = loadState();
       const allPicks = new Set([
         ...(state.shiryun || []),
-        ...(state.dbr_picks || [])
+        ...(state.dbr_picks || []),
+        ...(state.vadai || [])
       ]);
       const sorted = [...rankList].sort((a, b) => (b.scoreC ?? -1) - (a.scoreC ?? -1));
       sorted.forEach((c, i) => { c._origRank = i + 1; });
@@ -2041,6 +2466,12 @@
           infoEl.style.display = 'none';
         }
       }
+      // pool counter + go-to-filter button (expanded mode)
+      const _sc2 = (loadState().shiryun || []).length;
+      const _pc2 = document.getElementById('pool-counter');
+      if (_pc2) { _pc2.style.display = _sc2 > 0 ? '' : 'none'; _pc2.textContent = _sc2 + '/' + currentCap() + ' בפול'; }
+      const _gf2 = document.getElementById('go-filter-btn');
+      if (_gf2) _gf2.style.display = _sc2 > 0 ? '' : 'none';
     }
 
     let zipperMode = false;
@@ -2270,8 +2701,8 @@
       hosen: 'building', security: 'building', environment: 'building', future: 'building',
       human_rights_territories: 'active',
       gender_equality: 'active',
-      democratic_protest: 'active',
       health_and_welfare: 'active',
+      democratic_protest: 'active',
       education: 'active'
     };
     // מיפוי נבחרת → suffix בעמודות ה-CSV. נבחרת שאינה כאן משתמשת ב-'' (דבר1).
@@ -2301,8 +2732,8 @@
       education: 'חינוך ואזרחות',
       human_rights_territories: 'זכויות אדם בשטחים',
       health_and_welfare: 'בריאות ורווחה',
-      gender_equality: 'שוויון מגדרי',
-      democratic_protest: 'המחאה הדמוקרטית'
+      democratic_protest: 'המחאה הדמוקרטית',
+      gender_equality: 'שוויון מגדרי'
     };
 
     // ── נבחרות נושאיות — קונפיג + נתונים נטענים מ-main_teams ──
@@ -2353,7 +2784,7 @@
 
     let inRankingView = false;
 
-    let inRecTypePicker = true;  // true = מסך בחירת סוג המלצה מוצג
+    let inRecTypePicker = false;  // tabs always visible — no picker screen
 
     function notReady(el) {
       // ביפ שגיאה קצר
@@ -2379,22 +2810,149 @@
       }
     }
 
+    function switchTab(el, type) {
+      document.querySelectorAll('.rec-tab').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+      const emptyState = document.getElementById('tabs-empty-state');
+      if (emptyState) emptyState.style.display = 'none';
+      localStorage.setItem('primeris_last_tab', type);
+      // מסך בחירת נושא (לשוניות + גלריה) — אין בו בחירת מועמדים, אז אין סטטוס
+      setSelectionStatusVisible(false);
+      const committeePanel = document.getElementById('committee-panel');
+      if (type === 'historical_sim') {
+        committeePanel.style.display = '';
+        document.getElementById('team-picker').style.display = 'none';
+        document.getElementById('ranking-section').style.display = 'none';
+        inRankingView = false;
+        loadCommitteeData();
+      } else {
+        committeePanel.style.display = 'none';
+        selectRecType(type);
+      }
+      requestAnimationFrame(alignTabsSticky);
+    }
+
+    // מציג/מסתיר את כל שורת הכותרת (כותרת+מונה+אזהרה+כפתור "לשלב הבא") —
+    // מוצגת רק בתצוגת דירוג נושא; במסך בחירת נושא (לשוניות+גלריה) מיותרת
+    // כי כבר ברור שאנחנו במשחק הכסאות.
+    function setSelectionStatusVisible(show) {
+      const bar = document.getElementById('sim-status-bar');
+      if (bar) bar.style.display = show ? '' : 'none';
+      // שינוי גובה הכותרת → יישור מחדש של מיקום הלשוניות הדביקות
+      if (typeof alignTabsSticky === 'function') requestAnimationFrame(alignTabsSticky);
+    }
+
+    // ── ועדה מסדרת — רינדור ─────────────────────────────────────────
+    const CM_IMAGE_OVERRIDE = {
+      'ענבל וורטמן שהם': 'ענבל_וורטמן_שהם',
+      'עלי סלאלחה':      'עלי_סלאחלה',
+      'אמיר חניפס':      "אמיר_ח'ניפס",
+      'מהרטה ברוך רון':  'מהרטה_ברוך-רון'
+    };
+    const CM_WIKI_PHOTOS = {
+      'גלעד קריב':    'https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Gilad_Kariv_%28SHL_9093%29.jpg/250px-Gilad_Kariv_%28SHL_9093%29.jpg',
+      'יעל כהן-פארן': 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Yael_Cohen_Paran_%28IMG_0412%29.jpg/250px-Yael_Cohen_Paran_%28IMG_0412%29.jpg',
+      'ערן עציון':     'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Eran_Etzion.jpg/250px-Eran_Etzion.jpg',
+      'נמרוד שפר':     'https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Tat-Aluf_Nimrod_Shefer_1.jpg/250px-Tat-Aluf_Nimrod_Shefer_1.jpg',
+      'אבי דבוש':      'https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Avi_Dabush_2025a.jpg/250px-Avi_Dabush_2025a.jpg',
+      'נאור נרקיס':    'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Naor_Narkis_%28cropped%29.jpg/250px-Naor_Narkis_%28cropped%29.jpg',
+      'נעמה לזימי':    'https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Naama_lazimi_%28cropped%29.jpg/250px-Naama_lazimi_%28cropped%29.jpg',
+      'אפרת רייטן':    'https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Efrat_Rayten.jpg/250px-Efrat_Rayten.jpg',
+      'גבי לסקי':      'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Gaby_Lasky_180222_023_%28cropped%29.jpg/250px-Gaby_Lasky_180222_023_%28cropped%29.jpg',
+      'עלי סלאלחה':    'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Ali_Salalcha_%28salalja%29.jpg/250px-Ali_Salalcha_%28salalja%29.jpg',
+      'יאיא פינק':     'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Yaya_Fink_%28cropped%29.jpg/250px-Yaya_Fink_%28cropped%29.jpg',
+      'משה רדמן':      'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Moshe_Radman.png/250px-Moshe_Radman.png',
+      'רם שפע':        'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Ram_Shefa_%28SHL_8927%29.jpg/250px-Ram_Shefa_%28SHL_8927%29.jpg'
+    };
+
+    function cmPhotoHtml(name) {
+      const base = CM_IMAGE_OVERRIDE[name] || name.replace(/ /g, '_');
+      const local = 'images_new/' + base + '.webp';
+      const wiki = CM_WIKI_PHOTOS[name] || '';
+      const fb = `this.outerHTML='<div class=&quot;cm-photo-fb&quot; style=&quot;width:52px;height:52px;border-radius:50%;background:var(--blue-soft);display:grid;place-items:center;font-size:1.4rem;flex-shrink:0&quot;>👤</div>'`;
+      const chain = wiki ? `this.onerror=function(){${fb}};this.src='${wiki}'` : fb;
+      return `<img src="${local}" alt="${name}" loading="lazy" onerror="${chain}">`;
+    }
+
+    let cmData = null;
+
+    function loadCommitteeData() {
+      if (cmData) { renderCommitteePanel(); return; }
+      fetch('data/committees.json')
+        .then(r => r.json())
+        .then(d => { cmData = d; renderCommitteePanel(); })
+        .catch(() => { document.getElementById('cm-story').textContent = 'שגיאה בטעינת נתוני הוועדות'; });
+    }
+
+    function renderCommitteePanel() {
+      const d = cmData;
+      document.getElementById('cm-story').textContent = d.story;
+      document.getElementById('cm-disclaimer').textContent = '⚠️ ' + d.disclaimer;
+      const c = d.chair;
+      document.getElementById('cm-chair-slot').innerHTML = `
+        <div class="cm-chair-card">
+          ${cmPhotoHtml(c.name)}
+          <div>
+            <div class="cm-chair-kicker">${c.title}</div>
+            <div class="cm-chair-name">${c.name}</div>
+            <div class="cm-chair-note">${c.note}</div>
+          </div>
+        </div>`;
+      document.getElementById('cm-view-bg1948').innerHTML   = cmCommitteeHtml(d.committees.bg1948);
+      document.getElementById('cm-view-rabin1992').innerHTML = cmCommitteeHtml(d.committees.rabin1992);
+    }
+
+    function cmCommitteeHtml(cm) {
+      const seats = cm.picks.map(p => `
+        <div class="seat">
+          <span class="seat-role">${p.role}</span>
+          <div class="seat-person">
+            ${cmPhotoHtml(p.name)}
+            <div class="seat-name">${p.name}</div>
+          </div>
+          <div class="seat-reason">${p.reason}</div>
+        </div>`).join('');
+      const portrait = cm.portrait ? `
+        <div class="cm-portrait-box">
+          <img src="${cm.portrait}" alt="${cm.portrait_caption || ''}" onerror="this.parentElement.style.display='none'">
+          <div class="cm-portrait-caption">${cm.portrait_caption || ''}</div>
+        </div>` : '';
+      return `
+        <div class="cm-quote-row">${portrait}<div class="cm-quote">${cm.quote}</div></div>
+        ${cm.split_note ? `<div style="font-size:.88rem;color:var(--text-muted);margin:0 4px 20px">${cm.split_note}</div>` : ''}
+        <div class="cabinet-grid">${seats}</div>
+        <div class="cm-composition-note">${cm.composition_note}</div>`;
+    }
+
+    function showCommitteeView(id) {
+      ['bg1948','rabin1992'].forEach(k => {
+        document.getElementById('cm-view-' + k).classList.remove('active');
+        document.getElementById('ctab-' + k).classList.remove('active');
+      });
+      document.getElementById('cm-view-' + id).classList.add('active');
+      document.getElementById('ctab-' + id).classList.add('active');
+    }
+
     function selectRecType(type) {
       inRecTypePicker = false;
       // הצג רק כרטיסי נבחרת מהסוג שנבחר
+      // other_topics = מיזוג של special_topics + imitation
+      const matchTypes = type === 'other_topics'
+        ? ['special_topics', 'imitation']
+        : [type];
       document.querySelectorAll('.team-card').forEach(card => {
         const cardType = card.dataset.recType;
-        card.style.display = (!cardType || cardType === type) ? '' : 'none';
+        card.style.display = (!cardType || matchTypes.includes(cardType)) ? '' : 'none';
       });
-      document.getElementById('rec-type-picker').style.display = 'none';
       document.getElementById('team-picker').style.display = '';
-      const desc = document.getElementById('screen-desc');
-      if (desc) desc.textContent = 'בחרו נבחרת מהתיבות למטה.';
+      // גלריית הנושאים (ליבה + ייחודיים) — הצג עליה את המועמדים שבחרתי
+      setTimeout(highlightMyTopics, 0);
     }
 
     function handleBack() {
       if (inRankingView) {
         inRankingView = false;
+        setSelectionStatusVisible(false);   // חזרה לגלריית הבחירה — אין סטטוס
         document.getElementById('ranking-section').style.display = 'none';
         document.getElementById('team-picker').style.display = '';
         activeSquad = null;
@@ -2403,15 +2961,7 @@
         const desc = document.getElementById('screen-desc');
         if (desc) desc.textContent = 'בחרו זווית התחלה — כל מסלול מציג דרך אחרת להכיר את המועמדים ו"לשחק" עם בחירתכם.';
         // רענון שמות הבחירות בכרטיסי הנושאים — ייתכן שהבחירה השתנתה בתוך הטבלה
-        const _aiVisible = [...document.querySelectorAll('.team-card[data-rec-type="ai_squads"]')]
-          .some(c => c.style.display !== 'none');
-        if (_aiVisible && typeof highlightMyTopics === 'function') setTimeout(highlightMyTopics, 0);
-      } else if (!inRecTypePicker) {
-        inRecTypePicker = true;
-        document.getElementById('team-picker').style.display = 'none';
-        document.getElementById('rec-type-picker').style.display = '';
-        const desc = document.getElementById('screen-desc');
-        if (desc) desc.textContent = 'בחרו את סוג ההמלצה.';
+        if (typeof highlightMyTopics === 'function') setTimeout(highlightMyTopics, 0);
       } else {
         window.location.href = 'dbr_P_01_process.html';
       }
@@ -2419,6 +2969,7 @@
 
     function selectTeam(val) {
       inRankingView = true;
+      setSelectionStatusVisible(true);    // נכנסים לדירוג נושא — כאן בוחרים, מציגים סטטוס
       document.getElementById('team-picker').style.display = 'none';
       document.getElementById('team-select').value = val;
       updateSquadHdrTitle();
@@ -2457,7 +3008,7 @@
       else if (recType === 'imitation') rs.classList.add('rank-section--imitation');
     }
     // נבחרות "העמקה בנושאים ייחודיים" — מופרדות בתוך קבוצת הנושאיות בקו מקווקו
-    const SPECIAL_SQUADS = new Set(['human_rights_territories', 'health_and_welfare', 'gender_equality', 'democratic_protest']);
+    const SPECIAL_SQUADS = new Set(['human_rights_territories', 'gender_equality', 'health_and_welfare', 'democratic_protest']);
     function isSpecialSquad(val) { return SPECIAL_SQUADS.has(val); }
 
     // סדר מחדש את הדרופדאון: ליבה → קו מקווקו → העמקה → קו מלא → סימולציות
@@ -2514,19 +3065,20 @@
       return '<span style="font-size:.85rem;color:var(--text-muted);flex-shrink:0;">—</span>';
     }
     function monkeyRowHtml(name, picked, divider) {
-      const eName = escapeHtml(name);
+      const eName = escapeHtml(name);   // לטקסט מוצג
+      const jName = jsAttr(name);       // לתוך onclick('...')
       const icon = monkeyGenderIcon(name);
       const dv = divider ? ' squad-divider' : '';
       if (picked) {
-        return '<div class="rank-row is-picked' + dv + '" onclick="toggleSquadPick(\'' + eName + '\')">'
+        return '<div class="rank-row is-picked' + dv + '" onclick="toggleSquadPick(\'' + jName + '\')">'
           + icon
           + '<span class="rank-name picked">' + eName + '</span>'
           + '</div>';
       }
-      return '<div class="rank-row' + dv + '" onclick="toggleSquadPick(\'' + eName + '\')">'
+      return '<div class="rank-row' + dv + '" onclick="toggleSquadPick(\'' + jName + '\')">'
         + icon
         + '<span class="rank-name unpicked" style="font-size:1.05rem;">' + eName + '</span>'
-        + '<span class="rank-card" style="margin-inline-start:auto" onclick="event.stopPropagation();openSquadCard(\'' + eName + '\')" title="כרטיס הסבר">📋</span>'
+        + '<span class="rank-card" style="margin-inline-start:auto" onclick="event.stopPropagation();openSquadCard(\'' + jName + '\')" title="כרטיס הסבר">📋</span>'
         + '</div>';
     }
 
@@ -2698,7 +3250,8 @@
     }
 
     function squadRowHtml(c, cfg, divider) {
-      const eName = escapeHtml(c.name);
+      const eName = escapeHtml(c.name);   // לטקסט מוצג
+      const jName = jsAttr(c.name);       // לתוך onclick('...')
       // השם הראשון בשורה (עמודה ימנית, כשיש לו זוג) מקבל גבול שמאלי כמפריד מהשם השני
       const dv = divider ? ' squad-divider' : '';
       // צבע הנקודה — תמיד לפי ערך הזיקה המקורי (100/80/60/40)
@@ -2706,17 +3259,19 @@
       // מועמד שכבר נבחר — עיגול זיקה (אם בנבחרת) + שם בלבד, ללא מילת התאמה או כרטיס
       if (c.picked) {
         const dot = c.inSquad ? squadDotHtml(c.value, cfg.color_family, dotBand) : '';
-        return '<div class="rank-row is-picked' + (c.inSquad ? '' : ' squad-extra') + dv + '" onclick="toggleSquadPick(\'' + eName + '\')">'
+        const vadaiCls   = c.vadai ? ' vadai-name' : '';
+        const vadaiBadge = c.vadai ? '<span class="vadai-badge">ודאי</span>' : '';
+        return '<div class="rank-row is-picked' + (c.inSquad ? '' : ' squad-extra') + dv + '" onclick="toggleSquadPick(\'' + jName + '\')">'
           + dot
-          + '<span class="rank-name picked">' + eName + '</span>'
+          + '<span class="rank-name picked' + vadaiCls + '">' + eName + vadaiBadge + '</span>'
           + '</div>';
       }
       // העיגול + המקרא למטה מספרים את הרצועה — אין צורך במילת התאמה בשורה
       const dot = squadDotHtml(c.value, cfg.color_family, dotBand);
-      return '<div class="rank-row' + dv + '" onclick="toggleSquadPick(\'' + eName + '\')">'
+      return '<div class="rank-row' + dv + '" onclick="toggleSquadPick(\'' + jName + '\')">'
         + dot
         + '<span class="rank-name unpicked">' + eName + '</span>'
-        + '<span class="rank-card" style="margin-inline-start:auto" onclick="event.stopPropagation();openSquadCard(\'' + eName + '\')" title="כרטיס הסבר">📋</span>'
+        + '<span class="rank-card" style="margin-inline-start:auto" onclick="event.stopPropagation();openSquadCard(\'' + jName + '\')" title="כרטיס הסבר">📋</span>'
         + '</div>';
     }
 
@@ -2734,6 +3289,7 @@
       if (!cfg) return;
       state = loadState();
       const allPicks = new Set([ ...(state.shiryun || []), ...(state.dbr_picks || []) ]);
+      const vadaiSet = new Set(state.vadai || []);
 
       // מועמדי הנבחרת — ערך>0, מיון לפי combined יורד, חיתוך ב-squad_size, חלוקה ל-4 רצועות
       const squadSize = parseInt(cfg.squad_size || '0', 10) || 16;
@@ -2762,6 +3318,7 @@
         ...c,
         inSquad: true,
         picked:  allPicks.has(c.name),
+        vadai:   vadaiSet.has(c.name),
         // band_split: 2 קבוצות לפי ערך (≥split=רצועת ליבה, <split=נגיעה); אחרת חלוקה לפי מיקום
         bandIdx: splitAt ? (c.value >= splitAt ? 2 : 3) : Math.min(3, Math.floor(i / bandSize))
       }));
@@ -2770,7 +3327,7 @@
       // בחירות הבוחר שאינן בנבחרת זו (ערך 0 / לא קיים) — מתחת לקו המקווקו
       const extras = [...allPicks]
         .filter(n => !inNames.has(n))
-        .map(n => ({ name: n, value: 0, inSquad: false, picked: true }));
+        .map(n => ({ name: n, value: 0, inSquad: false, picked: true, vadai: vadaiSet.has(n) }));
 
       // רצועה-רצועה, שורה-שורה ימין→שמאל, בגריד אחד מלא-רוחב.
       // קו מפריד אחיד מקצה לקצה בין הרצועות; ברצועה אי-זוגית תא ריק ליישור הבאה.
@@ -2937,17 +3494,32 @@
       state = loadState();
       state.selected = state.selected || [];
       state.shiryun  = state.shiryun  || [];
+      state.vadai    = state.vadai    || [];
       const inShiryun = state.shiryun.indexOf(name) >= 0;
+      const isVadai   = state.vadai.indexOf(name) >= 0;
+      // לא נבחר → בחירה רגילה (קדימה, לבחירת מועמד/ת חדש/ה)
       if (!inShiryun) {
-        if (state.shiryun.length >= MAX_SHIRYUN) { maxReached(); return; }
+        if (state.shiryun.length >= addCap(state)) { maxReached(); return; }
         if (state.selected.indexOf(name) < 0) state.selected.push(name);
         state.shiryun.push(name);
+        _recordTeamSource(state, name);
+        ballotRouteOnAdd(state, name);
         autoLog(name, 'נבחר');
         saveState(state);
+        updateStatusBar();
         if (activeMonkey) { renderMonkeySquad(false); } else { renderSquad(activeSquad); }
         return;
       }
-      // ביטול בחירה — אזהרה לפי סך נוכחות המועמד בנבחרות (כולל הנוכחית)
+      // ודאי → הורדה לרגיל (לחיצה ראשונה — הופכי לשריון, מיידי ללא דיאלוג)
+      if (isVadai) {
+        state.vadai = state.vadai.filter(x => x !== name);
+        autoLog(name, 'הוסר מ-ודאי');
+        saveState(state);
+        updateStatusBar();
+        if (activeMonkey) { renderMonkeySquad(false); } else { renderSquad(activeSquad); }
+        return;
+      }
+      // רגיל → ביטול בחירה (לחיצה שנייה) — אזהרה לפי נוכחות המועמד בנבחרות
       const squads = squadMembershipTitles(name); // כל הנבחרות שבהן מוצג כחבר
       let msg = 'ביטול הבחירה של ' + name + ' יסיר את סימון הנבחר בכל המסכים.\n\n';
       if (squads.length === 0) {
@@ -2970,9 +3542,12 @@
         const st = loadState();
         st.selected = (st.selected || []).filter(x => x !== name);
         st.shiryun  = (st.shiryun  || []).filter(x => x !== name);
+        st.vadai    = (st.vadai    || []).filter(x => x !== name);
+        ballotRouteOnRemove(st, name);
         autoLog(name, 'בוטל');
         saveState(st);
         state = st;
+        updateStatusBar();
         if (activeMonkey) { renderMonkeySquad(false); } else { renderSquad(activeSquad); }
       });
     }
@@ -3086,8 +3661,6 @@
 
       const kickerLabel = (activeSquad === 'human_rights_territories') ? 'סוג הפעולה בשטח'
         : (activeSquad === 'gender_equality') ? 'סוג המעורבות המגדרית'
-        : (activeSquad === 'democratic_protest') ? 'עומק המעורבות במחאה'
-        : (activeSquad === 'health_and_welfare') ? 'עומק המעורבות בבריאות ורווחה'
         : 'הנימוק לדירוג';
       const reasonHtml = note
         ? '<section class="modal-reason-card"><div class="modal-section-kicker">' + kickerLabel + '</div><p>' + escapeHtml(note) + '</p></section>'
@@ -3113,7 +3686,8 @@
 
     function rankRow(c, rank, allPicks) {
       const picked = allPicks.has(c.name);
-      const eName = escapeHtml(c.name);
+      const eName = escapeHtml(c.name);   // לטקסט מוצג
+      const jName = jsAttr(c.name);       // לתוך onclick('...')
       const dName = escapeHtml(shortName(c.name));
 
       const shiryuned = (state.shiryun || []).includes(c.name);
@@ -3157,13 +3731,21 @@
       const pickTitle = shiryuned ? 'בטל שריון' : (picked ? 'שריין' : 'בחר');
       const pickCls = 'rank-pick' + (shiryuned ? ' shiryuned' : (picked ? ' picked-check' : ' empty-pick'));
 
-      var row = '<div class="rank-row' + (picked ? ' is-picked' : '') + '" onclick="togglePick(\'' + eName + '\')">'
+      /* צבע שם: ודאי = זהב, נבחר = כחול (מחוץ ל-20 = כהה), לא נבחר = ברירת מחדל */
+      const isVadai = (state.vadai || []).includes(c.name);
+      const nameColor = isVadai ? '#C9A017' : (c._origRank > rankSlots() ? '#111' : 'var(--blue-main)');
+      const vadaiBadge = (isVadai && picked)
+        ? '<span class="vadai-badge">ודאי</span>'
+        : '';
+      const vadaiAttr = (isVadai && picked) ? ' data-vadai="1"' : '';
+      const rowClick = (isVadai && picked) ? ' onclick="showStateToast(\'סומן/ה כ-ודאי — הסרה רק דרך שלב 1\')"' : ' onclick="togglePick(\'' + jName + '\')"';
+
+      var row = '<div class="rank-row' + (picked ? ' is-picked' : '') + '"' + vadaiAttr + rowClick + '>'
         + '<span style="display:inline-flex;align-items:center;gap:2px;flex-shrink:0">' + gDot + (picked ? '' : '<span class="rank-num">' + rank + '</span>') + '</span>'
-        + '<span class="rank-name' + (picked ? ' picked' : ' unpicked') + '"' + (picked ? ' style="color:' + (c._origRank > rankSlots() ? '#111' : 'var(--blue-main)') + '"' : '') + '>' + eName + targetHtml + '</span>'
-        + (c.manualFix ? '<span title="מיקום שתוקן ידנית — הנוסחה לא שקללה ביטחון/מגורים בצפון" style="flex-shrink:0;font-size:.62rem;font-weight:700;color:#b45309;background:#fef3c7;border:1px solid #fcd34d;border-radius:6px;padding:1px 5px;margin-inline-start:6px">תיקון ידני</span>' : '')
+        + '<span class="rank-name' + (picked ? ' picked' : ' unpicked') + (isVadai && picked ? ' vadai-name' : '') + '"' + (picked ? ' style="color:' + nameColor + (isVadai ? ';font-weight:900' : '') + '"' : '') + '>' + eName + vadaiBadge + targetHtml + '</span>'
         + reasonToggleHtml
-        + (filterShiryun || filterPicked || shiryuned ? '' : '<span class="' + pickCls + '" onclick="event.stopPropagation();toggleShiryunState(\'' + eName + '\')" title="' + pickTitle + '">' + pickIcon + '</span>')
-        + (filterShiryun || filterPicked || picked ? '' : '<span class="rank-card" onclick="event.stopPropagation();openProfile(\'' + eName + '\')" title="כרטיס ועדה מסדרת">📋</span>')
+        + (filterShiryun || filterPicked || shiryuned ? '' : '<span class="' + pickCls + '" onclick="event.stopPropagation();toggleShiryunState(\'' + jName + '\')" title="' + pickTitle + '">' + pickIcon + '</span>')
+        + (filterShiryun || filterPicked || picked ? '' : '<span class="rank-card" onclick="event.stopPropagation();openProfile(\'' + jName + '\')" title="כרטיס ועדה מסדרת">📋</span>')
         + '</div>';
       if (filterShiryun && shiryuned && typeof reasonHtml !== 'undefined') {
         row += reasonHtml;
@@ -3195,7 +3777,7 @@
     // הגבלת המקסימום הגיעה — צליל + הודעת toast מסבירה
     function maxReached() {
       beepError();
-      showStateToast('הגעת למקסימום ' + MAX_SHIRYUN + ' נבחרים. בטל בחירה קיימת כדי להוסיף אחר.');
+      showStateToast('הגעת למקסימום ' + addCap() + ' נבחרים. בטל בחירה קיימת כדי להוסיף אחר.');
     }
 
     function showStateToast(msg) {
@@ -3215,6 +3797,12 @@
     function togglePick(name) {
       if (filterPicked && !expanded) return;
       state = loadState();
+      console.log('[DBR togglePick]', name, '| vadai:', JSON.stringify(state.vadai));
+      // ודאי — חסום להסרה בשלב 2
+      if ((state.vadai || []).includes(name)) {
+        showStateToast('סומן/ה כ-ודאי — הסרה רק דרך שלב 1');
+        return;
+      }
       state.selected = state.selected || [];
       state.shiryun  = state.shiryun  || [];
       const inSelected  = state.selected.indexOf(name) >= 0;
@@ -3222,9 +3810,11 @@
 
       if (!inShiryun) {
         // ריק / מתלבט → נבחר
-        if (state.shiryun.length >= MAX_SHIRYUN) { maxReached(); return; }
+        if (state.shiryun.length >= addCap(state)) { maxReached(); return; }
         if (!inSelected) state.selected.push(name);
         state.shiryun.push(name);
+        _recordTeamSource(state, name);
+        ballotRouteOnAdd(state, name);
         autoLog(name, 'נבחר');
       } else {
         // נבחר → ביטול
@@ -3236,9 +3826,11 @@
         }
         state.selected = state.selected.filter(x => x !== name);
         state.shiryun  = state.shiryun.filter(x => x !== name);
+        ballotRouteOnRemove(state, name);
         autoLog(name, 'בוטל');
       }
       saveState(state);
+      updateStatusBar();
       if (expanded) renderRankingSingleCol(); else renderRanking();
     }
 
@@ -3252,7 +3844,100 @@
       savePickReasons(reasons);
     }
 
-    const MAX_SHIRYUN = 8;
+    // חסם דינמי: ברירת מחדל 12, ניתן להרמה עד תקרה קשיחה 16 — רק דרך מסלול "פתק→נושא".
+    const BASE_SHIRYUN = 12;
+    const HARD_SHIRYUN = 16;
+    const MIN_SHIRYUN  = 6;
+    // האם הגענו למסך הנושא מתוך פתק הבחירה (URL ?editTopic=) — מאפשר לפרוץ את החסם.
+    let fromBallotRoute = false;
+    // החסם הנוכחי (קו-שיא נשמר ב-state.capShiryun), מוגבל תמיד ל-[12,16].
+    function currentCap(st) {
+      const s = st || loadState();
+      const c = Number(s.capShiryun) || BASE_SHIRYUN;
+      return Math.min(HARD_SHIRYUN, Math.max(BASE_SHIRYUN, c));
+    }
+    // חסם ההוספה בפועל: במסלול הפתק — עד התקרה הקשיחה; אחרת — החסם הנוכחי.
+    function addCap(st) { return fromBallotRoute ? HARD_SHIRYUN : currentCap(st); }
+    // אחרי הוספה במסלול הפתק: הרם את קו-השיא (ratchet חד-כיווני) ומרר את המועמד לפתק.
+    function ballotRouteOnAdd(st, name) {
+      if (!fromBallotRoute) return;
+      st.capShiryun = Math.min(HARD_SHIRYUN, Math.max(currentCap(st), (st.shiryun || []).length));
+      st.ballot = Array.isArray(st.ballot) ? st.ballot : [];
+      if (st.ballot.indexOf(name) < 0) st.ballot.push(name);
+    }
+    // אחרי הסרה במסלול הפתק: הסר גם מהפתק (החסם עצמו לא יורד — ratchet).
+    function ballotRouteOnRemove(st, name) {
+      if (!fromBallotRoute) return;
+      if (Array.isArray(st.ballot)) st.ballot = st.ballot.filter(x => x !== name);
+    }
+    // פתיחת טבלת הדירוג של נושא ישירות מ-URL (?editTopic=<squad_id>)
+    function openEditTopicFromUrl() {
+      const topic = new URLSearchParams(location.search).get('editTopic');
+      if (!topic || !squadConfig[topic]) return;
+      fromBallotRoute = true;
+      // מסלול ישיר: בלי סרגל הלשוניות ובלי תיבת ה-empty-state — ישר לטבלת הדירוג
+      const tabs = document.getElementById('rec-tabs');
+      if (tabs) tabs.style.display = 'none';
+      const empty = document.getElementById('tabs-empty-state');
+      if (empty) empty.style.display = 'none';
+      selectTeam(topic);
+      updateStatusBar();
+    }
+
+    function goToFilterChecked() {
+      const count = (loadState().shiryun || []).length;
+      if (count < MIN_SHIRYUN) {
+        showStateToast('יש לבחור לפחות 6 שמות כדי להמשיך לשלב הבא (נבחרו ' + count + ')');
+        return;
+      }
+      window.location.href = 'dbr_P_01_filter.html';
+    }
+
+    function updateStatusBar() {
+      const st = loadState();
+      const shiryun  = st.shiryun  || [];
+      const sources  = st.shiryun_sources || {};
+      // מוצא = נבחרו בשלב 1 (אין להם מקור נבחרת בשלב 2)
+      const originCount = shiryun.filter(n => !sources[n]).length;
+      // נוספו = נבחרו בשלב 2 (יש להם מקור)
+      const addedCount  = shiryun.filter(n =>  sources[n]).length;
+      const total = shiryun.length;
+      const ready = total >= MIN_SHIRYUN;
+
+      const tc  = document.getElementById('sim-total-count');
+      const oc  = document.getElementById('sim-origin-count');
+      const ac  = document.getElementById('sim-added-count');
+      const btn = document.getElementById('sim-next-btn');
+      if (tc)  tc.textContent  = total;
+      if (oc)  oc.textContent  = originCount;
+      if (ac)  ac.textContent  = addedCount;
+      if (btn) {
+        btn.classList.toggle('ready', ready);
+        btn.disabled = !ready;
+      }
+      // רמז הטווח — דינמי לפי החסם הנוכחי (12, או מורם עד 16 דרך מסלול הפתק)
+      const hint = document.getElementById('sim-lock-hint');
+      if (hint) hint.innerHTML = '<span style="color:#dc2626">⚠</span> בחרו ' + MIN_SHIRYUN + '-' + currentCap(st) + ' לקראת סיום';
+    }
+
+    // מחזיר את שם הנבחרת הפעילה כרגע (לרישום מקור הבחירה)
+    function _getTeamLabel() {
+      if (activeSquad) {
+        return (squadConfig[activeSquad] && squadConfig[activeSquad].title) || TEAM_NAMES[activeSquad] || activeSquad;
+      }
+      const sel = document.getElementById('team-select');
+      if (sel && sel.value) return TEAM_NAMES[sel.value] || sel.value;
+      return null;
+    }
+
+    // שומר מקור נבחרת ל-state בעת הוספת מועמד (רק אם עוד לא נבחר)
+    function _recordTeamSource(state, name) {
+      const lbl = _getTeamLabel();
+      if (!lbl) return;
+      if (state.shiryun_sources && state.shiryun_sources[name]) return; // כבר יש מקור — לא דורסים
+      state.shiryun_sources = state.shiryun_sources || {};
+      state.shiryun_sources[name] = lbl;
+    }
 
     function toggleShiryunState(name) {
       state = loadState();
@@ -3262,18 +3947,22 @@
       if (isShiryuned) {
         const i = state.shiryun.indexOf(name);
         if (i >= 0) state.shiryun.splice(i, 1);
+        ballotRouteOnRemove(state, name);
         autoLog(name, 'בוטל שריון');
       } else {
-        if (state.shiryun.length >= MAX_SHIRYUN) {
+        if (state.shiryun.length >= addCap(state)) {
           maxReached();
           return;
         }
         if (state.selected.indexOf(name) < 0) state.selected.push(name);
         if (state.shiryun.indexOf(name) < 0) state.shiryun.push(name);
+        _recordTeamSource(state, name);
+        ballotRouteOnAdd(state, name);
         autoLog(name, 'שוריין');
       }
       saveState(state);
       if (expanded) renderRankingSingleCol(); else renderRanking();
+      updateStatusBar();
     }
 
     function openProfile(name) {
@@ -3394,6 +4083,7 @@
       for (const r of parseCsv(cfgTxt)) {
         if (r['squad_id']) squadConfig[r['squad_id']] = r;
       }
+      syncNamesFromConfig();   // שמות כרטיסים/דרופדאון מהקונפיג
       for (const r of parseCsv(teamsTxt)) {
         if (r['id1']) squadData[r['id1']] = r;
       }
@@ -3416,6 +4106,11 @@
       // DEBUG: uncomment next line to reset all picks
       // saveState({ selected: [], shiryun: [], dbr_picks: [], approved: [], meta: {} });
       renderRanking();
+      // אם גלריית הנושאים גלויה כבר עכשיו — הצג עליה את הבחירות משנטענו הנתונים
+      const _picker = document.getElementById('team-picker');
+      if (_picker && _picker.style.display !== 'none') highlightMyTopics();
+      // מסלול "פתק→נושא": פתיחת טבלת הדירוג ישירות (אחרי שהקונפיג נטען)
+      openEditTopicFromUrl();
     }).catch(() => {});
 
     // בונה את rankList לפי הנבחרת הפעילה (activeCommittee)
@@ -3437,44 +4132,83 @@
           zccsrc:   srcRaw !== undefined && srcRaw !== '' ? parseInt(srcRaw) : null
         };
       });
-      // תיקון ידני הושבת — מוצגת תוצאה נקייה לפי האלגוריתם בלבד
+      // ── תיקון ידני — נבחרת הצפון בלבד ──
+      // נוסחת ציון הכשירות (רזומה+מוטיבציה) מתעלמת מ-s61 וממגורים בצפון, ולכן מועמדי
+      // שיקום-דרום (רם שפע, מהרטה) דורגו מעל נציגי מגזר צפוניים עם קשר/ביטחון אמיתי
+      // (איהאב — s61=7.5, אומיימה — מגורים בנצרת). מחליפים מיקומי דירוג בלבד;
+      // ציון הכרטיס (computeCommitteeScore) נשאר האמיתי.
+      if (activeCommittee === 'north') {
+        const NORTH_MANUAL_SWAPS = [['איהאב שליאן','רם שפע'], ['אומיימה חאמד','מהרטה ברוך רון']];
+        for (const [up, down] of NORTH_MANUAL_SWAPS) {
+          const u = rankList.find(c => c.name === up);
+          const d = rankList.find(c => c.name === down);
+          if (u && d) {
+            const upScore = u.scoreC;   // ציון המקודם המקורי (נמוך, ~71)
+            u.scoreC = d.scoreC;        // המקודם מקבל את הציון הגבוה של המורד → נכנס
+            d.scoreC = upScore - 1;     // המורד יורד בבירור מתחת לאשכול ה-71 → יוצא
+            u.manualFix = true; d.manualFix = true;
+          }
+        }
+      }
       rankList.sort((a,b) => (b.scoreC??-1) - (a.scoreC??-1));
     }
+
+    // ── כניסה לדף — מציגים רק את הלשוניות, בלי לפתוח תוכן אוטומטית ──
+    // (הבחירה בפועל נעשית ע"י המשתמש דרך switchTab; שני הפאנלים נשארים
+    // display:none כברירת המחדל שלהם ב-HTML עד שנבחרת לשונית)
+    (function initTab() {
+      document.querySelectorAll('.rec-tab').forEach(t => t.classList.remove('active'));
+      setSelectionStatusVisible(false);   // מסך פתיחה — בוחרים נושא, אין סטטוס
+    })();
+    updateStatusBar();
+
+    // ── הלשוניות דביקות מתחת לכותרת הדביקה — ה-top נמדד בפועל (לא מספר קבוע),
+    // כדי להישאר מדויק גם כשגובה הכותרת משתנה (טקסט ה"הסבר"/האזהרה) ──
+    function alignTabsSticky() {
+      const stickyControls = document.querySelector('.sticky-controls');
+      const tabs = document.getElementById('rec-tabs');
+      if (!stickyControls || !tabs) return;
+      const bottom = stickyControls.getBoundingClientRect().bottom;
+      tabs.style.top = Math.max(0, bottom) + 'px';
+    }
+    alignTabsSticky();
+    window.addEventListener('resize', () => requestAnimationFrame(alignTabsSticky));
+    window.addEventListener('load',   () => requestAnimationFrame(alignTabsSticky));
 
     // ══════════════════════════════════════════
     // ספירת קליקים במסך הדירוג להעלמת הסבר אוטומטית
     document.addEventListener('DOMContentLoaded', () => {
       const rs = document.getElementById('ranking-section');
       if (rs) {
-        rs.addEventListener('click', (e) => {
-          const id = e.target && e.target.id;
-          if (id === 'desc-toggle-btn' || id === 'sq-zoom-in' || id === 'sq-zoom-out') return;
-          rankingClick();
-        }, true);
+        let rankClickCount = 0;
+        rs.addEventListener('click', () => {
+          const hint = document.getElementById('rank-info-text');
+          if (hint && hint.style.display !== 'none') {
+            rankClickCount++;
+            if (rankClickCount >= 3) hint.style.display = 'none';
+          }
+        });
       }
     });
 
-    window.addEventListener('focus', () => {
-      if (activeSquad) { renderSquad(activeSquad); }
-      else if (rankList.length) renderRanking();
-    });
-
-    // ══ הדגשת נושאים שנבחרי-העצמאית מככבים בהם ══
-    let _teamsCSV = null;
-    const AI_SQUAD_IDS = [
-      'law_democracy','religion_state','directors','green_social',
-      'jewish_arab','cost_of_living','peace_security','negev_galil',
-      'next_generation','education'
-    ];
-
-    function _loadTeamsCSV() {
-      if (_teamsCSV) return Promise.resolve(_teamsCSV);
-      return fetch('main_teams.csv').then(r => r.text()).then(txt => {
-        const rows = parseCsv(txt);
-        _teamsCSV = {};
-        rows.forEach(r => { if (r['id1']) _teamsCSV[r['id1']] = r; });
-        return _teamsCSV;
-      }).catch(() => ({}));
+    // ═══════════════════════════════════════════════════════════════════
+    //  שוחזר: הצגת "המועמדים שבחרתי" על כרטיסי גלריית נושאי הליבה
+    //  (מועמד → הנבחרות שלו, לפי אותו סף תצוגה של renderSquad)
+    // ═══════════════════════════════════════════════════════════════════
+    // שמות כרטיסי הגלריה + אפשרויות הדרופדאון — תמיד מהקונפיג (מקור אמת יחיד).
+    // מזהים שאינם נבחרת נושאית (dbr1/meretz/north...) לא בקונפיג → נשארים כמות שהם.
+    function syncNamesFromConfig() {
+      document.querySelectorAll('.team-card[onclick*="selectTeam"]').forEach(card => {
+        const m = (card.getAttribute('onclick') || '').match(/selectTeam\('([^']+)'\)/);
+        const cfg = m ? squadConfig[m[1]] : null;
+        if (!cfg || !cfg.title) return;
+        const nameEl = card.querySelector('.team-card-name');
+        if (nameEl && nameEl.textContent.trim() !== cfg.title) nameEl.textContent = cfg.title;
+      });
+      document.querySelectorAll('#team-select option').forEach(opt => {
+        const cfg = squadConfig[opt.value];
+        if (cfg && cfg.title && opt.textContent.trim() !== cfg.title) opt.textContent = cfg.title;
+      });
     }
 
     function highlightMyTopics() {
@@ -3482,24 +4216,30 @@
       if (!grid) return;
       const myPicks = (loadState().shiryun || []);
 
-      // \u05d7\u05d1\u05e8\u05d5\u05ea \u05d1\u05e0\u05d5\u05e9\u05d0 = \u05de\u05d9 \u05e9\u05d1\u05d0\u05de\u05ea \u05d1\u05d8\u05d1\u05dc\u05ea \u05d4\u05e0\u05d5\u05e9\u05d0 (top squad_size \u05dc\u05e4\u05d9 combined \u05d7\u05d9),
-      // \u05d6\u05d4\u05d4 \u05dc-renderSquad \u2014 \u05dc\u05d0 \u05e1\u05e3 \u226560 \u05d5\u05dc\u05d0 \u05d4\u05e2\u05de\u05d5\u05d3\u05d4 \u05d4\u05e7\u05e4\u05d5\u05d0\u05d4.
+      // מזהי הנבחרות — נגזרים מהכרטיסים בפועל (ליבה + נושאים ייחודיים), כדי שלא ייווצר פער מול ה-HTML
+      const SQUAD_SEL = '.team-card[data-rec-type="ai_squads"],.team-card[data-rec-type="special_topics"]';
+      const SQUAD_IDS = [...grid.querySelectorAll(SQUAD_SEL)]
+        .map(c => (c.getAttribute('onclick') || '').match(/selectTeam\('([^']+)'\)/))
+        .filter(Boolean).map(m => m[1]);
+
+      // חברות בנושא = מי שבאמת בטבלת הנושא (top squad_size לפי combined חי),
+      // זהה ל-renderSquad — לא סף ≥60 ולא העמודה הקפואה.
       const topicHits = {};
       const membersBySquad = {};
-      AI_SQUAD_IDS.forEach(sq => {
+      SQUAD_IDS.forEach(sq => {
         topicHits[sq] = [];
         membersBySquad[sq] = squadInNames(sq);
       });
       myPicks.forEach(name => {
         const row = squadData[name]; if (!row) return;
-        AI_SQUAD_IDS.forEach(sq => {
-          if (!membersBySquad[sq].has(name)) return;   // \u05dc\u05d0 \u05d1\u05d8\u05d1\u05dc\u05ea \u05d4\u05e0\u05d5\u05e9\u05d0 \u2192 \u05dc\u05d0 \u05de\u05d5\u05e4\u05d9\u05e2
+        SQUAD_IDS.forEach(sq => {
+          if (!membersBySquad[sq].has(name)) return;   // לא בטבלת הנושא → לא מופיע
           topicHits[sq].push({ name, score: computeCombined(sq, row) });
         });
       });
-      AI_SQUAD_IDS.forEach(sq => topicHits[sq].sort((a, b) => b.score - a.score));
+      SQUAD_IDS.forEach(sq => topicHits[sq].sort((a, b) => b.score - a.score));
 
-      grid.querySelectorAll('.team-card[data-rec-type="ai_squads"]').forEach(card => {
+      grid.querySelectorAll(SQUAD_SEL).forEach(card => {
         const m = (card.getAttribute('onclick') || '').match(/selectTeam\('([^']+)'\)/);
         const sq = m ? m[1] : '';
         const hits = topicHits[sq] || [];
@@ -3515,10 +4255,10 @@
         const chips = hits
           .map(h => '<span class="topic-my-name-chip">' + shortName(h.name) + '</span>').join('');
         nameEl.insertAdjacentHTML('afterend',
-          '<div class="topic-my-count">(' + hits.length + ' \u05de\u05e0\u05d1\u05d7\u05e8\u05d9\u05da)</div>' +
           '<div class="topic-my-names">' + chips + '</div>');
       });
 
+      // נבחרות שבהן יש לך בחירות — צפות לראש הגלריה
       const allCards = [...grid.querySelectorAll('.team-card[data-rec-type="ai_squads"]')];
       allCards.sort((a, b) => {
         const ma = (a.getAttribute('onclick') || '').match(/selectTeam\('([^']+)'\)/);
@@ -3528,19 +4268,9 @@
         return cb - ca;
       });
       allCards.forEach(c => grid.appendChild(c));
-
-      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    (function() {
-      const _orig = window.selectRecType;
-      if (typeof _orig !== 'function') return;
-      window.selectRecType = function(type) {
-        _orig.call(this, type);
-        if (type === 'ai_squads') setTimeout(highlightMyTopics, 150);
-      };
-    })();
-
   </script>
+  </div>
 </body>
 </html>

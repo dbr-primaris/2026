@@ -1,0 +1,1338 @@
+﻿<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<script>if(localStorage.getItem('dbr_disclaimer_accepted')!=='yes'){window.location.href='dbr_P_01_index.html?redirect='+encodeURIComponent(location.pathname.split('/').pop()+location.search)}
+    function navToStep(step) {
+      try { localStorage.setItem('dbr_disclaimer_accepted','yes'); } catch(e) {}
+      var st = {}; try { st = JSON.parse(localStorage.getItem('primeris_state_v1')||'{}'); } catch(e){}
+      var count = (st.shiryun || []).length;
+      if (step === 1) window.location.href = 'dbr_P_01_shiryun.html';
+      else if (step === 2) window.location.href = 'dbr_P_01_state.html';
+      else if (step === 3) {
+        if (count >= 6) window.location.href = 'dbr_P_01_filter.html';
+      }
+    }
+    function initStepNav() {
+      var st = {}; try { st = JSON.parse(localStorage.getItem('primeris_state_v1')||'{}'); } catch(e){}
+      var count = (st.shiryun || []).length;
+      var s3 = document.getElementById('step3-nav');
+      if (s3) { s3.classList.toggle('locked', count < 6); }
+    }
+  </script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TJNJTZQF1F"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-TJNJTZQF1F');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>פתק הבחירה | ד.ב.ר</title>
+<style>
+  :root {
+    --blue-dark: #12355b;
+    --blue-main: #1d5fa7;
+    --blue-soft: #eaf3ff;
+    --blue-card: #f7fbff;
+    --green: #2e7d4f;
+    --green-soft: #e6f4eb;
+    --amber: #b45309;
+    --amber-soft: #fef3c7;
+    --text-main: #1f2933;
+    --text-muted: #5f6b7a;
+    --border-soft: #d7e3f3;
+    --white: #fff;
+    --shadow: 0 16px 38px rgba(18,53,91,.13);
+    --shadow-soft: 0 4px 16px rgba(18,53,91,.07);
+    --radius-large: 24px;
+    --radius-medium: 18px;
+    --radius-small: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; overflow-y: scroll; }
+  body {
+    font-family: 'Heebo', Arial, sans-serif;
+    background: linear-gradient(180deg, #f4f8ff 0%, #fff 60%);
+    color: var(--text-main);
+    line-height: 1.6;
+    min-height: 100vh;
+    padding-top: 86px;
+    padding-bottom: 80px;
+  }
+
+  /* ── Topbar (dark navy fixed — same as steps 1+2) ── */
+  .topbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: #0D2B5E;
+    padding: 12px 0 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .topbar-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding-bottom: 10px;
+    /* מיושר לעמודת התוכן (.page) */
+    width: 100%;
+    max-width: 600px;
+    margin-inline: auto;
+    padding-inline: 16px;
+  }
+  /* ── Step navigator ── */
+  .step-nav {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 600px;
+    margin-inline: auto;
+    padding: 4px 16px 10px;
+  }
+  .step-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+  .step-item.done { cursor: pointer; }
+  .step-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,.22); }
+  .step-item.active .step-dot { background: #fff; box-shadow: 0 0 0 2px rgba(255,255,255,.2); }
+  .step-item.done .step-dot { background: rgba(255,255,255,.55); }
+  .step-lbl { color: rgba(255,255,255,.35); font-size: .63rem; white-space: nowrap; line-height: 1; font-weight: 800; }
+  .step-item.active .step-lbl { color: #fff; }
+  .step-item.done .step-lbl { color: rgba(255,255,255,.6); }
+  .step-line { flex: 1; height: 1px; background: rgba(255,255,255,.12); margin-bottom: 14px; }
+  .step-line.done { background: rgba(255,255,255,.42); }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: rgba(255,255,255,.92);
+    font-weight: 800;
+    font-size: 1rem;
+    flex-shrink: 1;
+    min-width: 0;
+    overflow: hidden;
+  }
+  .brand-mark {
+    flex-shrink: 0;
+    height: 26px;
+    padding: 0 8px;
+    border-radius: 9px;
+    background: #C9A017;
+    color: #0D2B5E;
+    font-size: .8rem;
+    font-weight: 900;
+    display: grid;
+    place-items: center;
+  }
+  .brand-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* ── ⓘ כפתור הסבר ── */
+  .pf-bar-help {
+    background: none;
+    border: none;
+    padding: 0 2px;
+    cursor: pointer;
+    color: var(--blue-main);
+    font-size: .82rem;
+    font-weight: 700;
+    font-family: inherit;
+    line-height: 1;
+    opacity: .75;
+  }
+  .pf-bar-help:hover { opacity: 1; }
+  /* ── כפתור סיום (בתוך כותרת מסגרת הפתק) ── */
+  .done-btn {
+    flex-shrink: 0;
+    border: 1px solid #cbd5e1;
+    border-radius: 9px;
+    font-family: inherit;
+    cursor: not-allowed;
+    transition: background .15s, color .15s, border-color .15s;
+    white-space: nowrap;
+    padding: 5px 12px;
+    font-size: .82rem;
+    font-weight: 800;
+    background: #f1f5f9;
+    color: #94a3b8;
+  }
+  .done-btn.ready {
+    background: var(--blue-soft);
+    color: var(--blue-main);
+    border: 1px solid var(--blue-main);
+    cursor: pointer;
+  }
+  .done-btn.ready:hover { background: #dceaff; }
+
+  /* ── Page layout ── */
+  .page { max-width: 600px; margin: 0 auto; padding: 0 16px; }
+
+  /* ── Section headers ── */
+  .zone-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 4px 0 8px;
+  }
+  .zone-title-group {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .zone-title {
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--blue-dark);
+  }
+  .zone-badge {
+    font-size: .78rem;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .zone-badge.vadai-badge { background: var(--blue-soft); color: var(--blue-main); }
+  .zone-badge.pending-badge { background: #f1f5f9; color: var(--text-muted); }
+  .zone-badge.over-badge { background: var(--amber-soft); color: var(--amber); }
+  .zone-badge.ok-badge { background: #dcfce7; color: #15803d; }
+
+  /* ── Section headers (Zone B — outside ballot) ── */
+  .zone-header-b {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 0 10px;
+  }
+
+  /* ── גריד שמות קומפקטי — שמות בלבד, 3 בשורה ── */
+  .name-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+  }
+  /* ── מסגרת הפתק — רוחב מלא, מסמנת חוקי/לא־חוקי ── */
+  .ballot-frame {
+    border: 2px solid var(--border-soft);
+    border-radius: 0;
+    padding: 0 14px 14px;
+    /* גאפ מינימלי מקצה המסך כדי שהמסגרת הצידית תיראה גם בסלולר */
+    margin: 6px -12px 0;
+    transition: border-color .2s, background .2s;
+  }
+  .ballot-frame.is-valid   { border-color: #16a34a; background: #f0fdf4; }
+  .ballot-frame.is-invalid { border-color: var(--amber); background: var(--amber-soft); }
+
+  /* ── תצוגת כיסוי הנושאים (4 רמות עוצמה) ── */
+  .coverage { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border-soft); }
+  .cov-title { font-size: .95rem; font-weight: 800; color: var(--blue-dark); margin-bottom: 8px; }
+  .cov-title-hint { font-size: .78rem; font-weight: 600; color: var(--blue-main); }
+  /* זרימה רציפה בשני טורים: ליבה ממלאת טור 1 וזולגת ל-2, מפריד, ואז ייחודיים */
+  .cov-flow { column-count: 2; column-gap: 16px; }
+  .cov-flow .cov-chip {
+    display: block;
+    width: fit-content;
+    break-inside: avoid;
+    margin-bottom: 5px;
+  }
+  .cov-sep {
+    break-inside: avoid;
+    border-top: 2px solid var(--border-soft);
+    margin: 4px 0 9px;
+    height: 0;
+  }
+  .cov-legend-row { display: flex; align-items: center; gap: 10px; margin-top: 12px; padding-top: 8px; border-top: 1px dashed var(--border-soft); }
+  .cov-legend { font-size: .82rem; color: var(--text-muted); display: flex; flex-wrap: wrap; gap: 5px; align-items: center; flex: 1; min-width: 0; }
+  .cov-legend-label { font-weight: 800; color: var(--blue-dark); }
+  /* כפתור הסיום צמוד לפינה השמאלית של שורת הביאור */
+  .cov-legend-row .done-btn { margin-inline-start: auto; flex-shrink: 0; }
+  .cov-chip { font-size: .82rem; padding: 3px 9px; border-radius: 999px; white-space: nowrap; }
+  .cov-clickable { cursor: pointer; transition: filter .12s, transform .12s; }
+  .cov-clickable:hover { filter: brightness(.94); transform: translateY(-1px); }
+  .cov-clickable:active { transform: translateY(0); }
+  .cov-l1 { background: #bbf7d0; color: #14532d; font-weight: 800; }
+  .cov-l2 { background: #dcfce7; color: #15803d; }
+  .cov-l3 { background: transparent; border: 1px dashed #86efac; color: #15803d; }
+  .cov-l4 { background: transparent; border: 1px dashed var(--border-soft); color: var(--text-muted); text-decoration: line-through; }
+  .name-chip {
+    padding: 5px 10px;
+    border-radius: 8px;
+    border: 1.5px solid var(--border-soft);
+    background: var(--white);
+    font-weight: 700;
+    font-size: .85rem;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: border-color .15s, background .15s;
+  }
+  .name-chip:hover { border-color: #b0c8e8; }
+  .name-chip.in-ballot { border-color: var(--blue-main); background: var(--blue-soft); color: var(--blue-dark); }
+  .name-chip.is-vadai-origin { border-color: #C9A017; background: #fdf6e3; color: #7c5a00; }
+
+  .candidate-slot {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-radius: var(--radius-small);
+    border: 1.5px solid var(--border-soft);
+    background: var(--white);
+    margin-bottom: 8px;
+    transition: border-color .15s, background .15s, box-shadow .15s, transform .15s;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    position: relative;
+    overflow: hidden;
+  }
+  .candidate-slot:active { transform: scale(.985); }
+  .candidate-slot:hover { box-shadow: var(--shadow-soft); border-color: #b0c8e8; }
+
+  /* Upper zone — origin ★ ודאי (gold) */
+  .candidate-slot.is-vadai-origin {
+    border-color: #C9A017;
+    border-width: 2px;
+    background: #fffbeb;
+  }
+  .candidate-slot.is-vadai-origin:hover { border-color: #a57c00; box-shadow: 0 4px 16px rgba(201,160,23,.2); }
+
+  /* Upper zone — regular, promoted in step 3 (blue) */
+  .candidate-slot.is-vadai-added {
+    border-color: var(--blue-main);
+    border-width: 2px;
+    background: var(--blue-soft);
+  }
+  .candidate-slot.is-vadai-added:hover { border-color: var(--blue-dark); box-shadow: 0 4px 16px rgba(29,95,167,.18); }
+
+  /* Slot number */
+  .slot-num {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 2px solid var(--border-soft);
+    background: #f8fafc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .78rem;
+    font-weight: 900;
+    color: var(--text-muted);
+    transition: border-color .15s, background .15s, color .15s;
+  }
+  .is-vadai-origin .slot-num {
+    border-color: #C9A017;
+    background: #C9A017;
+    color: white;
+  }
+  .is-vadai-added .slot-num {
+    border-color: var(--blue-main);
+    background: var(--blue-main);
+    color: white;
+  }
+
+  /* Photo */
+  .slot-photo {
+    flex-shrink: 0;
+    width: 52px;
+    height: 64px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid var(--border-soft);
+    background: #e8eff8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    line-height: 1;
+    transition: border-color .15s;
+  }
+  .slot-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .is-vadai-origin .slot-photo { border-color: #C9A017; }
+  .is-vadai-added  .slot-photo { border-color: var(--blue-main); }
+
+  /* Name & meta */
+  .slot-info { flex: 1; min-width: 0; }
+  .slot-name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--blue-dark);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color .15s;
+  }
+  .is-vadai-origin .slot-name { font-weight: 800; color: #7c5a00; }
+  .is-vadai-added  .slot-name { font-weight: 800; }
+  .slot-tags {
+    display: flex;
+    gap: 5px;
+    margin-top: 4px;
+    flex-wrap: wrap;
+  }
+  .tag {
+    font-size: .72rem;
+    font-weight: 700;
+    padding: 1px 8px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .tag-shiryun { background: #dce9f7; color: #3a6fa0; }
+  .tag-dbr     { background: var(--blue-soft); color: var(--blue-main); }
+  .tag-vadai   { background: #fef3cd; color: #9a6c00; font-weight: 800; }
+  .tag-topic   { background: #eef2f7; color: #4a6285; }
+
+  /* Action icon */
+  .slot-action {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.05rem;
+    font-weight: 900;
+    transition: transform .12s, box-shadow .12s;
+    pointer-events: none;
+  }
+  .slot-action.promote {
+    border-color: var(--blue-main);
+    color: var(--blue-main);
+    background: var(--blue-soft);
+  }
+  .slot-action.demote {
+    border-color: #94a3b8;
+    color: #64748b;
+    background: #f1f5f9;
+  }
+  .candidate-slot:hover .slot-action { transform: scale(1.15); box-shadow: 0 2px 8px rgba(0,0,0,.12); }
+
+  /* ── Dividing line ── */
+  .cut-line {
+    position: relative;
+    margin: 6px 0 4px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .cut-line::before, .cut-line::after {
+    content: '';
+    flex: 1;
+    height: 2px;
+    background: var(--blue-main);
+    opacity: .35;
+    border-radius: 2px;
+  }
+  .cut-label {
+    flex-shrink: 0;
+    font-size: .78rem;
+    font-weight: 800;
+    color: var(--blue-main);
+    opacity: .7;
+    white-space: nowrap;
+    letter-spacing: .04em;
+  }
+
+  /* ── Empty states ── */
+  .empty-zone {
+    text-align: center;
+    padding: 22px 16px;
+    border: 2px dashed var(--border-soft);
+    border-radius: var(--radius-small);
+    color: var(--text-muted);
+    font-size: .9rem;
+    margin-bottom: 8px;
+  }
+
+  /* ── Toast ── */
+  #toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--blue-dark);
+    color: white;
+    padding: 10px 22px;
+    border-radius: 999px;
+    font-size: .92rem;
+    font-weight: 700;
+    opacity: 0;
+    transition: opacity .2s, transform .2s;
+    z-index: 200;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ── Empty-list screen (no candidates at all) ── */
+  .no-picks-screen {
+    max-width: 400px;
+    margin: 60px auto;
+    text-align: center;
+    padding: 0 24px;
+  }
+  .no-picks-screen h2 { font-size: 1.4rem; color: var(--blue-dark); margin-bottom: 12px; }
+  .no-picks-screen p { color: var(--text-muted); font-size: .95rem; line-height: 1.7; }
+  .back-link {
+    display: inline-block;
+    margin-top: 24px;
+    padding: 10px 28px;
+    background: var(--blue-main);
+    color: white;
+    border-radius: 999px;
+    font-weight: 800;
+    text-decoration: none;
+    font-size: .95rem;
+  }
+
+  /* ── Info hint ── */
+  .page-intro {
+    padding: 14px 0 4px;
+    font-size: .88rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  /* ── Finish screen ── */
+  .finish-screen { padding: 8px 0 40px; }
+  .finish-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 14px;
+  }
+  .finish-card {
+    flex: 0 0 calc(25% - 6px);
+    max-width: calc(25% - 6px);
+    background: var(--white);
+    border-radius: 10px;
+    border: 1.5px solid var(--border-soft);
+    overflow: hidden;
+    text-align: center;
+  }
+  .finish-grid-3col .finish-card {
+    flex: 0 0 calc(33.333% - 6px);
+    max-width: calc(33.333% - 6px);
+  }
+  .finish-card-photo {
+    width: 100%;
+    aspect-ratio: 3/4;
+    overflow: hidden;
+    background: #e8eff8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+  }
+  .finish-card-photo img {
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: top center;
+    display: block;
+  }
+  .finish-card-name {
+    padding: 5px 4px 7px;
+    font-size: .78rem;
+    font-weight: 800;
+    color: var(--blue-dark);
+    line-height: 1.3;
+    word-break: break-word;
+  }
+  .finish-message {
+    background: var(--blue-soft);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-medium);
+    padding: 22px 20px;
+  }
+  .finish-msg-main {
+    font-size: .95rem;
+    font-weight: 800;
+    color: var(--blue-dark);
+    line-height: 1.7;
+    margin-bottom: 16px;
+  }
+  .finish-msg-body {
+    font-size: .88rem;
+    color: var(--text-main);
+    line-height: 1.8;
+    margin-bottom: 14px;
+  }
+  .finish-share-label {
+    font-size: .88rem;
+    font-weight: 800;
+    color: var(--blue-dark);
+    margin-bottom: 8px;
+  }
+  .finish-share-url {
+    font-size: .82rem;
+    color: var(--blue-main);
+    background: var(--white);
+    border: 1px solid var(--border-soft);
+    border-radius: 8px;
+    padding: 8px 12px;
+    word-break: break-all;
+    margin-bottom: 12px;
+    direction: ltr;
+    text-align: left;
+  }
+  .finish-footer-btns {
+    display: flex;
+    gap: 10px;
+    margin-top: 4px;
+  }
+  .finish-copy-btn, .finish-back-btn {
+    flex: 1;
+    padding: 11px;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: .9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background .15s, border-color .15s, color .15s;
+  }
+  .finish-copy-btn {
+    border: 1.5px solid var(--blue-main);
+    background: var(--blue-soft);
+    color: var(--blue-main);
+  }
+  .finish-copy-btn:hover { background: #dceaff; }
+  .finish-copy-btn.copied { border-color: var(--green); background: #dcfce7; color: var(--green); }
+  .finish-back-btn {
+    border: 1.5px solid var(--border-soft);
+    background: var(--white);
+    color: var(--text-muted);
+  }
+  .finish-back-btn:hover { border-color: #b0c8e8; color: var(--blue-dark); }
+
+  @media (max-width: 480px) {
+    .brand-label { display: none; }
+    .slot-name { font-size: .92rem; }
+    .slot-photo { width: 44px; height: 56px; }
+  }
+
+  /* ── Intro overlay ── */
+  .intro-overlay {
+    position: fixed; inset: 0;
+    background: rgba(13,43,94,.12);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 50;
+    display: grid; place-items: center;
+    padding: 20px;
+  }
+  .intro-card {
+    background: white;
+    border-radius: 16px;
+    max-width: 560px; width: 100%;
+    max-height: 90vh; overflow-y: auto;
+    padding: 32px 28px;
+    box-shadow: 0 28px 70px rgba(16,24,40,.25);
+    text-align: right;
+  }
+  .intro-card h2 { font-size: 1.35rem; color: var(--blue-dark); margin: 0 0 14px; line-height: 1.3; }
+  .intro-card p  { color: var(--text-main); font-size: .93rem; line-height: 1.75; margin: 0 0 12px; }
+  .intro-card .intro-note {
+    background: var(--blue-soft);
+    border: 1px solid var(--border-soft);
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: .88rem; color: var(--blue-dark);
+    font-weight: 700; line-height: 1.6; margin: 14px 0;
+  }
+  .intro-btn {
+    display: block; width: 100%;
+    padding: 13px 20px;
+    background: var(--blue-main); color: white;
+    border: none; border-radius: 12px;
+    font-size: 1rem; font-weight: 800;
+    cursor: pointer; font-family: inherit;
+    margin-top: 8px;
+    transition: transform .15s, box-shadow .15s;
+  }
+  .intro-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(29,95,167,.25); }
+
+    .step-item { cursor: pointer; }
+    .step-item.locked { cursor: not-allowed; }
+    .step-item.locked .step-dot { background: rgba(255,255,255,.10); }
+    .step-item.locked .step-lbl { color: rgba(255,255,255,.18); }
+  </style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- ── Intro overlay — כניסה ראשונה ── -->
+<div id="intro-overlay" class="intro-overlay" style="display:none">
+  <div class="intro-card">
+    <h2>פתק הבחירה</h2>
+    <p>כאן בונים את פתק הבחירה הסופי — 6 עד 8 מועמדות ומועמדים שתרצו לסמן ביום ההצבעה.</p>
+    <p>המועמדים שצברתם בשלבים הקודמים מחכים לכם כאן. לחצו על שם כדי להוסיפו לפתק או להוציאו ממנו.</p>
+    <div class="intro-note">הפתק תקף רק עם 6 עד 8 שמות. ✓</div>
+    <button class="intro-btn" onclick="dismissIntro()">הבנתי, אפשר להמשיך</button>
+  </div>
+</div>
+
+<!-- ── Topbar ── -->
+<header class="topbar">
+  <div class="topbar-row">
+    <a class="brand" href="dbr_P_01_index.html">
+      <span class="brand-mark">ד.ב.ר</span>
+      <span class="brand-label">דמוקרטים בוחרים רציונלית</span>
+    </a>
+    <a href="dbr_P_01_process.html" style="color:#ffd24d;font-size:1.05rem;font-weight:700;text-decoration:none;flex-shrink:0;margin-inline-start:auto;padding-inline:8px">☰</a>
+  </div>
+  <div class="step-nav">
+    <div class="step-item done" onclick="navToStep(1)">
+      <div class="step-dot"></div>
+      <div class="step-lbl">נקודת הפתיחה</div>
+    </div>
+    <div class="step-line done"></div>
+    <div class="step-item done" onclick="navToStep(2)">
+      <div class="step-dot"></div>
+      <div class="step-lbl">משחק הכסאות</div>
+    </div>
+    <div class="step-line done"></div>
+    <div class="step-item active" id="step3-nav" onclick="navToStep(3)">
+      <div class="step-dot"></div>
+      <div class="step-lbl">פתק הבחירה</div>
+    </div>
+  </div>
+</header>
+
+
+<!-- ── Main content ── -->
+<div class="page">
+
+  <!-- no-picks fallback (hidden by default, shown via JS) -->
+  <div class="no-picks-screen" id="no-picks-screen" style="display:none">
+    <div style="font-size:3rem;margin-bottom:16px">🗳️</div>
+    <h2>עוד לא בחרת מועמדים</h2>
+    <p>כדי להגיע לשלב הסינון, קודם כל בחרו מועמדים בשלב הבחירה העצמאית או במשחקי הסימולציה.</p>
+    <a class="back-link" href="dbr_P_01_process.html">חזרה לתהליך</a>
+  </div>
+
+  <!-- main filter UI (hidden until JS populates it) -->
+  <div id="filter-ui" style="display:none">
+
+    <!-- ── Zone A: בפתק הבחירה — במסגרת שמסמנת חוקי/לא־חוקי ── -->
+    <div class="ballot-frame" id="ballot-frame">
+      <div class="zone-header">
+        <div class="zone-title-group">
+          <span class="zone-title">פתק הבחירה</span>
+          <button class="pf-bar-help" onclick="document.getElementById('intro-overlay').style.display=''">ⓘ</button>
+        </div>
+        <span class="zone-badge vadai-badge" id="vadai-zone-badge">0 מועמדים</span>
+      </div>
+      <div id="vadai-list"></div>
+
+      <!-- ── כיסוי הנושאים ע"י המועמדים שבפתק (4 רמות עוצמה) ── -->
+      <div id="coverage" class="coverage">
+        <div class="cov-title">כיסוי נושאי הליבה והנושאים הייחודיים <span class="cov-title-hint">— לחצו על נושא כדי לערוך אותו</span></div>
+        <div id="cov-flow" class="cov-flow"></div>
+        <div class="cov-legend-row">
+          <div class="cov-legend">
+            <span class="cov-legend-label">ביאור:</span>
+            <span class="cov-chip cov-l1">עוגן</span>
+            <span class="cov-chip cov-l2">מבוסס</span>
+            <span class="cov-chip cov-l3">דליל</span>
+            <span class="cov-chip cov-l4">חסר</span>
+          </div>
+          <!-- כפתור סיום — בשורת הביאור, צמוד לפינה השמאלית -->
+          <button class="done-btn" id="done-btn" onclick="finishAndGo()" disabled>סיום</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Zone B: נבחרו אך מחוץ לפתק ── -->
+    <div class="zone-header-b">
+      <span class="zone-title">מחוץ לפתק הבחירה</span>
+      <span class="zone-badge pending-badge" id="pending-zone-badge">0 מועמדים</span>
+    </div>
+    <div id="pending-list"></div>
+
+  </div>
+
+  <!-- ── Finish screen: הפתק שלי עם תמונות ── -->
+  <div id="finish-screen" style="display:none" class="finish-screen">
+    <div class="finish-grid" id="finish-grid"></div>
+    <div class="finish-message">
+      <p class="finish-msg-main">הפתק שלך מוכן — אלה המועמדות והמועמדים שבחרת.</p>
+      <p class="finish-msg-body">תודה שבדקת, חשבת, והרכבת פתק בחירה אישי.<br>יש לזכור שהמידע עליו התבסס היישום, אורגן ונותח ע"י ארבע בינות מלאכותיות שאספו מידע טקסטואלי מרשת האינטרנט.</p>
+      <p class="finish-msg-body">אם המשחק סייע לכם בתהליך הבחירה, נשמח אם תשתפו את הקישור אליו לבוחרים נוספים, הן לאלה שטרם החלו את הבחירה והן לאלה שמתלבטים בבחירה, אלה ואלה יוכלו להיעזר ביישום.<br>המיזם עצמו הינו פיילוט למיזם דומה לקראת הבחירות הכלליות.<br>תודה — צוות המיזם.</p>
+      <div class="finish-share-url">https://dbr-primaris.github.io/2026/dbr_P_01_index.html</div>
+      <div class="finish-footer-btns">
+        <button class="finish-copy-btn" id="copy-link-btn" onclick="copyShareLink()">העתקת הקישור</button>
+        <button class="finish-back-btn" onclick="window.location.href='dbr_P_01_index.html'">שחק שוב</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── Toast ── -->
+<div id="toast"></div>
+
+<script>
+  // ══ מסך פתיחה ══
+  const INTRO_KEY = 'dbr_filter_intro_seen';
+  function dismissIntro() {
+    document.getElementById('intro-overlay').style.display = 'none';
+    try { localStorage.setItem(INTRO_KEY, 'yes'); } catch(e) {}
+  }
+  if (localStorage.getItem(INTRO_KEY) !== 'yes') {
+    document.getElementById('intro-overlay').style.display = '';
+  }
+  // ════════════════
+
+  // ═══════════════════════════════════════════
+  //  State
+  // ═══════════════════════════════════════════
+  const STATE_KEY = 'primeris_state_v1';
+  const MIN_VADAI = 6;
+  const MAX_VADAI = 8;
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(STATE_KEY);
+      return raw ? JSON.parse(raw) : {};
+    } catch(e) { return {}; }
+  }
+
+  function saveState(s) {
+    try {
+      s.meta = s.meta || {};
+      s.meta.last_updated = new Date().toISOString();
+      localStorage.setItem(STATE_KEY, JSON.stringify(s));
+    } catch(e) {}
+  }
+
+  let primState = loadState();
+  // צעד 1: בכניסה, כל הנבחרים (רגילים + ודאיים) מתחילים בתוך הפתק.
+  // ballot נפרד מ-vadai (סימוני ודאי משלב 1/2) ומכאן מתפתח עצמאית.
+  const _allInit = [...new Set([...(primState.shiryun || []), ...(primState.dbr_picks || [])])];
+  if (!Array.isArray(primState.ballot)) {
+    primState.ballot = [..._allInit];
+    saveState(primState);
+  }
+  // סימון התמדה: הגענו לשלב 3 (פתק הבחירה) — נשאר גם אם הפתק יורד זמנית מ-6.
+  // דף פרוסס קורא את הדגל כדי לסמן שהשלב השלישי נפתח.
+  if (_allInit.length > 0) {
+    primState.meta = primState.meta || {};
+    if (!primState.meta.reachedStep3) {
+      primState.meta.reachedStep3 = true;
+      saveState(primState);
+    }
+  }
+  // ★ מקור = מי שסומן ודאי (לצביעת הכוכב הזהב מול הכחול "נוסף בשלב זה")
+  const initialVadai = new Set(primState.vadai || []);
+
+  // מיפוי מגדר לכינוי ודאי/ודאית + תגיות נושא
+  let genderMap = {};
+  let candidateTopTags = {};
+  fetch('data/candidates_master.json').then(r => r.ok ? r.json() : {}).then(data => {
+    (data.candidates || []).forEach(c => {
+      if (!c['שם']) return;
+      genderMap[c['שם']] = c['קטגוריה'] || '';
+      const raw = (c['תחומי_חוזק'] || '').split(',')
+        .map(t => t.trim())
+        .filter(t => t && t !== '—' && t !== 'אין מידע' && t !== 'אין');
+      candidateTopTags[c['שם']] = raw.slice(0, 3);
+    });
+    render(); // רנדר מחדש עם נתונים מלאים
+  }).catch(() => {});
+
+  function getTopicTags(name) { return candidateTopTags[name] || []; }
+
+  // ═══════════════════════════════════════════
+  //  שיוך מועמד → נבחרות (הופכי לגלריה בדף הסטייט; אותו סף בדיוק)
+  // ═══════════════════════════════════════════
+  let squadConfig = {};      // squad_id → שורת קונפיג
+  let squadData   = {};      // שם → שורת main_teams
+  let flatDB      = {};      // שם → שורת dbr_P_01_data (בשביל zccc)
+  let droppedSet  = new Set();
+  let candidateSquads = {};  // שם → [כותרות נבחרות] (מחושב פעם אחת)
+
+  function parseCsvLine(line) {
+    const out=[]; let cur=''; let inQ=false;
+    for (let i=0;i<line.length;i++) {
+      const c=line[i];
+      if (c==='"'){if(inQ&&line[i+1]==='"'){cur+='"';i++;}else inQ=!inQ;}
+      else if(c===','&&!inQ){out.push(cur);cur='';}
+      else cur+=c;
+    }
+    out.push(cur); return out;
+  }
+  function parseCsv(txt) {
+    txt=txt.replace(/^﻿/,'');
+    const lines=txt.split(/\r?\n/), headers=parseCsvLine(lines[0]), rows=[];
+    for(let i=1;i<lines.length;i++){
+      if(!lines[i].trim())continue;
+      const vals=parseCsvLine(lines[i]),r={};
+      headers.forEach((h,j)=>{r[h.trim()]=(vals[j]||'').trim();});
+      rows.push(r);
+    }
+    return rows;
+  }
+
+  // combined בזמן ריצה — זהה לדף הסטייט (בפילטר אין החלפת ועדה → zccc עמודה ישירה)
+  function computeCombined(squadId, row) {
+    const cfg  = squadConfig[squadId] || {};
+    let   w    = parseFloat(cfg.resume_weight || '0') || 0;
+    const aff  = parseInt(row[squadId] || '0', 10) || 0;
+    const zRaw = (flatDB[row.id1] || {})['zccc'];
+    const z    = parseFloat(zRaw);
+    if (w > 0 && (zRaw === undefined || zRaw === '' || isNaN(z))) w = 0;
+    const zc   = isNaN(z) ? 0 : z;
+    return (1 - w) * aff + w * (zc * 10);
+  }
+
+  // חברי נבחרת = top squad_size לפי combined — זהה ל-squadInNames בדף הסטייט
+  function squadMembers(squadId) {
+    const cfg = squadConfig[squadId] || {};
+    const squadSize = parseInt(cfg.squad_size || '0', 10) || 16;
+    return Object.values(squadData)
+      .map(r => ({
+        name:     r.id1,
+        value:    parseInt(r[squadId] || '0', 10),
+        combined: computeCombined(squadId, r),
+        rank:     parseInt(r[squadId + '_rank'] || '0', 10)
+      }))
+      .filter(c => c.value > 0 && !droppedSet.has(c.name))
+      .sort((a, b) => {
+        if (a.combined > 0 || b.combined > 0) return b.combined - a.combined;
+        const aHas = a.rank > 0, bHas = b.rank > 0;
+        if (aHas && bHas) return a.rank - b.rank;
+        if (aHas) return -1;
+        if (bHas) return 1;
+        return b.value - a.value;
+      })
+      .slice(0, squadSize)
+      .map(c => c.name);
+  }
+
+  // בונה פעם אחת: שם מועמד → כל הנבחרות שהוא מוצג בהן (לפי הסף)
+  function buildCandidateSquads() {
+    candidateSquads = {};
+    Object.keys(squadConfig).forEach(sid => {
+      const title = squadConfig[sid].title || sid;
+      squadMembers(sid).forEach(name => {
+        (candidateSquads[name] = candidateSquads[name] || []).push(title);
+      });
+    });
+  }
+
+  function squadsOf(name) { return candidateSquads[name] || []; }
+
+  // ═══════════════════════════════════════════
+  //  עוצמת תמיכה קבוצתית בנושא (4 רמות)
+  //  ניקוד לפי רצועה: ליבה(100)=3, חזקה(80)=2, משמעותית(60)=1, מתחת=0
+  //  S = סכום הקבוצה לנושא → רמה: 0=חסר(קו חוצה) · 1–2=דליל · 3–6=מבוסס · 7+=עוגן
+  // ═══════════════════════════════════════════
+  function topicPts(v) { return v >= 100 ? 3 : (v >= 80 ? 2 : (v >= 60 ? 1 : 0)); }
+  function topicStrength(names, squadId) {
+    let S = 0, c = 0;
+    names.forEach(n => {
+      const row = squadData[n];
+      if (!row) return;
+      const v = parseInt(row[squadId] || '0', 10) || 0;
+      S += topicPts(v);
+      if (v >= 60) c++;
+    });
+    return { S, c };
+  }
+  function topicLevel(S) { return S === 0 ? 4 : (S <= 2 ? 3 : (S <= 6 ? 2 : 1)); }
+  // ליבה מול ייחודיים — נגזר מהקונפיג (squad_norm מלא = ליבה)
+  function coreTopicIds()    { return Object.keys(squadConfig).filter(id => (squadConfig[id].squad_norm || '').trim()); }
+  function specialTopicIds() { return Object.keys(squadConfig).filter(id => !(squadConfig[id].squad_norm || '').trim()); }
+
+  function renderCoverage(ballotNames) {
+    const flow = document.getElementById('cov-flow');
+    if (!flow) return;
+    flow.innerHTML = '';
+
+    const appendGroup = (ids) => {
+      ids.map(id => {
+        const { S, c } = topicStrength(ballotNames, id);
+        return { id, title: squadConfig[id].title || id, S, c, L: topicLevel(S) };
+      }).sort((a, b) => b.S - a.S).forEach(x => {
+        const chip = document.createElement('span');
+        chip.className = 'cov-chip cov-l' + x.L + ' cov-clickable';
+        chip.textContent = x.title;
+        chip.title = 'לחצו לעריכת הנושא במסך הדירוג';
+        chip.onclick = () => {
+          window.location.href = 'dbr_P_01_state.html?editTopic=' + encodeURIComponent(x.id);
+        };
+        flow.appendChild(chip);
+      });
+    };
+
+    // נושאי הליבה תחילה — ממלאים את הטור הראשון וזולגים לשני,
+    // אחריהם קו מפריד, ואז הנושאים הייחודיים.
+    appendGroup(coreTopicIds());
+    const sep = document.createElement('div');
+    sep.className = 'cov-sep';
+    flow.appendChild(sep);
+    appendGroup(specialTopicIds());
+  }
+
+  // טעינת שלושת הקבצים + המודחים, בניית המפה, ורנדר מחדש
+  Promise.all([
+    fetch('main_teams.csv').then(r => r.ok ? r.text() : ''),
+    fetch('main_teams_config.csv').then(r => r.ok ? r.text() : ''),
+    fetch('dbr_P_01_data.csv').then(r => r.ok ? r.text() : ''),
+    fetch('dropped.json').then(r => r.ok ? r.json() : []).catch(() => [])
+  ]).then(([teamsTxt, cfgTxt, dataTxt, droppedList]) => {
+    droppedSet = new Set(droppedList);
+    for (const r of parseCsv(cfgTxt))  { if (r['squad_id']) squadConfig[r['squad_id']] = r; }
+    for (const r of parseCsv(teamsTxt)) { if (r['id1']) squadData[r['id1']] = r; }
+    for (const r of parseCsv(dataTxt))  { if (r['id1']) flatDB[r['id1']] = r; }
+    buildCandidateSquads();
+    render();
+  }).catch(() => {});
+
+  // ═══════════════════════════════════════════
+  //  Image helpers (copied from shiryun page)
+  // ═══════════════════════════════════════════
+  const JPEG_NAMES = new Set([]);
+  const IMAGE_OVERRIDE = {
+    'אבתיסאם מראענה-מנוחין': 'אבתיסאם_מראענה-מנוחין',
+    'מהרטה ברוך רון':        'מהרטה_ברוך-רון',
+    'ענבל וורטמן שהם':      'ענבל_וורטמן_שהם',
+    'לי הופמן אגיב':         'לי_הופמן-אגיב',
+    'אמיר חניפס':            "אמיר_ח'ניפס",
+    'איילת השחר סיידוף':    'איילת-השחר_סיידוף',
+    'ענבר בזק':              'ענבר_בזק',
+    'רותם סיון הופמן':       'רותם_סיון_הופמן',
+  };
+  const WIKI_PHOTOS = {
+    'גלעד קריב':              'https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Gilad_Kariv_%28SHL_9093%29.jpg/250px-Gilad_Kariv_%28SHL_9093%29.jpg',
+    'מיכל רוזין':             'https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Michal_Rozin_%D7%9E%D7%99%D7%9B%D7%9C_%D7%A8%D7%95%D7%96%D7%99%D7%9F.jpg/250px-Michal_Rozin_%D7%9E%D7%99%D7%9B%D7%9C_%D7%A8%D7%95%D7%96%D7%99%D7%9F.jpg',
+    'מוסי רז':                'https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Mossi_Raz_%28SHL_9237%29.jpg/250px-Mossi_Raz_%28SHL_9237%29.jpg',
+    'יעל כהן-פארן':           'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Yael_Cohen_Paran_%28IMG_0412%29.jpg/250px-Yael_Cohen_Paran_%28IMG_0412%29.jpg',
+    'אמילי מואטי':            'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Emilie_Moatti_%28SHL_8044%29.jpg/250px-Emilie_Moatti_%28SHL_8044%29.jpg',
+    'אבתיסאם מראענה-מנוחין':  'https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Ibtisam_Maraana_MK_2022.jpg/250px-Ibtisam_Maraana_MK_2022.jpg',
+    'אורי זכי':               'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/UriZaki_125.jpg/250px-UriZaki_125.jpg',
+    'ערן עציון':              'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Eran_Etzion.jpg/250px-Eran_Etzion.jpg',
+    'נמרוד שפר':              'https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Tat-Aluf_Nimrod_Shefer_1.jpg/250px-Tat-Aluf_Nimrod_Shefer_1.jpg',
+    'תומר אביטל':             'https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Tomer_Avital_-_Israeli_Journalist_-_2024.jpg/250px-Tomer_Avital_-_Israeli_Journalist_-_2024.jpg',
+    'אבי דבוש':               'https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Avi_Dabush_2025a.jpg/250px-Avi_Dabush_2025a.jpg',
+    'נאור נרקיס':             'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Naor_Narkis_%28cropped%29.jpg/250px-Naor_Narkis_%28cropped%29.jpg',
+    'נעמה לזימי':             'https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Naama_lazimi_%28cropped%29.jpg/250px-Naama_lazimi_%28cropped%29.jpg',
+    'אפרת רייטן':             'https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Efrat_Rayten.jpg/250px-Efrat_Rayten.jpg',
+    'סומיה בשיר':             'https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/Somaya_Bashir.jpg/250px-Somaya_Bashir.jpg',
+    'גבי לסקי':               'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Gaby_Lasky_180222_023_%28cropped%29.jpg/250px-Gaby_Lasky_180222_023_%28cropped%29.jpg',
+    'הדס רגולסקי':            'https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/%D7%94%D7%93%D7%A1_%D7%A8%D7%92%D7%95%D7%9C%D7%A1%D7%A7%D7%99_%D7%A6%D7%99%D7%9C%D7%95%D7%9D-_%D7%92%D7%99%D7%9C%D7%99%D7%94_%D7%91%D7%9F_%D7%92%D7%93.jpg/250px-%D7%94%D7%93%D7%A1_%D7%A8%D7%92%D7%95%D7%9C%D7%A1%D7%A7%D7%99_%D7%A6%D7%99%D7%9C%D7%95%D7%9D-_%D7%92%D7%99%D7%9C%D7%99%D7%94_%D7%91%D7%9F_%D7%92%D7%93.jpg',
+    'איהאב שליאן':            'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/%D7%90%D7%99%D7%94%D7%90%D7%91_%D7%A9%D7%9C%D7%99%D7%90%D7%9F.jpg/250px-%D7%90%D7%99%D7%94%D7%90%D7%91_%D7%A9%D7%9C%D7%99%D7%90%D7%9F.jpg',
+    'עלי סלאלחה':             'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Ali_Salalcha_%28salalja%29.jpg/250px-Ali_Salalcha_%28salalja%29.jpg',
+    'יאיא פינק':              'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Yaya_Fink_%28cropped%29.jpg/250px-Yaya_Fink_%28cropped%29.jpg',
+    'משה רדמן':               'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Moshe_Radman.png/250px-Moshe_Radman.png',
+    'נאווה רוזוליו':          'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Nava_Rozolyo_Photo_by_Ben_Cohen_%28cropped%29.jpg/250px-Nava_Rozolyo_Photo_by_Ben_Cohen_%28cropped%29.jpg',
+    'רם שפע':                 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Ram_Shefa_%28SHL_8927%29.jpg/250px-Ram_Shefa_%28SHL_8927%29.jpg',
+  };
+
+  function localImageUrl(name) {
+    const base = IMAGE_OVERRIDE[name] || name.replace(/ /g, '_');
+    const ext = JPEG_NAMES.has(name) ? '.jpg' : '.webp';
+    return 'images_new/' + base + ext;
+  }
+
+  function imgSrc(name) {
+    return localImageUrl(name);
+  }
+
+  function imgFallback(name) {
+    if (WIKI_PHOTOS[name]) {
+      return `this.src='${WIKI_PHOTOS[name]}';this.onerror=function(){this.outerHTML='<span style="font-size:2rem">👤</span>'}`;
+    }
+    return `this.outerHTML='<span style="font-size:2rem">👤</span>'`;
+  }
+
+  function escapeHtml(s) {
+    return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  // עבור ערכים המוזרקים לתוך onclick="...('...')" — גרש גולמי בשם (כמו
+  // "בנימין מיניץ'") היה שובר את מחרוזת ה-JS. \' שורד את פענוח ה-HTML ומגיע
+  // ל-JS כברירה תקנית.
+  function jsAttr(s) {
+    return String(s || '')
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')
+      .replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+  }
+
+  // ═══════════════════════════════════════════
+  //  Build candidate list from state
+  // ═══════════════════════════════════════════
+  function buildCandidateList() {
+    const shiryun  = Array.isArray(primState.shiryun)   ? primState.shiryun   : [];
+    const dbrPicks = Array.isArray(primState.dbr_picks)  ? primState.dbr_picks : [];
+
+    // Union: shiryun first, then dbr-only
+    const seen = new Set();
+    const all  = [];
+    shiryun.forEach(n  => { if (!seen.has(n))  { seen.add(n);  all.push(n); } });
+    dbrPicks.forEach(n => { if (!seen.has(n))  { seen.add(n);  all.push(n); } });
+
+    return all;   // array of names in original pick order
+  }
+
+  function getVadai() {
+    return Array.isArray(primState.ballot) ? [...primState.ballot] : [];
+  }
+
+  function isFromShiryun(name) {
+    return Array.isArray(primState.shiryun) && primState.shiryun.includes(name);
+  }
+  function isFromDbr(name) {
+    return Array.isArray(primState.dbr_picks) && primState.dbr_picks.includes(name);
+  }
+
+  // ═══════════════════════════════════════════
+  //  Render
+  // ═══════════════════════════════════════════
+  function render() {
+    const all    = buildCandidateList();
+    const vadai  = getVadai();
+
+    if (all.length === 0) {
+      document.getElementById('no-picks-screen').style.display = '';
+      document.getElementById('filter-ui').style.display = 'none';
+      return;
+    }
+    document.getElementById('no-picks-screen').style.display = 'none';
+    document.getElementById('filter-ui').style.display = '';
+
+    // Split into vadai (in order of vadai array) and pending (rest)
+    const vadaiSet   = new Set(vadai);
+    const vadaiList  = vadai.filter(n => all.includes(n)); // only if still in pool
+    const pendingList = all.filter(n => !vadaiSet.has(n));
+
+    // ── Vadai zone — גריד שמות קומפקטי ──
+    const vadaiEl = document.getElementById('vadai-list');
+    vadaiEl.classList.add('name-grid');
+    if (vadaiList.length === 0) {
+      vadaiEl.classList.remove('name-grid');
+      vadaiEl.innerHTML = '<div class="empty-zone">לחצו על מועמד/ת מהרשימה למטה כדי להוסיף לפתק</div>';
+    } else {
+      vadaiEl.innerHTML = vadaiList.map(name => chipHTML(name, true)).join('');
+    }
+
+    // ── Pending zone — גריד שמות קומפקטי ──
+    const pendingEl = document.getElementById('pending-list');
+    pendingEl.classList.add('name-grid');
+    if (pendingList.length === 0) {
+      pendingEl.classList.remove('name-grid');
+      pendingEl.innerHTML = '<div class="empty-zone">כל המועמדים שלך כבר בפתק הבחירה 🎉</div>';
+    } else {
+      pendingEl.innerHTML = pendingList.map(name => chipHTML(name, false)).join('');
+    }
+
+    // ── סימון חוקיות: מסגרת הפתק + תג הכותרת ──
+    const isValid = vadaiList.length >= MIN_VADAI && vadaiList.length <= MAX_VADAI;
+    const frame = document.getElementById('ballot-frame');
+    frame.classList.toggle('is-valid', isValid);
+    frame.classList.toggle('is-invalid', !isValid);
+
+    const vadaiBadge = document.getElementById('vadai-zone-badge');
+    vadaiBadge.textContent = isValid
+      ? '✓ חוקי · ' + vadaiList.length
+      : '⚠ לא חוקי · ' + vadaiList.length;
+    vadaiBadge.classList.toggle('over-badge', !isValid);
+    vadaiBadge.classList.toggle('ok-badge', isValid);
+    document.getElementById('pending-zone-badge').textContent = pendingList.length + ' מועמדים';
+
+    // ── כיסוי הנושאים ע"י המועמדים שבפתק ──
+    renderCoverage(vadaiList);
+
+    // ── Done button — לחיץ רק כשהפתק חוקי (6–8 בפתק) ──
+    const doneBtn = document.getElementById('done-btn');
+    doneBtn.disabled = !isValid;
+    doneBtn.classList.toggle('ready', isValid);
+    doneBtn.textContent = 'סיום';
+  }
+
+  // ── צ'יפ שם קומפקטי (צעד 1) — שם בלבד, ללא נבחרות/תמונה ──
+  function chipHTML(name, isVadai) {
+    let cls = 'name-chip';
+    if (isVadai) cls += initialVadai.has(name) ? ' is-vadai-origin' : ' in-ballot';
+    return `<div class="${cls}"
+                 onclick="toggleVadai('${jsAttr(name)}')"
+                 title="${isVadai ? 'לחצו להוצאה מהפתק' : 'לחצו להוספה לפתק'}">${escapeHtml(name)}</div>`;
+  }
+
+  function cardHTML(name, position, isVadai) {
+    const fromShiryun = isFromShiryun(name);
+    const fromDbr     = isFromDbr(name);
+    const isFemale    = genderMap[name] === 'נשים';
+    const tags = [];
+    // שיוך לנבחרות — כל הנבחרות שהמועמד/ת מוצג/ת בהן (אותו סף כמו דף הסטייט)
+    const squads = squadsOf(name);
+    squads.forEach(t => {
+      tags.push(`<span class="tag tag-dbr">${escapeHtml(t)}</span>`);
+    });
+    // ★ ודאי בקבוצה התחתונה
+    if (!isVadai && initialVadai.has(name)) {
+      tags.push(`<span class="tag tag-vadai">★ ${isFemale ? 'ודאית' : 'ודאי'}</span>`);
+    }
+    // אין שיוך לאף נבחרת — מלא בתחומי החוזק כמו קודם
+    if (squads.length === 0) {
+      getTopicTags(name).slice(0, 3).forEach(t => {
+        tags.push(`<span class="tag tag-topic">${escapeHtml(t)}</span>`);
+      });
+    }
+
+    const numHtml = position
+      ? `<div class="slot-num">${position}</div>`
+      : `<div class="slot-num" style="opacity:.3">•</div>`;
+
+    const actionIcon = isVadai
+      ? `<div class="slot-action demote" title="הוצא מהפתק">↓</div>`
+      : `<div class="slot-action promote" title="הוסף לפתק">↑</div>`;
+
+    // בחירת class: ודאי מקורי (★) = זהב, נוסף בשלב 3 = כחול
+    const vadaiClass = isVadai
+      ? (initialVadai.has(name) ? ' is-vadai-origin' : ' is-vadai-added')
+      : '';
+
+    return `
+      <div class="candidate-slot${vadaiClass}"
+           onclick="toggleVadai('${jsAttr(name)}')"
+           title="${isVadai ? 'לחצו להוצאה מהפתק' : 'לחצו להוספה לפתק'}">
+        ${numHtml}
+        <div class="slot-photo">
+          <img src="${escapeHtml(imgSrc(name))}"
+               alt="${escapeHtml(name)}"
+               onerror="${escapeHtml(imgFallback(name))}">
+        </div>
+        <div class="slot-info">
+          <div class="slot-name">${escapeHtml(name)}</div>
+          <div class="slot-tags">${tags.join('')}</div>
+        </div>
+        ${actionIcon}
+      </div>`;
+  }
+
+  // ═══════════════════════════════════════════
+  //  Toggle vadai
+  // ═══════════════════════════════════════════
+  function toggleVadai(name) {
+    if (!Array.isArray(primState.ballot)) primState.ballot = [];
+
+    // אין מגבלה על מספר המועמדים בפתק — כל שם קופץ חופשי בין המצבים.
+    // החוקיות (6–8) מסומנת ויזואלית בלבד, לא נאכפת בהוספה.
+    const idx = primState.ballot.indexOf(name);
+    if (idx >= 0) {
+      primState.ballot.splice(idx, 1);
+    } else {
+      primState.ballot.push(name);
+    }
+
+    saveState(primState);
+    render();
+
+    try { gtag('event', 'filter_toggle', { name, action: idx >= 0 ? 'remove' : 'add' }); } catch(e) {}
+  }
+
+  // ═══════════════════════════════════════════
+  //  Toast
+  // ═══════════════════════════════════════════
+  let toastTimer;
+  function showToast(msg) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove('show'), 2500);
+  }
+
+  // ═══════════════════════════════════════════
+  //  Finish screen
+  // ═══════════════════════════════════════════
+  function finishAndGo() {
+    const all       = buildCandidateList();
+    const vadai     = getVadai();
+    const vadaiList = vadai.filter(n => all.includes(n));
+
+    const grid = document.getElementById('finish-grid');
+    // 3 עמודות ל-6 מועמדים (2×3 שורות שוות), 4 עמודות ל-7–8
+    grid.classList.toggle('finish-grid-3col', vadaiList.length <= 6);
+
+    grid.innerHTML = vadaiList.map(name =>
+      `<div class="finish-card">
+        <div class="finish-card-photo">
+          <img src="${escapeHtml(imgSrc(name))}"
+               alt="${escapeHtml(name)}"
+               onerror="${escapeHtml(imgFallback(name))}">
+        </div>
+        <div class="finish-card-name">${escapeHtml(name)}</div>
+      </div>`
+    ).join('');
+
+    saveState(primState);
+    try { gtag('event', 'filter_done', { vadai_count: vadaiList.length }); } catch(e) {}
+
+    document.getElementById('filter-ui').style.display     = 'none';
+    document.getElementById('finish-screen').style.display = '';
+    window.scrollTo(0, 0);
+  }
+
+  function backToEdit() {
+    document.getElementById('finish-screen').style.display = 'none';
+    document.getElementById('filter-ui').style.display     = '';
+  }
+
+  function copyShareLink() {
+    const url = 'https://dbr-primaris.github.io/2026/dbr_P_01_index.html';
+    const btn = document.getElementById('copy-link-btn');
+    const reset = () => {
+      btn.textContent = 'העתקת הקישור';
+      btn.classList.remove('copied');
+    };
+    const done = () => {
+      btn.textContent = 'הועתק ✓';
+      btn.classList.add('copied');
+      setTimeout(reset, 2500);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(done).catch(() => fallbackCopy(url, done));
+    } else {
+      fallbackCopy(url, done);
+    }
+  }
+
+  function fallbackCopy(text, cb) {
+    const el = document.createElement('textarea');
+    el.value = text;
+    el.style.cssText = 'position:fixed;top:-9999px;opacity:0';
+    document.body.appendChild(el);
+    el.select();
+    try { document.execCommand('copy'); } catch(e) {}
+    document.body.removeChild(el);
+    cb();
+  }
+
+  // ═══════════════════════════════════════════
+  //  Init
+  // ═══════════════════════════════════════════
+  render();
+</script>
+</body>
+</html>
+                                                            

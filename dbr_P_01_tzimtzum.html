@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<script>if(localStorage.getItem('dbr_disclaimer_accepted')!=='yes'&&sessionStorage.getItem('dbr_session_accepted')!=='yes'){window.location.href='dbr_P_01_index.html?redirect='+encodeURIComponent(location.pathname.split('/').pop()+location.search)}</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TJNJTZQF1F"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-TJNJTZQF1F');
+</script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>הנבחרת הסופית | מערכת תומכת החלטה לפריימריז</title>
+<style>
+  :root {
+    --blue-dark:   #12355b;
+    --blue-main:   #1d5fa7;
+    --blue-soft:   #eaf3ff;
+    --blue-card:   #f7fbff;
+    --green:       #2e7d4f;
+    --green-soft:  #e6f4eb;
+    --green-border:#b8dcc5;
+    --gold:        #b45309;
+    --gold-soft:   #fffde7;
+    --gold-border: #f59e0b;
+    --text-main:   #1f2933;
+    --text-muted:  #5f6b7a;
+    --border-soft: #d7e3f3;
+    --white:       #ffffff;
+    --shadow:      0 16px 38px rgba(18,53,91,.14);
+    --shadow-soft: 0 6px 20px rgba(18,53,91,.08);
+    --radius-large:  24px;
+    --radius-medium: 18px;
+    --radius-small:  12px;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: Arial, "Noto Sans Hebrew", sans-serif;
+    background: linear-gradient(180deg, #f4f8ff 0%, #ffffff 45%, #f8fbff 100%);
+    color: var(--text-main);
+    line-height: 1.65;
+    padding-bottom: 110px;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  .page {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 16px;
+  }
+
+  /* ── Topbar ── */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0 8px;
+    border-bottom: 1px solid var(--border-soft);
+    margin-bottom: 20px;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 800;
+    color: var(--blue-dark);
+    font-size: 1rem;
+    min-width: 0;
+    flex-shrink: 1;
+  }
+
+  .brand-mark {
+    height: 28px;
+    padding: 0 9px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #3730a3, #1e1b4b);
+    display: grid;
+    place-items: center;
+    color: white;
+    font-size: .84rem;
+    font-weight: 900;
+    letter-spacing: .06em;
+    box-shadow: 0 4px 14px rgba(55,48,163,.3);
+    flex-shrink: 0;
+  }
+
+  /* ── Page header ── */
+  .page-header { margin-bottom: 18px; }
+
+  .page-header h1 {
+    margin: 0 0 6px;
+    font-size: clamp(1.4rem, 2.5vw, 1.8rem);
+    color: var(--blue-dark);
+    letter-spacing: -0.015em;
+  }
+
+  .subtitle {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.93rem;
+    line-height: 1.6;
+  }
+
+  /* ── Counter pills ── */
+  .counter-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+
+  .vpill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 13px;
+    border-radius: 20px;
+    border: 1.5px solid var(--gold-border);
+    background: var(--gold-soft);
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: var(--gold);
+  }
+
+  .bpill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 13px;
+    border-radius: 20px;
+    border: 1.5px solid var(--border-soft);
+    background: var(--white);
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    transition: all 0.3s;
+  }
+
+  .bpill.done {
+    border-color: var(--green-border);
+    background: var(--green-soft);
+    color: var(--green);
+  }
+
+  /* ── In-zone (above the cut) ── */
+  .in-zone {
+    border-radius: var(--radius-medium);
+    border: 1.5px solid var(--border-soft);
+    min-height: 64px;
+    padding: 8px;
+    background: var(--white);
+    box-shadow: var(--shadow-soft);
+    transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
+  }
+
+  .in-zone.done {
+    background: var(--green-soft);
+    border-color: var(--green-border);
+    box-shadow: 0 0 0 3px rgba(46,125,79,.1);
+  }
+
+  .in-zone.is-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .empty-hint {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    text-align: center;
+    padding: 8px;
+  }
+
+  /* ── Cut line ── */
+  .cut-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0;
+  }
+
+  .cut-line {
+    flex: 1;
+    border-top: 2px dashed var(--border-soft);
+    transition: border-color 0.3s, border-style 0.3s;
+  }
+
+  .cut-line.done { border-color: var(--green); border-style: solid; }
+
+  .cut-label {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+    font-weight: 600;
+    transition: color 0.3s;
+  }
+
+  .cut-label.done { color: var(--green); }
+
+  /* ── Out-zone (below the cut) ── */
+  .out-zone {
+    border-radius: var(--radius-medium);
+    border: 1.5px solid var(--border-soft);
+    min-height: 64px;
+    padding: 8px;
+    background: #f7faff;
+    box-shadow: var(--shadow-soft);
+  }
+
+  /* ── Name rows ── */
+  .nrow {
+    width: 100%;
+    padding: 11px 14px;
+    border-radius: var(--radius-small);
+    border: 1px solid var(--border-soft);
+    background: var(--white);
+    font-size: 0.95rem;
+    font-family: inherit;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+    color: var(--text-main);
+    text-align: right;
+    transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+  }
+
+  .nrow:last-child { margin-bottom: 0; }
+
+  button.nrow { cursor: pointer; }
+
+  button.nrow.in-row { border-color: #c8dff8; }
+  button.nrow.in-row:hover { border-color: var(--blue-main); box-shadow: 0 2px 8px rgba(29,95,167,.1); }
+  button.nrow.in-row.done-bg { background: var(--green-soft); border-color: var(--green-border); }
+
+  .nrow.vadai-row { background: var(--gold-soft); border-color: var(--gold-border); cursor: default; }
+
+  button.nrow.out-row { color: var(--text-muted); background: var(--white); }
+  button.nrow.out-row:hover { border-color: var(--blue-main); color: var(--text-main); box-shadow: 0 2px 8px rgba(29,95,167,.1); }
+  button.nrow.out-row.blocked { opacity: 0.38; cursor: not-allowed; pointer-events: none; }
+
+  .row-name { font-weight: 700; flex: 1; }
+  .row-action { font-size: 0.8rem; color: var(--text-muted); flex-shrink: 0; }
+  button.nrow.in-row .row-action { color: var(--blue-main); }
+  button.nrow.in-row.done-bg .row-action { color: var(--green); }
+  .nrow.vadai-row .row-action { color: var(--gold); display: flex; align-items: center; gap: 6px; }
+
+  .vadai-star { color: var(--gold); margin-left: 6px; }
+
+  .unlock-btn {
+    font-size: 0.72rem;
+    color: var(--gold);
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-decoration: underline;
+    font-family: inherit;
+    padding: 0;
+    line-height: 1;
+  }
+
+  /* ── Empty pool ── */
+  .empty-pool {
+    text-align: center;
+    padding: 28px 16px;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  /* ── Sticky confirm footer ── */
+  .sticky-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--white);
+    border-top: 1px solid var(--border-soft);
+    box-shadow: 0 -8px 30px rgba(18,53,91,.08);
+    padding: 14px 20px;
+    z-index: 50;
+  }
+
+  .footer-inner {
+    max-width: 680px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .footer-note {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+  }
+
+  .confirm-btn {
+    padding: 12px 26px;
+    border-radius: 12px;
+    border: 1px solid var(--border-soft);
+    background: var(--blue-soft);
+    color: var(--text-muted);
+    font-weight: 800;
+    font-size: 0.96rem;
+    cursor: not-allowed;
+    font-family: inherit;
+    transition: all 0.25s;
+    white-space: nowrap;
+  }
+
+  .confirm-btn.ready {
+    background: var(--blue-main);
+    border-color: var(--blue-dark);
+    color: var(--white);
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(29,95,167,.25);
+  }
+
+  .confirm-btn.ready:hover {
+    background: var(--blue-dark);
+    transform: translateY(-1px);
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 600px) {
+    .page { padding: 0 10px; }
+    .brand span:last-child { font-size: .85rem; }
+    .nrow { padding: 10px 10px; font-size: 0.88rem; }
+    .footer-inner { flex-direction: column; align-items: stretch; gap: 8px; }
+    .confirm-btn { width: 100%; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ══ מסך הסבר ══ -->
+  <div id="tzimtzum-intro" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(18,53,91,.55);overflow-y:auto;padding:20px 16px 40px">
+    <div style="max-width:560px;margin:0 auto;background:white;border-radius:20px;padding:28px 24px;box-shadow:0 24px 60px rgba(18,53,91,.28)">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px">
+        <span style="height:36px;padding:0 11px;border-radius:12px;background:linear-gradient(135deg,#3730a3,#1e1b4b);display:grid;place-items:center;color:white;font-size:.84rem;font-weight:900;letter-spacing:.06em;box-shadow:0 4px 14px rgba(55,48,163,.3)">ד.ב.ר</span>
+        <span style="font-weight:800;color:var(--blue-dark)">הנבחרת הסופית</span>
+      </div>
+      <p style="color:var(--text-main);line-height:1.75;margin:0 0 12px">
+        מתחת לקו נמצאים כל המועמדים שבחרת עד כה. <br>
+        לחצי על שם כדי להעביר אותו <strong>מעל הקו</strong> — לנבחרת שתצביעי לה.
+      </p>
+      <p style="color:var(--text-main);line-height:1.75;margin:0 0 20px">
+        כשמגיעים ל-8, הנבחרת מלאה ואפשר לאשר.<br>
+        רוצה להחליף? לחצי על שם <strong>מעל הקו</strong> להחזרתו מטה.
+      </p>
+      <button onclick="dismissIntro()"
+        style="padding:12px 30px;background:var(--blue-main);color:white;border:none;border-radius:12px;font-weight:800;font-size:1rem;cursor:pointer;font-family:inherit;box-shadow:0 8px 24px rgba(29,95,167,.22);transition:transform .15s"
+        onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
+        הבנתי — בואי נתחיל ←
+      </button>
+    </div>
+  </div>
+  <!-- ════════════════ -->
+
+  <main class="page">
+
+    <header class="topbar">
+      <div style="display:flex;flex-direction:column;width:100%;gap:4px">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <a class="brand" href="dbr_P_01_index.html">
+            <span class="brand-mark">ד.ב.ר</span>
+            <span>דמוקרטים בוחרים רציונלית</span>
+          </a>
+          <a href="dbr_P_01_process.html" style="font-size:1.8rem;text-decoration:none;line-height:1;flex-shrink:0">⬅️</a>
+        </div>
+        <div style="text-align:center;font-size:.72rem;color:var(--text-muted)">© 2026 Silvertel Online ltd | כל הזכויות שמורות</div>
+      </div>
+    </header>
+
+    <section class="page-header">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+        <h1 style="margin:0">הנבחרת הסופית</h1>
+        <button onclick="document.getElementById('tzimtzum-intro').style.display='block'"
+          style="width:26px;height:26px;border-radius:50%;border:2px solid var(--blue-main);background:white;color:var(--blue-main);font-size:.85rem;font-weight:900;cursor:pointer;font-family:Georgia,serif;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0">i</button>
+      </div>
+      <p class="subtitle">הזיזי שמות מלמטה למעלה כדי לבנות את 8 הנבחרים שיקבלו את קולך.</p>
+    </section>
+
+    <div class="counter-wrap" id="counter-wrap"></div>
+
+    <div class="in-zone is-empty" id="in-zone">
+      <span class="empty-hint" id="in-hint">לחצי על שם מלמטה כדי להכניס לנבחרת</span>
+    </div>
+
+    <div class="cut-wrap">
+      <div class="cut-line" id="cut-l"></div>
+      <span class="cut-label" id="cut-lbl">הנבחרת הסופית מעל · שאר מתחת</span>
+      <div class="cut-line" id="cut-r"></div>
+    </div>
+
+    <div class="out-zone" id="out-zone"></div>
+
+  </main>
+
+  <!-- Sticky footer -->
+  <div class="sticky-footer">
+    <div class="footer-inner">
+      <span class="footer-note" id="footer-note">טוען…</span>
+      <button class="confirm-btn" id="confirm-btn" disabled onclick="confirmFinal()">אישור הנבחרת הסופית ←</button>
+    </div>
+  </div>
+
+  <script>
+    // ════════════════════════════════════════
+    // Shared state (identical pattern to all pages)
+    // ════════════════════════════════════════
+    const STATE_KEY = 'primeris_state_v1';
+    const INTRO_KEY = 'dbr_tzimtzum_intro_seen';
+    const TARGET    = 8;
+
+    function getInitialState() {
+      return {
+        meta: { created_at: new Date().toISOString(), last_updated: new Date().toISOString(), version: 1, paths_visited: [], status: 'in_progress' },
+        selected: [], approved: [],
+        profile: { deot: { flags: {}, skipped_categories: {} }, yecholot: { ranked: [] }, tadmit: { flags: {} }, weights: { deot: 33, yecholot: 33, tadmit: 34 } },
+        paths: { shiryun: { last_visited: null }, similar: { anchor_candidate: null }, advisor: null }
+      };
+    }
+
+    function deepMerge(target, source) {
+      if (typeof source !== 'object' || source === null) return source;
+      if (Array.isArray(source)) return source.slice();
+      const result = { ...target };
+      for (const key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          result[key] = (typeof source[key] === 'object' && source[key] !== null && !Array.isArray(source[key]))
+            ? deepMerge(target[key] || {}, source[key])
+            : source[key];
+        }
+      }
+      return result;
+    }
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STATE_KEY);
+        if (!raw) return getInitialState();
+        return deepMerge(getInitialState(), JSON.parse(raw));
+      } catch (e) { return getInitialState(); }
+    }
+
+    function saveState(s) {
+      try { s.meta.last_updated = new Date().toISOString(); localStorage.setItem(STATE_KEY, JSON.stringify(s)); } catch (e) {}
+    }
+
+    function escapeHtml(s) {
+      return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+    }
+
+    // ════════════════════════════════════════
+    // Intro modal
+    // ════════════════════════════════════════
+    function dismissIntro() {
+      localStorage.setItem(INTRO_KEY, 'yes');
+      document.getElementById('tzimtzum-intro').style.display = 'none';
+    }
+
+    if (localStorage.getItem(INTRO_KEY) !== 'yes' || new URLSearchParams(location.search).get('intro') === '1') {
+      document.getElementById('tzimtzum-intro').style.display = 'block';
+    }
+
+    // ════════════════════════════════════════
+    // Page state
+    // ════════════════════════════════════════
+    let primState = loadState();
+
+    // Pool: candidates selected in step 1
+    const pool = Array.isArray(primState.shiryun) ? [...primState.shiryun] : [];
+
+    // ודאי: must-have candidates (set in step 1, future feature — supported here now)
+    const vadaiIds   = new Set(Array.isArray(primState.vadai) ? primState.vadai : []);
+    let lockedAbove  = pool.filter(id => vadaiIds.has(id));   // start locked above the line
+    let unlockedVadai = new Set();                             // vadai the user chose to release
+
+    let aboveList = [];                                         // regular above-cut candidates
+    let belowList = pool.filter(id => !vadaiIds.has(id));     // start below the line
+
+    // ════════════════════════════════════════
+    // Name lookup (from candidates_master.json)
+    // ════════════════════════════════════════
+    let nameMap = {};   // id → שם
+
+    function getName(id) {
+      return nameMap[id] || String(id).replace(/-/g, ' ');
+    }
+
+    // ════════════════════════════════════════
+    // Helpers
+    // ════════════════════════════════════════
+    function effectiveLocked() { return lockedAbove.filter(id => !unlockedVadai.has(id)); }
+    function totalAbove()      { return effectiveLocked().length + aboveList.length; }
+
+    // ════════════════════════════════════════
+    // Render
+    // ════════════════════════════════════════
+    function render() {
+      const locked    = effectiveLocked();
+      const above     = totalAbove();
+      const isDone    = above === TARGET;
+      const maxReached = above >= TARGET;
+
+      // — Counter pills —
+      const cw = document.getElementById('counter-wrap');
+      cw.innerHTML = '';
+      if (locked.length > 0) {
+        const vp = document.createElement('span');
+        vp.className = 'vpill';
+        vp.textContent = '★ ' + locked.length + ' ודאי';
+        cw.appendChild(vp);
+      }
+      const bp = document.createElement('span');
+      bp.className = 'bpill' + (isDone ? ' done' : '');
+      const need = TARGET - locked.length;
+      bp.textContent = isDone ? '✓ הנבחרת מלאה' : (aboveList.length + '/' + need + ' נוספים');
+      cw.appendChild(bp);
+
+      // — In-zone —
+      const inZone = document.getElementById('in-zone');
+      inZone.className = 'in-zone' + (isDone ? ' done' : '') + (above === 0 ? ' is-empty' : '');
+      document.getElementById('in-hint').style.display = above === 0 ? 'block' : 'none';
+      inZone.querySelectorAll('.nrow').forEach(e => e.remove());
+
+      locked.forEach(id => {
+        const row = document.createElement('div');
+        row.className = 'nrow vadai-row';
+        row.innerHTML =
+          '<span class="row-name"><span class="vadai-star">★</span>' + escapeHtml(getName(id)) + '</span>' +
+          '<span class="row-action">' +
+            '<button class="unlock-btn" onclick="unlockVadai(\'' + escapeHtml(id) + '\')">שחרר</button>' +
+            ' 🔒' +
+          '</span>';
+        inZone.appendChild(row);
+      });
+
+      aboveList.forEach((id, i) => {
+        const row = document.createElement('button');
+        row.type = 'button';
+        row.className = 'nrow in-row' + (isDone ? ' done-bg' : '');
+        row.innerHTML =
+          '<span class="row-name">' + escapeHtml(getName(id)) + '</span>' +
+          '<span class="row-action">הסר ↓</span>';
+        row.onclick = () => { aboveList.splice(i, 1); belowList.unshift(id); render(); };
+        inZone.appendChild(row);
+      });
+
+      // — Cut line —
+      ['cut-l', 'cut-r'].forEach(id => {
+        document.getElementById(id).className = 'cut-line' + (isDone ? ' done' : '');
+      });
+      const lbl = document.getElementById('cut-lbl');
+      lbl.className = 'cut-label' + (isDone ? ' done' : '');
+      lbl.textContent = isDone ? '✓ הנבחרת מלאה — 8/8' : 'הנבחרת הסופית מעל · שאר מתחת';
+
+      // — Out-zone —
+      const outZone = document.getElementById('out-zone');
+      outZone.innerHTML = '';
+
+      const unlockedArr = [...unlockedVadai];
+      const allBelow = [...unlockedArr.map(id => ({ id, wasVadai: true })), ...belowList.map(id => ({ id, wasVadai: false }))];
+
+      if (allBelow.length === 0) {
+        outZone.innerHTML = '<p style="text-align:center;padding:20px 0;margin:0;color:var(--text-muted);font-size:.92rem">כל המועמדים בנבחרת</p>';
+      } else {
+        allBelow.forEach(({ id, wasVadai }, i) => {
+          const row = document.createElement('button');
+          row.type = 'button';
+          row.className = 'nrow out-row' + (maxReached ? ' blocked' : '');
+          row.innerHTML =
+            '<span class="row-name">' + (wasVadai ? '<span style="color:var(--gold-border)">★ </span>' : '') + escapeHtml(getName(id)) + '</span>' +
+            '<span class="row-action">↑ הוסף</span>';
+          row.onclick = () => {
+            if (maxReached) return;
+            if (wasVadai) {
+              unlockedVadai.delete(id);
+              aboveList.push(id);
+            } else {
+              belowList.splice(belowList.indexOf(id), 1);
+              aboveList.push(id);
+            }
+            render();
+          };
+          outZone.appendChild(row);
+        });
+      }
+
+      // — Footer —
+      const btn = document.getElementById('confirm-btn');
+      btn.disabled = !isDone;
+      btn.className = 'confirm-btn' + (isDone ? ' ready' : '');
+
+      const note = document.getElementById('footer-note');
+      if (pool.length === 0) {
+        note.textContent = 'לא נמצאו מועמדים — חזרי לשלב הבחירה';
+      } else if (pool.length < TARGET) {
+        note.textContent = 'יש לך ' + pool.length + ' מועמדים — צריך לפחות 8';
+      } else if (isDone) {
+        note.textContent = 'נבחרת מלאה — לחצי אישור';
+      } else {
+        const rem = TARGET - above;
+        note.textContent = 'יש לבחור עוד ' + rem + (rem === 1 ? ' מועמד' : ' מועמדים');
+      }
+    }
+
+    function unlockVadai(id) {
+      unlockedVadai.add(id);
+      render();
+    }
+
+    function confirmFinal() {
+      const locked = effectiveLocked();
+      const finalEight = [...locked, ...aboveList];
+      if (finalEight.length !== TARGET) return;
+      primState.approved = finalEight;
+      primState.meta.status = 'approved';
+      if (!primState.meta.paths_visited.includes('tzimtzum')) {
+        primState.meta.paths_visited.push('tzimtzum');
+      }
+      saveState(primState);
+      window.location.href = 'dbr_P_01_official.html';
+    }
+
+    // ════════════════════════════════════════
+    // Init: load names then render
+    // ════════════════════════════════════════
+    async function init() {
+      try {
+        const res = await fetch('data/candidates_master.json');
+        if (res.ok) {
+          const data = await res.json();
+          const list = Array.isArray(data) ? data : (data.candidates || []);
+          list.forEach(c => { if (c.id && c['שם']) nameMap[c.id] = c['שם']; });
+        }
+      } catch (e) { /* fallback: show id with dashes replaced */ }
+
+      // Handle empty pool
+      if (pool.length === 0) {
+        document.getElementById('in-zone').innerHTML =
+          '<div class="empty-pool">' +
+            '<p style="margin:0 0 12px">לא בחרת מועמדים עדיין.</p>' +
+            '<a href="dbr_P_01_shiryun.html" style="color:var(--blue-main);font-weight:700">חזרה לבחירת מועמדים ←</a>' +
+          '</div>';
+        document.getElementById('out-zone').style.display = 'none';
+        document.getElementById('cut-lbl').textContent = '';
+      }
+
+      render();
+    }
+
+    init();
+  </script>
+
+  <script>
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        document.getElementById('tzimtzum-intro').style.display = 'none';
+      }
+    });
+  </script>
+
+</body>
+</html>

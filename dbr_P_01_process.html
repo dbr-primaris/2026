@@ -37,7 +37,7 @@
 
     body {
       margin: 0;
-      font-family: Arial, "Noto Sans Hebrew", sans-serif;
+      font-family: 'Heebo', Arial, sans-serif;
       background: #f4f8ff;
       color: var(--text-main);
       line-height: 1.65;
@@ -47,77 +47,138 @@
 
     .page { max-width: 960px; margin: 0 auto; padding: 0 24px 60px; }
 
-    /* ── Top bar ── */
+    /* ── Top bar (dark navy) ── */
     .topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 20px;
-      padding: 8px 0 6px;
-      border-bottom: 1px solid var(--border-soft);
-      margin-bottom: 20px;
+      background: #0D2B5E;
+      padding: 12px 24px 0;
+      margin: 0 -24px 24px;
     }
-
+    .topbar-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-bottom: 10px;
+    }
     .brand {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
+      color: rgba(255,255,255,.92);
       font-weight: 800;
-      color: var(--blue-dark);
-      font-size: 1.1rem;
+      font-size: 1rem;
+      text-decoration: none;
     }
-
     .brand-mark {
-      height: 28px;
-      padding: 0 9px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #3730a3, #1e1b4b);
+      height: 26px;
+      padding: 0 8px;
+      border-radius: 9px;
+      background: #C9A017;
       display: grid;
       place-items: center;
-      color: white;
-      font-size: .84rem;
+      color: #0D2B5E;
+      font-size: .8rem;
       font-weight: 900;
-      letter-spacing: .06em;
-      box-shadow: 0 4px 14px rgba(55,48,163,.3);
+      letter-spacing: .05em;
     }
 
-    .nav {
+    /* ── Step navigator (on dark bg) ── */
+    .step-nav {
       display: flex;
-      gap: 6px;
-      font-size: .9rem;
+      align-items: center;
+      width: 100%;
+      padding: 4px 0 10px;
     }
+    .step-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+    .step-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.22);
+      transition: all .2s;
+    }
+    .step-item.done .step-dot  { background: rgba(255,255,255,.55); }
+    .step-item.active .step-dot { width: 8px; height: 8px; background: #fff; box-shadow: 0 0 0 2px rgba(255,255,255,.2); }
+    .step-lbl {
+      font-size: .58rem;
+      color: rgba(255,255,255,.35);
+      white-space: nowrap;
+      line-height: 1;
+      font-weight: 500;
+    }
+    .step-item.done .step-lbl  { color: rgba(255,255,255,.6); font-weight: 700; }
+    .step-item.active .step-lbl { color: #fff; font-weight: 800; font-size: .63rem; }
+    .step-line {
+      flex: 1;
+      height: 1px;
+      background: rgba(255,255,255,.12);
+      margin-bottom: 14px;
+    }
+    .step-line.done { background: rgba(255,255,255,.42); }
 
-    .nav a {
-      padding: 7px 14px;
-      border: 1px solid var(--border-soft);
-      border-radius: 999px;
+    /* ── Step cards (vertical list, reversed order) ── */
+    .steps-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-width: 640px;
+      margin: 0 auto 20px;
+    }
+    .step-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
       background: white;
-      color: var(--text-muted);
-      font-weight: 600;
-      transition: border-color .15s, color .15s;
+      border: 1px solid var(--border-soft);
+      border-radius: 14px;
+      cursor: pointer;
+      transition: border-color .15s;
+      position: relative;
     }
-
-    .nav a:hover { border-color: var(--blue-main); color: var(--blue-main); }
-    .nav a.active { background: var(--blue-main); color: white; border-color: var(--blue-main); }
+    .step-card:hover:not(.locked) { border-color: var(--blue-main); }
+    .step-card.active  { border: 2px solid var(--blue-main); background: #f0f6ff; }
+    .step-card.done    { border: 1px solid #b8cfe8; background: #f4f8fd; }
+    .step-card.locked  { opacity: .42; cursor: not-allowed; pointer-events: none; }
+    .sc-num {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border-soft);
+      display: grid; place-items: center;
+      font-size: .85rem; font-weight: 900;
+      color: #9bafc7; flex-shrink: 0; background: white;
+    }
+    .step-card.active .sc-num { border-color: var(--blue-main); background: var(--blue-main); color: white; }
+    .step-card.done   .sc-num { border-color: #7ba3cc; background: #dce9f7; color: #3a6fa0; font-size: .72rem; }
+    .sc-info { flex: 1; min-width: 0; }
+    .sc-title { font-size: .9rem; font-weight: 800; color: var(--text-main); }
+    .step-card.active .sc-title { color: var(--blue-dark); }
+    .step-card.done   .sc-title { color: #3a6fa0; }
+    .sc-status { font-size: .72rem; color: #9bafc7; margin-top: 2px; }
+    .step-card.active .sc-status { color: var(--blue-main); font-weight: 800; font-size: .82rem; }
+    .step-card.done   .sc-status { color: #7ba3cc; }
 
     /* ── Page title ── */
     .page-title {
-      margin-bottom: 32px;
+      text-align: center;
+      margin-bottom: 20px;
     }
-
     .page-title h1 {
-      margin: 0 0 8px;
-      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      margin: 0 0 4px;
+      font-size: clamp(1.3rem, 2.5vw, 1.7rem);
       color: var(--blue-dark);
       letter-spacing: -.02em;
       line-height: 1.25;
     }
-
     .page-title p {
       margin: 0;
       color: var(--text-muted);
-      font-size: 1rem;
-      max-width: 640px;
+      font-size: .88rem;
     }
 
     /* ── Status bar (when candidates exist) ── */
@@ -348,9 +409,106 @@
       .paths-grid { grid-template-columns: 1fr; }
       .status-bar { flex-direction: column; align-items: stretch; }
       .manage-btn { text-align: center; justify-content: center; }
+
+      /* מובייל: כרטיסי השלבים גדולים יותר, פונטים גדולים יותר */
+      .steps-list { gap: 14px; }
+      .step-card { padding: 20px 18px; gap: 16px; }
+      .sc-num { width: 44px; height: 44px; font-size: 1.1rem; }
+      .step-card.done .sc-num { font-size: .95rem; }
+      .sc-title { font-size: 1.15rem; }
+      .sc-status { font-size: .88rem; margin-top: 4px; }
+      .flow-connector { font-size: 1.7rem; margin: 0; }
+
+      /* מובייל: צמצום רווחים בחלק התחתון */
+      .foot-row { margin-bottom: 6px !important; }
+      .footer { margin-top: 18px; padding-top: 14px; font-size: .8rem; }
     }
     @media (max-width: 480px) { .page { padding-inline: 8px; } }
+  
+    .flow-connector {
+      text-align: center;
+      font-size: 1.5rem;
+      color: var(--blue-main);
+      opacity: .9;
+      margin: -2px 0;
+      line-height: 1;
+      user-select: none;
+      font-weight: 700;
+    }
+    .flow-side-label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 20px;
+      flex-shrink: 0;
+      margin-left: 6px;
+      user-select: none;
+    }
+    .flow-side-line {
+      flex: 1;
+      width: 3px;
+      background: var(--blue-main);
+      opacity: .5;
+      border-radius: 2px;
+      position: relative;
+    }
+    /* מרפק שיוצא מהקו ומצביע אל ראש תיבה 3 — ממוקם ומצויר ב-JS (alignFlowElbow) */
+    .flow-elbow-svg {
+      position: absolute;
+      top: 0; left: 0;
+      overflow: visible;
+      pointer-events: none;
+    }
+    .flow-side-text {
+      font-size: .7rem;
+      font-weight: 800;
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      letter-spacing: .09em;
+      white-space: nowrap;
+      color: var(--blue-main);
+      opacity: .68;
+      padding: 7px 0;
+    }
+    .step-card.passive {
+      background: transparent;
+      border: 1.5px solid #b8cfe8;
+    }
+    .step-card.passive .sc-num { background: transparent; }
+
+    /* ── קישורים חיצוניים — מתחת למלבנים הראשיים, מופרד בקו בולט ── */
+    .external-links {
+      margin-top: 28px;
+      padding-top: 22px;
+      border-top: 2px solid var(--border-soft);
+    }
+    .external-links-title {
+      font-size: .82rem;
+      font-weight: 800;
+      color: var(--text-muted);
+      letter-spacing: .03em;
+      margin-bottom: 4px;
+    }
+    .external-links-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .external-links-list li {
+      font-size: .88rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .external-links-list a {
+      color: var(--blue-main);
+      font-weight: 700;
+      text-decoration: underline;
+    }
   </style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="page">
@@ -363,16 +521,28 @@
   gtag('js', new Date());
   gtag('config', 'G-TJNJTZQF1F');
 </script>
-      <div style="display:flex;flex-direction:column;width:100%;gap:6px">
-        <div style="display:flex;align-items:center;justify-content:space-between">
-          <a class="brand" href="dbr_P_01_index.html" style="min-width:0;flex-shrink:1">
-            <span class="brand-mark">ד.ב.ר</span>
-            <span>דמוקרטים בוחרים רציונלית</span>
-          </a>
-          <a href="dbr_P_01_index.html" style="font-size:1.8rem;text-decoration:none;line-height:1;flex-shrink:0">⬅️</a>
-        </div>
-        <div style="text-align:center;font-size:.72rem;color:var(--text-muted)">© 2026 Silvertel Online ltd | כל הזכויות שמורות</div>
+      <div class="topbar-row">
+        <a class="brand" href="dbr_P_01_index.html">
+          <span class="brand-mark">ד.ב.ר</span>
+          <span>דמוקרטים בוחרים רציונלית</span>
+        </a>
       </div>
+      <nav class="step-nav" id="step-nav">
+        <div class="step-item" id="sn1">
+          <div class="step-dot"></div>
+          <div class="step-lbl">נקודת הפתיחה</div>
+        </div>
+        <div class="step-line" id="sl1"></div>
+        <div class="step-item" id="sn2">
+          <div class="step-dot"></div>
+          <div class="step-lbl">משחק הכסאות</div>
+        </div>
+        <div class="step-line" id="sl2"></div>
+        <div class="step-item" id="sn3">
+          <div class="step-dot"></div>
+          <div class="step-lbl">פתק הבחירה</div>
+        </div>
+      </nav>
     </header>
 
     <!-- Status bar — shown only when there are candidates -->
@@ -388,77 +558,79 @@
       </div>
     </div>
 
-    <!-- Path cards -->
-    <div class="paths-grid">
+    <!-- Step cards — סדר רגיל: 1 למעלה → 3 למטה -->
+    <div style="max-width:640px;margin:0 auto 20px">
+      <div id="flow-side-wrap" style="display:flex;gap:0;align-items:stretch;position:relative">
 
-      <div class="path-card" style="cursor:default;border:2px solid #2e7d32;box-shadow:0 4px 20px rgba(46,125,50,.1);">
-        <div class="path-title">
-          <button class="card-zoom-btn" onclick="cardZoom('shiryun',-1)">−</button>
-          <span class="title-text">בחירה עצמאית ראשונית</span>
-          <button class="card-zoom-btn" onclick="cardZoom('shiryun',1)">+</button>
+        <!-- קו אנכי "סדר המשחק" + מרפק שנכנס לתיבה 3 (מיושר ב-JS) -->
+        <div class="flow-side-label">
+          <div class="flow-side-line" id="flow-line-top"></div>
+          <span class="flow-side-text" id="flow-side-text">סדר המשחק</span>
+          <div class="flow-side-line" id="flow-line-bottom"></div>
         </div>
-        <div class="path-desc" id="shiryun-desc">כאן בוחרים את המועמדים/ות באופן עצמאי, ישירות מתוך הרשימה המלאה — על פי שיקול הדעת שלכם בלבד.<br>אין הנחיה, אין דירוג אוטומטי: מאתרים את המועמד שאתם מתכוונים לבחור בן, "מציצים" בפרופיל שלו ובתמונתו ומסמנים. את הבחירות האלו אפשר לשנות בכל שלב.<br>בסיום, הרשימה שבחרתם עוברת אתכם להמשך התהליך.</div>
-        <a href="dbr_P_01_shiryun.html" onclick="event.stopPropagation();trackPath('shiryun')" style="position:relative;z-index:2;display:inline-flex;align-items:center;justify-content:center;align-self:flex-end;margin-top:10px;width:36px;height:36px;background:var(--blue-soft);color:var(--blue-main);border:2px solid var(--blue-main);border-radius:50%;font-weight:900;font-size:1.2rem;text-decoration:none;box-shadow:0 2px 8px rgba(29,95,167,.18);transition:transform .15s,box-shadow .15s,background .15s;" onmouseover="this.style.transform='scale(1.12)';this.style.boxShadow='0 4px 14px rgba(29,95,167,.32)';this.style.background='#dceaff'" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 2px 8px rgba(29,95,167,.18)';this.style.background='var(--blue-soft)'">←</a>
-        <a href="dbr_P_01_shiryun.html" onclick="trackPath('shiryun')" class="card-tap-zone" aria-label="בחירה עצמאית ראשונית"></a>
-      </div>
+        <svg id="flow-elbow-svg" class="flow-elbow-svg" aria-hidden="true"></svg>
 
-      <div class="path-card" id="rec-card" style="cursor:default;border:2px solid #1d5fa7;box-shadow:0 4px 20px rgba(29,95,167,.1);position:relative;">
-        <div class="path-title">
-          <button class="card-zoom-btn" onclick="cardZoom('dbr',-1)">−</button>
-          <span class="title-text">משחקי סימולציה</span>
-          <button class="card-zoom-btn" onclick="cardZoom('dbr',1)">+</button>
-        </div>
-        <div class="path-desc" id="dbr-card-desc">כאן יוצאים מנקודת מוצא מוכנה מראש: נושאים ( עם מועמדים מתאימים) או נבחרות שמערכות הבינה סיווגו על פי קריטריונים של אנשי הפרויקט ויועצים נוספים.<br>כל נבחרת/נושא מציגה את המועמדים המובילים שלה, כשאלה שבחרתם כבר ונמצאים בתצוגה - מודגשים. .<br>תוכלו לעבור בין הנבחרות או הנושאים השונים, כשהמועמדים שבחרתם עוברים אתכם. וכך ניתן לבחור מכל נבחרת או נושא את הראויים בעיניכם, ולבסוף להרכיב מהם את ה‑8 שלכם.</div>
-        <a href="#" onclick="event.preventDefault();event.stopPropagation();tryRecommendation()" style="position:relative;z-index:2;display:inline-flex;align-items:center;justify-content:center;align-self:flex-end;margin-top:10px;width:36px;height:36px;background:var(--blue-soft);color:var(--blue-main);border:2px solid var(--blue-main);border-radius:50%;font-weight:900;font-size:1.2rem;text-decoration:none;box-shadow:0 2px 8px rgba(29,95,167,.18);transition:transform .15s,box-shadow .15s,background .15s;" onmouseover="this.style.transform='scale(1.12)';this.style.boxShadow='0 4px 14px rgba(29,95,167,.32)';this.style.background='#dceaff'" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 2px 8px rgba(29,95,167,.18)';this.style.background='var(--blue-soft)'">←</a>
-        <a href="#" onclick="event.preventDefault();tryRecommendation()" class="card-tap-zone" aria-label="משחקי סימולציה"></a>
-        <!-- hint חץ לבחירה עצמאית -->
-        <div id="rec-hint" style="display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:82%;z-index:20;background:rgba(255,243,205,0.97);border:2px solid #f59e0b;border-radius:14px;padding:20px 16px 16px;text-align:center;pointer-events:none;box-shadow:0 4px 18px rgba(0,0,0,.15);flex-direction:column;align-items:center;justify-content:center;gap:8px;">
-          <div style="font-size:1.25rem;font-weight:900;color:#92400e;line-height:1.4;">התחילו בבחירה עצמאית</div>
-          <div id="rec-hint-arrow" style="font-size:2.2rem;color:#f59e0b;">→</div>
-          <div style="font-size:.82rem;color:#78350f;line-height:1.5;margin-top:4px;">(רצוי לבחור מועמדים בבחירה עצמאית ראשונית, הן כדי להבין מהר יותר את השלבים הבאים, והן כדי להתאים את המערכת אליכם.)</div>
-        </div>
-      </div>
+        <div class="steps-list" style="flex:1;margin:0;max-width:none">
 
-      <div class="path-card" style="cursor:default;opacity:.7;border:2px dashed #a0b4cc;">
-        <div class="path-title">
-          <button class="card-zoom-btn" onclick="cardZoom('summary',-1)">−</button>
-          <span class="title-text" style="color:var(--text-muted)">מסך סיכום</span>
-          <button class="card-zoom-btn" onclick="cardZoom('summary',1)">+</button>
+        <!-- שלב 1: בחירה (ראש — תמיד זמין) -->
+        <div class="step-card active" id="card-shiryun" onclick="goToShiryun()">
+          <div class="sc-num" id="num-shiryun">1</div>
+          <div class="sc-info">
+            <div class="sc-title">נקודת הפתיחה שלי</div>
+            <div class="sc-status" id="status-shiryun">בשלב זה, ניתן לסמן מועמדים לבחירה טנטטיבית או וודאית, כולל צפייה במידע המפורט עליהם</div>
+          </div>
         </div>
-        <div id="summary-static-desc" class="path-desc" style="color:var(--text-muted)">
-          במסך זה יוצג פתק הבחירה המלא שלכם — מוכן להדפסה, לשמירה כקובץ, או לשליחה לאחרים.
-        </div>
-        <div id="summary-desc" style="display:none;margin-top:6px;color:var(--text-main)"></div>
-        <div style="margin-top:10px;padding:8px 12px;background:#fff8e1;border:1.5px solid #fbbf24;border-radius:8px;font-size:.88rem;color:#92400e;">
-          <strong>שלב זה עדיין בפיתוח</strong> — יהיה זמין בקרוב.
-        </div>
-      </div>
 
-      <!-- מלבן: אתר המועמדים הרשמי -->
-      <div class="path-card" style="cursor:default;border:2px solid #0f766e;box-shadow:0 4px 20px rgba(15,118,110,.1);">
-        <div class="path-title">
-          <button class="card-zoom-btn" onclick="cardZoom('official',-1)">−</button>
-          <span class="title-text" style="color:#0f4c43;">אתר המועמדים הרשמי</span>
-          <button class="card-zoom-btn" onclick="cardZoom('official',1)">+</button>
+        <div class="flow-connector">↓</div>
+
+        <!-- שלב 2: סימולציה -->
+        <div class="step-card locked" id="card-state" onclick="handleStateClick()">
+          <div class="sc-num" id="num-state">2</div>
+          <div class="sc-info">
+            <div class="sc-title">משחק הכסאות</div>
+            <div class="sc-status" id="status-state">בשלב זה ניתן לעבור בין סימולציות שונות שנעשו ע"י הבינות המלאכותיות, כשהמועמדים שנבחרו משתלבים היטב בסימולציות</div>
+          </div>
         </div>
-        <div class="path-desc" id="official-desc" style="color:var(--text-muted)">
-          מפלגת הדמוקרטים מציעה לכל חברה וחבר להכריע מי יהיו המועמדים שלה לכנסת הבאה. כל מי שיתפקדו עד ליום 12.7.2026 בשעה 24:00 יוכלו להצביע.<br><br>
-          אם ברצונכם לראות את המועמדים כפי שהם מציגים את עצמם באתר המפלגה, כנסו לאתר שם, הכירו את המועמדים. כנסו לקישורים, קראו והכירו את המועמדים המגוונים והמצוינים שהחליטו לקחת צעד אמיץ ולהציע את עצמם לרשימה. אנו שמחים וגאים בכולם.<br><br>
-          יחד נבנה דמוקרטיה חזקה וטובה יותר!<br><br>
-          <a href="dbr_P_01_official_frame.html" onclick="event.stopPropagation();trackPath('official_frame')" style="position:relative;z-index:2;color:#0f766e;font-weight:800;text-decoration:underline;">לצפייה באתר המפלגה — לחץ כאן</a>
+
+        <div class="flow-connector">↓</div>
+
+        <!-- שלב 3: פתק הבחירה (תחתון — נעול עד שמוכן) -->
+        <div class="step-card locked" id="card-filter" onclick="goToFilter()">
+          <div class="sc-num" id="num-filter">3</div>
+          <div class="sc-info">
+            <div class="sc-title">פתק הבחירה שלי</div>
+            <div class="sc-status" id="status-filter">זהו סוף התהליך שבו יש להתאים את מספר המועמדים לדרישות המפלגה (6-8 שמות)</div>
+          </div>
+        </div>
+
         </div>
       </div>
-
     </div>
 
-    <div style="text-align:center;margin-bottom:12px">
+    <div class="foot-row" style="text-align:center;margin-bottom:12px">
       <button onclick="resetAllSelections()" style="background:none;border:none;color:var(--text-muted);font-size:.82rem;cursor:pointer;text-decoration:underline;font-family:inherit">איפוס כל הבחירות</button>
+    </div>
+
+    <!-- קישורים חיצוניים -->
+    <div class="external-links" style="margin-top:32px">
+      <div class="external-links-title">קישורים חיצוניים</div>
+      <ul class="external-links-list">
+        <li>
+          <a href="https://www.zman.co.il/698948/" target="_blank" rel="noopener noreferrer">מאמר של אורי כנרות</a>
+          על הבעיתיות בבחירות הפריימריז, שמציג
+          <a href="https://urikinrot.org/RandomWeightedSortDemocratsIL.html" target="_blank" rel="noopener noreferrer">יישום של הגרלה משוקללת</a>.
+        </li>
+        <li>
+          <a href="https://democrats.org.il/candidates/" target="_blank" rel="noopener noreferrer" onclick="trackPath('official_frame')">רשימת המועמדים הרשמית של המפלגה</a>
+        </li>
+      </ul>
     </div>
 
 
 
     <footer class="footer">
-      מערכת תומכת החלטה לפריימריז של מפלגת הדמוקרטים · הנתונים נשמרים מקומית בדפדפן בלבד.
+      משחקי סימולציות לסיוע בתהליך הבחירה לפריימריז של מפלגת הדמוקרטים.<br>
+      הנתונים נשמרים מקומית בדפדפן שלכם ואינם נשלחים לשום גורם.
     </footer>
   </div>
 
@@ -471,22 +643,6 @@
     let appCfg = { reset_suggest_hours: 72, rec_hint_max_clicks: 3 };
     fetch('app_config.json').then(r => r.json()).then(j => { appCfg = Object.assign(appCfg, j); }).catch(() => {});
 
-    let genderMap = {}; // name → 'נשים' | 'גברים' | 'ערבים'
-
-    async function loadGenderMap() {
-      try {
-        const resp = await fetch('data/candidates_master.json');
-        const data = await resp.json();
-        const arr  = Array.isArray(data) ? data : (data.candidates || []);
-        arr.forEach(c => { if (c['שם']) genderMap[c['שם']] = c['קטגוריה'] || ''; });
-      } catch(e) {}
-    }
-
-    function genderDot(name) {
-      const cat = genderMap[name] || '';
-      const color = cat === 'נשים' ? '#e879a0' : cat === 'גברים' ? '#3b82f6' : '#aaa';
-      return `<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${color};margin-inline-end:5px;vertical-align:middle;flex-shrink:0"></span>`;
-    }
 
     function loadState() {
       try {
@@ -508,86 +664,146 @@
 
     let primState = loadState();
 
-    function selectionText(namesArr) {
-      const list = namesArr.map(n =>
-        `<div style="display:flex;align-items:center;font-weight:900;color:#12355b;font-size:.85rem;line-height:1.2;padding:1px 0">${genderDot(n)}${n}</div>`
-      ).join('');
-      return `אלה המועמדים/ות שבחרתם:<br><div style="display:grid;grid-template-columns:1fr 1fr;gap:0 10px;margin:4px 0">${list}</div>`;
+    // ── ניווט ──────────────────────────────────────────────────────────────
+    // הגעה לעמוד זה מוכיחה שהמשתמש עבר את מסך ההסכמה — נוודא שהמפתח מוגדר לפני כל ניווט
+    function _ensureDisclaimer() { try { localStorage.setItem('dbr_disclaimer_accepted','yes'); } catch(e) {} }
+    function goToShiryun() { _ensureDisclaimer(); trackPath('shiryun'); window.location.href = 'dbr_P_01_shiryun.html'; }
+    function goToState()   { _ensureDisclaimer(); trackPath('committee'); window.location.href = 'dbr_P_01_state.html'; }
+    function goToFilter()  { _ensureDisclaimer(); trackPath('filter'); window.location.href = 'dbr_P_01_filter.html'; }
+
+    // לחיצה ראשונה על תיבת שלב 2 רק "מעבירה" אליה במסך הזה (כדי לא לקפוץ ישר
+    // לדף הסימולציה בטעות); לחיצה שנייה על אותה תיבה היא זו שמנווטת בפועל.
+    let stateArmed = false;
+    function handleStateClick() {
+      const card = document.getElementById('card-state');
+      if (card && card.classList.contains('done')) { goToState(); return; }
+      if (stateArmed) { goToState(); return; }
+      stateArmed = true;
+      renderAll();
     }
 
-    function selectionTextWithShiryun(selectedArr, shiryunArr) {
-      const shiryunSet = new Set(shiryunArr);
-      const list = selectedArr.map(n => {
-        const isSh = shiryunSet.has(n);
-        return `<div style="display:flex;align-items:center;font-weight:${isSh ? '900' : '600'};color:${isSh ? '#2e7d4f' : '#12355b'};font-size:.85rem;line-height:1.2;padding:1px 0">${genderDot(n)}${n}${isSh ? ' ✓' : ''}</div>`;
-      }).join('');
-      return `נבחרו ${selectedArr.length} מועמדים/ות:<br><div style="display:grid;grid-template-columns:1fr 1fr;gap:0 10px;margin:4px 0">${list}</div>`;
-    }
 
-    function summaryText(selectedArr) {
-      const list = selectedArr.map(n =>
-        `<div style="display:flex;align-items:center;font-weight:700;color:#12355b;line-height:1.4;padding:2px 0">${genderDot(n)}${n}</div>`
-      ).join('');
-      return `נבחרו ${selectedArr.length} מועמדים/ות:<br><div style="display:grid;grid-template-columns:1fr 1fr;gap:2px 10px;margin:6px 0">${list}</div>`;
+    function setCard(cardId, numId, statusId, state, numText, statusText) {
+      const card = document.getElementById(cardId);
+      if (!card) return;
+      card.className = 'step-card ' + state;
+      const n = document.getElementById(numId); if (n) n.textContent = numText;
+      const s = document.getElementById(statusId); if (s) s.textContent = statusText;
     }
-
-    const SHIRYUN_DESC_HTML = 'כאן בוחרים את המועמדים/ות באופן עצמאי, ישירות מתוך הרשימה המלאה — על פי שיקול הדעת שלכם בלבד.<br>אין המלצה, ואין דירוג - מאתרים את המועמדים ומסמנים את מי שתרצו, כמובן שניתן לבטל את הבחירה בכל שלב.<br>בסיום, הרשימה שבחרתם עוברת אתכם להמשך התהליך ולכן רצוי שכן תבחרו מועמדים בטוחים או פונציאלים לבחירה הסופית.';
-    const DBR_DESC     = 'על פי שיקול דעתכם, קובעים את מאפיינים כלליים לסגל, מבין נושאי הליבה של המפלגה בוחרים את החשובים לדעתכם, מכוונים כל נושא ומקבלים את דירוג המועמדים.';
 
     function renderAll() {
       primState = loadState();
-      const shiryun   = primState.shiryun   || [];
-      const selected  = primState.selected  || [];
-      const dbrPicks  = primState.dbr_picks || [];
-      const nSel = selected.length;
+      const shiryun  = primState.shiryun  || [];
+      const selected = primState.selected || [];
+      const vadai    = primState.vadai    || [];   // סימוני ודאי (שלב 1/2)
+      const ballot   = primState.ballot   || [];   // פתק הבחירה הסופי (שלב 3)
+      const sources  = primState.shiryun_sources || {};
 
-      // כרטיסית שריון — טקסט קבוע תמיד
-      const shiryunEl = document.getElementById('shiryun-desc');
-      if (shiryunEl) shiryunEl.innerHTML = SHIRYUN_DESC_HTML;
-      const btnRow = document.getElementById('shiryun-btn-row');
-      if (btnRow) btnRow.style.display = selected.length > 0 ? 'flex' : 'none';
+      // נבחרי מוצא = נבחרו בשלב 1 בלבד (ללא מקור נבחרת בשלב 2)
+      const originShiryun   = shiryun.filter(n => !sources[n]);
+      const regularOrigin   = originShiryun.filter(n => !vadai.includes(n)).length;
 
-      // כרטיסית מסך סיכום — מציג נבחרים אם יש
-      const summaryEl = document.getElementById('summary-desc');
-      if (summaryEl) {
-        if (selected.length > 0) {
-          summaryEl.innerHTML = summaryText(selected);
-          summaryEl.style.display = '';
-        } else {
-          summaryEl.style.display = 'none';
-        }
+      const step1Done           = originShiryun.length > 0;
+      const step1EnoughForStep3 = originShiryun.length >= 6;
+      const step2Done           = selected.length >= 6;
+      const step3Done           = ballot.length   >= 6;
+      // הגענו לפתק (שלב 3) — דגל התמדה שנדלק בכניסה לדף הפתק
+      const step3Reached        = !!(primState.meta && primState.meta.reachedStep3);
+
+      // ── כרטיסית 1: בחירה (תחתון) ──
+      if (step1Done) {
+        const s1txt = vadai.length > 0
+          ? `${originShiryun.length} נבחרו, מתוכם ${vadai.length} ודאי`
+          : `${originShiryun.length} נבחרו`;
+        setCard('card-shiryun','num-shiryun','status-shiryun','done','✓', s1txt);
+      } else {
+        setCard('card-shiryun','num-shiryun','status-shiryun','active','1','בשלב זה, ניתן לסמן מועמדים לבחירה טנטטיבית או וודאית, כולל צפייה במידע המפורט עליהם');
       }
 
-      // כרטיסית מושכלת
-      const dbrEl = document.getElementById('dbr-desc');
-      if (dbrEl) dbrEl.innerHTML = dbrPicks.length > 0
-        ? selectionText(dbrPicks)
-        : DBR_DESC;
-    }
-
-    let _recHintTimer = null;
-    const REC_HINT_KEY = 'dbr_rec_hint_count';
-    function getRecHintCount() { return parseInt(localStorage.getItem(REC_HINT_KEY) || '0', 10); }
-    function incRecHintCount() { localStorage.setItem(REC_HINT_KEY, getRecHintCount() + 1); }
-
-    function tryRecommendation() {
-      const picks = (primState.shiryun || []).length + (primState.selected || []).length;
-      const showHint = picks <= 1 && getRecHintCount() < appCfg.rec_hint_max_clicks;
-      if (!showHint) {
-        trackPath('committee');
-        window.location.href = 'dbr_P_01_state.html';
-        return;
+      // ── כרטיסית 2: סימולציה (אמצע) — תמיד פתוחה (שלב 1 אופציונלי) ──
+      if (step2Done) {
+        const addedCount = shiryun.filter(n => sources[n]).length;
+        const s2txt = `${shiryun.length} נבחרו, מתוכם ${originShiryun.length} מוצא ו-${addedCount} נוספו בשלב זה`;
+        setCard('card-state','num-state','status-state','done','✓', s2txt);
+      } else if (stateArmed) {
+        setCard('card-state','num-state','status-state','active','2','עברתם לשלב 2 — לחצו שוב על התיבה כדי להמשיך לדף הסימולציה');
+      } else if (step1Done) {
+        setCard('card-state','num-state','status-state','active','2','בשלב זה ניתן לעבור בין סימולציות שונות שנעשו ע"י הבינות המלאכותיות, כשהמועמדים שנבחרו משתלבים היטב בסימולציות');
+      } else {
+        setCard('card-state','num-state','status-state','passive','2','בשלב זה ניתן לעבור בין סימולציות שונות שנעשו ע"י הבינות המלאכותיות, כשהמועמדים שנבחרו משתלבים היטב בסימולציות');
       }
-      incRecHintCount();
-      const hint = document.getElementById('rec-hint');
-      const arrow = document.getElementById('rec-hint-arrow');
-      if (!hint) return;
-      const twoCol = window.innerWidth > 600;
-      if (arrow) arrow.textContent = twoCol ? '→' : '↑';
-      hint.style.display = 'flex';
-      clearTimeout(_recHintTimer);
-      _recHintTimer = setTimeout(() => { hint.style.display = 'none'; }, 10500);
+
+      // ── כרטיסית 3: פתק הבחירה (ראש) — נפתחת רק כשיש לפחות 6 נבחרים סה"כ ──
+      if (step3Done) {
+        setCard('card-filter','num-filter','status-filter','done','✓',`${ballot.length} נבחרים בפתק שלך`);
+      } else if (step3Reached || shiryun.length >= 6) {
+        setCard('card-filter','num-filter','status-filter','active','3','זהו סוף התהליך שבו יש להתאים את מספר המועמדים לדרישות המפלגה (6-8 שמות)');
+      } else {
+        setCard('card-filter','num-filter','status-filter','locked','3','זהו סוף התהליך שבו יש להתאים את מספר המועמדים לדרישות המפלגה (6-8 שמות)');
+      }
+
+      // ── סרגל שלבים אופקי ──
+      ['sn1','sl1','sn2','sl2','sn3'].forEach(id => {
+        const el = document.getElementById(id); if (el) el.className = el.className.replace(/\b(done|active)\b/g,'').trim();
+      });
+      if (step1Done) { document.getElementById('sn1').classList.add('done'); }
+      else           { document.getElementById('sn1').classList.add('active'); }
+      if (step2Done) { document.getElementById('sn2').classList.add('done'); document.getElementById('sl1').classList.add('done'); }
+      else { document.getElementById('sn2').classList.add('active'); }
+      if (step3Done || step3Reached) { document.getElementById('sn3').classList.add('done'); document.getElementById('sl2').classList.add('done'); }
+      else if (step1EnoughForStep3 || step2Done) { document.getElementById('sn3').classList.add('active'); }
+
+      requestAnimationFrame(alignFlowElbow);
     }
+
+    // ── מרפק "סדר המשחק" — קו יורד מהראש ונכנס לראש תיבה 3 (פתק הבחירה) ──
+    // ממוקם ומצויר לפי מדידה אמיתית של DOM (לא אחוזים קבועים), כדי להישאר מדויק
+    // גם כשגובה התיבות משתנה (טקסט סטטוס שונה, רוחב מסך שונה).
+    function alignFlowElbow() {
+      const wrap       = document.getElementById('flow-side-wrap');
+      const lineTop    = document.getElementById('flow-line-top');
+      const lineBottom = document.getElementById('flow-line-bottom');
+      const label      = document.getElementById('flow-side-text');
+      const cardState  = document.getElementById('card-state');
+      const cardFilter = document.getElementById('card-filter');
+      const svg        = document.getElementById('flow-elbow-svg');
+      if (!wrap || !lineTop || !lineBottom || !label || !cardState || !cardFilter || !svg) return;
+
+      const wrapRect  = wrap.getBoundingClientRect();
+      const labelRect = label.getBoundingClientRect();
+      const stateRect = cardState.getBoundingClientRect();
+      const cardRect  = cardFilter.getBoundingClientRect();
+      if (!wrapRect.height || !stateRect.height || !cardRect.height) return;
+
+      const centerX     = (labelRect.left + labelRect.right) / 2 - wrapRect.left;
+      // הכתב האנכי — באמצע תיבה 2 לאורכה
+      const textCenterY = stateRect.top - wrapRect.top + stateRect.height / 2;
+      const textHalfH   = labelRect.height / 2;
+      // השבירה — אמצע הדופן הימנית של תיבה 3; החץ נושק לדופן ונכנס רק טיפה פנימה (לא עד העיגול)
+      const bendY       = cardRect.top   - wrapRect.top + cardRect.height / 2;
+      const tipX        = cardRect.right - wrapRect.left - 4;
+
+      // שני קטעי הקו נקבעים במפורש (לא flex:1 חופשי) — כך שהטקסט לא "בורח"
+      // והקו התחתון נעצר בדיוק בנקודת השבירה, בלי להמשיך מעבר לה.
+      lineTop.style.flex      = 'none';
+      lineTop.style.height    = Math.max(0, textCenterY - textHalfH) + 'px';
+      lineBottom.style.flex   = 'none';
+      lineBottom.style.height = Math.max(0, bendY - (textCenterY + textHalfH)) + 'px';
+
+      const W = wrapRect.width, H = wrapRect.height;
+      svg.setAttribute('width', W);
+      svg.setAttribute('height', H);
+      svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+      svg.innerHTML =
+        '<path d="M ' + centerX + ' ' + bendY + ' L ' + tipX + ' ' + bendY + '" '
+          + 'fill="none" stroke="#1d5fa7" stroke-width="3" stroke-linecap="round"/>'
+        + '<polygon points="' + (tipX + 9) + ',' + (bendY - 6) + ' '
+                              + (tipX + 9) + ',' + (bendY + 6) + ' '
+                              + (tipX - 3) + ',' + bendY
+          + '" fill="#1d5fa7"/>';
+    }
+    window.addEventListener('resize', () => requestAnimationFrame(alignFlowElbow));
+    window.addEventListener('load', () => requestAnimationFrame(alignFlowElbow)); // אחרי טעינת גופן Heebo
 
     function trackPath(path) {
       primState.meta = primState.meta || {};
@@ -606,34 +822,6 @@
       renderAll();
     }
 
-    const cardZoomLevels = { shiryun: 0, dbr: 0, summary: 0, official: 0 };
-    const cardDescIds = {
-      shiryun:  ['shiryun-desc'],
-      dbr:      ['dbr-card-desc'],
-      summary:  ['summary-static-desc', 'summary-desc'],
-      official: ['official-desc']
-    };
-    const zoomFonts = ['.96rem', '1.06rem', '1.18rem', '1.32rem'];
-    function cardZoom(card, dir) {
-      const cur = cardZoomLevels[card] || 0;
-      const next = Math.max(0, Math.min(3, cur + dir));
-      if (next === cur) { beepError(); return; }
-      cardZoomLevels[card] = next;
-      cardDescIds[card].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.style.fontSize = zoomFonts[next];
-      });
-    }
-    function beepError() {
-      try {
-        const ctx = new (window.AudioContext || window.webkitAudioContext)();
-        const osc = ctx.createOscillator(), gain = ctx.createGain();
-        osc.connect(gain); gain.connect(ctx.destination);
-        osc.frequency.value = 200; osc.type = 'square';
-        gain.gain.value = 0.12;
-        osc.start(); osc.stop(ctx.currentTime + 0.1);
-      } catch(e) {}
-    }
 
     function checkResetSuggest() {
       if (!appCfg.reset_suggest_hours) return;
@@ -654,7 +842,7 @@
       checkResetSuggest();
     }).catch(() => { checkResetSuggest(); });
 
-    loadGenderMap().then(renderAll);
+    renderAll();
     window.addEventListener('focus', renderAll);
     window.addEventListener('pageshow', renderAll);
     document.addEventListener('visibilitychange', () => {
@@ -664,3 +852,4 @@
 </body>
 </html>
 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
