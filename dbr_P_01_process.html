@@ -125,7 +125,7 @@
     .steps-list {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 4px;
       max-width: 640px;
       margin: 0 auto 20px;
     }
@@ -430,7 +430,7 @@
       font-size: 1.5rem;
       color: var(--blue-main);
       opacity: .9;
-      margin: -2px 0;
+      margin: -6px 0;
       line-height: 1;
       user-select: none;
       font-weight: 700;
@@ -505,6 +505,45 @@
       font-weight: 700;
       text-decoration: underline;
     }
+
+    /* ── תיבת ניתוח מסרים למגזר — מתחת ל"איפוס כל הבחירות" ── */
+    .insight-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      max-width: 640px;
+      margin: 6px auto 0;
+      padding: 16px 18px;
+      background: linear-gradient(135deg, #f2fbfb, #eef6ff);
+      border: 1.5px solid #bfe3e2;
+      border-right: 6px solid #178f8d;
+      border-radius: 16px;
+      box-shadow: 0 6px 20px rgba(18,53,91,.08);
+      cursor: pointer;
+      transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+    }
+    .insight-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(23,143,141,.18);
+      border-color: #178f8d;
+    }
+    .insight-icon { font-size: 1.7rem; flex-shrink: 0; line-height: 1; }
+    .insight-text { flex: 1; min-width: 0; }
+    .insight-title {
+      display: block;
+      font-size: 1rem;
+      font-weight: 900;
+      color: var(--blue-dark);
+      line-height: 1.3;
+    }
+    .insight-desc {
+      display: block;
+      font-size: .82rem;
+      color: var(--text-muted);
+      margin-top: 3px;
+      line-height: 1.5;
+    }
+    .insight-go { flex-shrink: 0; font-size: 1.3rem; font-weight: 900; color: #178f8d; }
   </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -610,6 +649,16 @@
     <div class="foot-row" style="text-align:center;margin-bottom:12px">
       <button onclick="resetAllSelections()" style="background:none;border:none;color:var(--text-muted);font-size:.82rem;cursor:pointer;text-decoration:underline;font-family:inherit">איפוס כל הבחירות</button>
     </div>
+
+    <!-- תיבת ניתוח מסרים למגזר -->
+    <a class="insight-card" href="dbr_arab_candidates_messages.html" onclick="trackPath('arab_messages')">
+      <span class="insight-icon">🗣️</span>
+      <span class="insight-text">
+        <span class="insight-title">מה אומרים המועמדים הערבים והדרוזים לציבור שלהם?</span>
+        <span class="insight-desc">ניתוח מסרים של שמונה מועמדי המגזר — שותפות יהודית־ערבית, ביטחון אישי, שוויון וייצוג. ניתוח, לא דירוג.</span>
+      </span>
+      <span class="insight-go">←</span>
+    </a>
 
     <!-- קישורים חיצוניים -->
     <div class="external-links" style="margin-top:32px">

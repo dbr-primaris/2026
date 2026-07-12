@@ -1,0 +1,615 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="ניתוח המסרים שמפנים המועמדים הערבים והדרוזים בפריימריז של הדמוקרטים לציבור הערבי ולתומכיהם.">
+  <title>מה אומרים המועמדים לציבור הערבי? | ד.ב.ר</title>
+  <style>
+    :root{
+      --navy:#0d2942;
+      --navy-2:#123a5a;
+      --blue:#1d6e9f;
+      --cyan:#26a9b8;
+      --teal:#178f8d;
+      --cream:#f5f2e9;
+      --paper:#ffffff;
+      --ink:#172432;
+      --muted:#5e6d78;
+      --line:#dce5e8;
+      --gold:#e4b54d;
+      --shadow:0 12px 34px rgba(13,41,66,.12);
+      --radius:22px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Arial,"Noto Sans Hebrew","Segoe UI",sans-serif;
+      background:
+        radial-gradient(circle at 90% 0%, rgba(38,169,184,.16), transparent 34rem),
+        linear-gradient(180deg,#eef5f6 0,#f7f8f6 28rem,#f4f1e8 100%);
+      color:var(--ink);
+      line-height:1.72;
+    }
+
+    a{color:inherit}
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:20;
+      background:rgba(13,41,66,.96);
+      backdrop-filter:blur(10px);
+      color:white;
+      border-bottom:1px solid rgba(255,255,255,.15);
+    }
+    .topbar-inner{
+      width:min(1180px,calc(100% - 28px));
+      margin:auto;
+      min-height:66px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+    }
+    .brand{
+      text-decoration:none;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      font-weight:800;
+    }
+    .brand-mark{
+      width:42px;height:42px;border-radius:50%;
+      display:grid;place-items:center;
+      background:linear-gradient(135deg,var(--cyan),var(--blue));
+      box-shadow:inset 0 0 0 2px rgba(255,255,255,.2);
+      font-size:17px;
+    }
+    .brand small{display:block;font-weight:500;opacity:.78;font-size:12px}
+    .back-link{
+      text-decoration:none;
+      border:1px solid rgba(255,255,255,.35);
+      padding:8px 14px;
+      border-radius:999px;
+      font-size:14px;
+      white-space:nowrap;
+    }
+    .back-link:hover{background:rgba(255,255,255,.1)}
+
+    .hero{
+      background:
+        linear-gradient(125deg,rgba(13,41,66,.98),rgba(18,58,90,.92)),
+        radial-gradient(circle at 10% 20%,var(--cyan),transparent 30rem);
+      color:#fff;
+      overflow:hidden;
+    }
+    .hero-inner{
+      width:min(1180px,calc(100% - 28px));
+      margin:auto;
+      padding:72px 0 62px;
+      position:relative;
+    }
+    .hero-inner:after{
+      content:"ديمقراطية · שותפות · تأثير";
+      position:absolute;
+      left:-20px;
+      bottom:12px;
+      font-weight:800;
+      font-size:clamp(34px,7vw,88px);
+      opacity:.045;
+      direction:ltr;
+      white-space:nowrap;
+    }
+    .kicker{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-size:14px;
+      font-weight:700;
+      padding:7px 12px;
+      border-radius:999px;
+      background:rgba(38,169,184,.18);
+      border:1px solid rgba(116,228,235,.35);
+      color:#d6fbff;
+    }
+    h1{
+      max-width:900px;
+      margin:18px 0 14px;
+      font-size:clamp(36px,6vw,67px);
+      line-height:1.08;
+      letter-spacing:-1.6px;
+    }
+    .lead{
+      max-width:900px;
+      margin:0;
+      font-size:clamp(18px,2.4vw,24px);
+      color:#dceaf1;
+    }
+    .hero-meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:26px;
+    }
+    .hero-meta span{
+      padding:8px 12px;
+      border-radius:12px;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.12);
+      font-size:14px;
+    }
+
+    main{
+      width:min(1180px,calc(100% - 28px));
+      margin:32px auto 64px;
+    }
+    .summary{
+      margin-top:-52px;
+      position:relative;
+      z-index:5;
+      background:var(--paper);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:28px;
+      border:1px solid rgba(255,255,255,.8);
+    }
+    .summary h2,.section-title{margin:0 0 12px;color:var(--navy)}
+    .summary blockquote{
+      margin:20px 0 0;
+      padding:20px 22px;
+      border-right:5px solid var(--cyan);
+      background:#edf8f8;
+      border-radius:16px 0 0 16px;
+      font-size:clamp(19px,2.4vw,25px);
+      font-weight:700;
+      color:var(--navy);
+    }
+
+    .section{margin-top:42px}
+    .section-intro{max-width:900px;color:var(--muted)}
+    .pill-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:14px;
+      margin-top:20px;
+    }
+    .pill{
+      background:#fff;
+      padding:18px;
+      border-radius:18px;
+      border:1px solid var(--line);
+      box-shadow:0 7px 20px rgba(13,41,66,.06);
+    }
+    .pill b{display:block;color:var(--navy);margin-bottom:4px}
+    .pill .num{
+      width:34px;height:34px;border-radius:50%;
+      display:grid;place-items:center;
+      background:var(--navy);color:white;
+      margin-bottom:12px;font-weight:800;
+    }
+
+    .camps{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:18px;
+      margin-top:20px;
+    }
+    .camp{
+      position:relative;
+      overflow:hidden;
+      background:#fff;
+      padding:24px;
+      border-radius:var(--radius);
+      border:1px solid var(--line);
+      box-shadow:0 8px 26px rgba(13,41,66,.07);
+    }
+    .camp:before{
+      content:"";
+      position:absolute;right:0;top:0;bottom:0;width:6px;
+      background:linear-gradient(var(--cyan),var(--blue));
+    }
+    .camp h3{margin:0 0 7px;color:var(--navy)}
+    .camp p{margin:0;color:var(--muted)}
+    .names{margin-top:15px;font-weight:700;color:var(--teal)}
+
+    .candidate-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:20px;
+      margin-top:22px;
+    }
+    .candidate{
+      background:rgba(255,255,255,.95);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:0 9px 26px rgba(13,41,66,.075);
+      overflow:hidden;
+    }
+    .candidate-head{
+      padding:20px 22px 16px;
+      background:linear-gradient(135deg,#f8fbfb,#edf5f6);
+      border-bottom:1px solid var(--line);
+    }
+    .candidate-head h3{margin:0;color:var(--navy);font-size:24px}
+    .arabic{color:var(--blue);font-size:15px;margin-top:2px;direction:rtl}
+    .tag{
+      display:inline-block;
+      margin-top:10px;
+      padding:5px 10px;
+      border-radius:999px;
+      color:#fff;background:var(--teal);
+      font-size:13px;font-weight:700;
+    }
+    .candidate-body{padding:20px 22px 24px}
+    .message{
+      border-right:4px solid var(--gold);
+      padding:12px 15px;
+      background:#fffbef;
+      border-radius:13px 0 0 13px;
+      margin:0 0 16px;
+      font-weight:700;
+    }
+    .audience{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin:14px 0;
+    }
+    .audience div{
+      padding:13px;
+      background:#f4f8f8;
+      border-radius:14px;
+      font-size:14px;
+    }
+    .audience b{display:block;color:var(--navy)}
+    .confidence{
+      margin-top:14px;
+      color:var(--muted);
+      font-size:13px;
+      border-top:1px dashed var(--line);
+      padding-top:12px;
+    }
+
+    .conclusion{
+      background:linear-gradient(135deg,var(--navy),var(--navy-2));
+      color:#fff;
+      border-radius:var(--radius);
+      padding:30px;
+      box-shadow:var(--shadow);
+    }
+    .conclusion h2{margin-top:0}
+    .conclusion blockquote{
+      font-size:clamp(21px,3vw,30px);
+      margin:18px 0 0;
+      padding:18px 20px;
+      border-right:5px solid var(--cyan);
+      background:rgba(255,255,255,.08);
+      border-radius:14px 0 0 14px;
+    }
+    .note{
+      margin-top:24px;
+      padding:18px 20px;
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:18px;
+      color:var(--muted);
+      font-size:14px;
+    }
+    .note strong{color:var(--navy)}
+
+    footer{
+      background:var(--navy);
+      color:#c9d7df;
+      padding:30px 14px;
+      text-align:center;
+      font-size:13px;
+    }
+    footer a{color:#fff}
+
+    @media (max-width:900px){
+      .pill-grid{grid-template-columns:repeat(2,1fr)}
+      .camps{grid-template-columns:1fr}
+      .candidate-grid{grid-template-columns:1fr}
+    }
+    @media (max-width:560px){
+      .topbar-inner{min-height:58px}
+      .brand small{display:none}
+      .brand-mark{width:36px;height:36px}
+      .back-link{padding:7px 10px;font-size:12px}
+      .hero-inner{padding:54px 0 76px}
+      h1{font-size:39px;letter-spacing:-.8px}
+      .summary{padding:21px;margin-top:-44px}
+      .pill-grid{grid-template-columns:1fr}
+      .audience{grid-template-columns:1fr}
+      .candidate-head,.candidate-body{padding-right:18px;padding-left:18px}
+    }
+
+    @media print{
+      .topbar,.back-link{display:none}
+      body{background:white}
+      .hero{background:var(--navy)!important}
+      .summary{margin-top:20px;box-shadow:none}
+      .candidate,.camp,.pill,.conclusion{break-inside:avoid;box-shadow:none}
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="dbr_P_01_process.html?entry=start">
+        <span class="brand-mark">ד.ב.ר</span>
+        <span>דמוקרטים בוחרים רציונלית<small>משחק הבחירה לפריימריז</small></span>
+      </a>
+      <a class="back-link" href="dbr_P_01_process.html?entry=start">חזרה לתהליך הבחירה ←</a>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <span class="kicker">ניתוח מסרים לציבור הערבי</span>
+      <h1>מה אומרים המועמדים הערבים והדרוזים לציבור שלהם?</h1>
+      <p class="lead">
+        שמונה מועמדים, שלושה קווי פנייה מרכזיים ושאלה פוליטית אחת:
+        האם ההשפעה עוברת דרך מחאה מבחוץ, או דרך השתתפות בתוך מחנה יהודי־ערבי המבקש להחליף את השלטון?
+      </p>
+      <div class="hero-meta">
+        <span>מבוסס על פרסומים ציבוריים בעברית ובערבית</span>
+        <span>ניתוח מסרים — לא דירוג מועמדים</span>
+        <span>עודכן: יולי 2026</span>
+      </div>
+    </div>
+  </section>
+
+  <main>
+    <article class="summary">
+      <h2>התמונה הכללית</h2>
+      <p>
+        מן הפרסומים בערבית עולה מסר משותף לרוב המועמדים: הציבור הערבי אינו צריך להסתפק
+        בעמדה של מחאה או ייצוג סמלי, אלא לנסות להשפיע גם מתוך מפלגה יהודית־ערבית שעשויה
+        להשתתף בהחלפת השלטון ובקואליציה עתידית.
+      </p>
+      <blockquote>
+        אל תישארו רק מחוץ לחדר שבו מתקבלות ההחלטות — בואו לבנות כוח פוליטי גם בתוכו.
+      </blockquote>
+    </article>
+
+    <section class="section">
+      <h2 class="section-title">ארבעת המסרים החוזרים</h2>
+      <p class="section-intro">
+        המינון משתנה ממועמד למועמד, אך ארבעה רעיונות מופיעים שוב ושוב בפנייה לציבור הערבי.
+      </p>
+      <div class="pill-grid">
+        <div class="pill"><span class="num">1</span><b>שותפות יהודית־ערבית</b>לא כסיסמה בלבד, אלא כמסלול להשפעה פוליטית.</div>
+        <div class="pill"><span class="num">2</span><b>ביטחון אישי</b>מאבק בפשיעה ובאלימות בתוך היישובים הערביים.</div>
+        <div class="pill"><span class="num">3</span><b>שוויון אזרחי</b>מאבק בגזענות, באפליה ובהדרה ממוקדי ההחלטה.</div>
+        <div class="pill"><span class="num">4</span><b>החלפת השלטון</b>חיבור הציבור הערבי למחנה הדמוקרטי המתמודד מול ממשלת נתניהו.</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">שלושה קווי פנייה שונים</h2>
+      <div class="camps">
+        <div class="camp">
+          <h3>השפעה פוליטית מעשית</h3>
+          <p>הצבעה ערבית גבוהה יכולה להפוך ייצוג סמלי לכוח ממשי בתוך מפלגה וקואליציה.</p>
+          <div class="names">נדאל מסאלחה · סומיה בשיר · עאיד בדיר</div>
+        </div>
+        <div class="camp">
+          <h3>השתלבות, שירות ושייכות</h3>
+          <p>מי שתורם למדינה ומקבל אחריות ציבורית זכאי למעמד שווה ולהשפעה מלאה.</p>
+          <div class="names">איהאב שליאן · גאלב סלאמנה</div>
+        </div>
+        <div class="camp">
+          <h3>ייצוג דרוזי וניסיון ציבורי</h3>
+          <p>העדה הדרוזית זקוקה לנציגות בעלת משקל, ניסיון ועצמאות — לא לקישוט ברשימה.</p>
+          <div class="names">עלי סלאלחה · אמיר ח׳ניפס · מאלכ בדר</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">המועמדים והמסר המזוהה עמם</h2>
+      <p class="section-intro">
+        ההבחנה בין “המסר לציבור הרחב” לבין “המסר לתומכים” חשובה: הראשון מסביר למה להשתתף,
+        והשני מסביר למה לבחור דווקא במועמד המסוים.
+      </p>
+
+      <div class="candidate-grid">
+
+        <section class="candidate">
+          <div class="candidate-head">
+            <h3>נדאל מסאלחה</h3>
+            <div class="arabic">نضال مصالحة</div>
+            <span class="tag">כוח פוליטי מעשי</span>
+          </div>
+          <div class="candidate-body">
+            <p class="message">להפוך קולות ערביים למושבים ריאליים ולהשפעה בתוך הממשלה.</p>
+            <p>
+              מסאלחה מדגיש ניסיון בשלטון המקומי, בכלכלה ובמינהל הציבורי. הוא מציג את
+              ההשתתפות בדמוקרטים כמהלך אלקטורלי מחושב: העלאת שיעור ההצבעה בחברה הערבית
+              עשויה להכניס נציגים נוספים מעבר לשריון המובטח.
+            </p>
+            <div class="audience">
+              <div><b>לציבור הערבי</b>אל תוותרו מראש על השפעה מתוך קואליציה עתידית.</div>
+              <div><b>לתומכיו</b>אני יודע לתרגם תמיכה ציבורית לעבודה, תקציבים ומנגנוני ביצוע.</div>
+            </div>
+            <div class="confidence">רמת ביטחון בניתוח: גבוהה — קו המסרים מופיע בבירור בחומר הקמפיין.</div>
+          </div>
+        </section>
+
+        <section class="candidate">
+          <div class="candidate-head">
+            <h3>סומיה בשיר</h3>
+            <div class="arabic">سمية بشير</div>
+            <span class="tag">שותפות וביטחון אישי</span>
+          </div>
+          <div class="candidate-body">
+            <p class="message">שותפות יהודית־ערבית חייבת להגן על חיי האזרחים, לא להישאר רעיון מופשט.</p>
+            <p>
+              בשיר מחברת בין המאבק בפשיעה ובאלימות, שוויון אזרחי, מעמד נשים ודמוקרטיה.
+              היא מציגה זהות ערבית ברורה לצד השתייכות למחנה ישראלי ליברלי ומשותף.
+            </p>
+            <div class="audience">
+              <div><b>לציבור הערבי</b>אפשר להיאבק על ביטחון ושוויון באמצעות שותפות ולא באמצעות הסתגרות.</div>
+              <div><b>לתומכיה</b>אני מביאה קול ערבי, נשי ואזרחי שאינו מיוצג באותה צורה בידי אחרים.</div>
+            </div>
+            <div class="confidence">רמת ביטחון בניתוח: גבוהה — נושאים אלה חוזרים בפרסומיה ובפעילותה הציבורית.</div>
+          </div>
+        </section>
+
+        <section class="candidate">
+          <div class="candidate-head">
+            <h3>עאיד בדיר</h3>
+            <div class="arabic">عايد بدير</div>
+            <span class="tag">שותפות למרות הגזענות</span>
+          </div>
+          <div class="candidate-body">
+            <p class="message">גילויי גזענות אינם סיבה לוותר על הזירה הפוליטית הישראלית.</p>
+            <p>
+              בדיר מציג שותפות יהודית־ערבית כהחלטה ערכית המחייבת עמידה בלחצים.
+              בעקבות אירועים שבהם תיאר הסתה או פגיעה כלפיו, הוא הדגיש שלא ייסוג מדרכו.
+            </p>
+            <div class="audience">
+              <div><b>לציבור הערבי</b>המאבק בגזענות צריך להתנהל גם מתוך המערכת ולא רק מולה.</div>
+              <div><b>לתומכיו</b>אני עומד בלחץ ואיני נעלם ברגעים שבהם השותפות נעשית קשה.</div>
+            </div>
+            <div class="confidence">רמת ביטחון בניתוח: בינונית־גבוהה — ברור ערכית, אך פחות מפורט כתכנית מדיניות.</div>
+          </div>
+        </section>
+
+        <section class="candidate">
+          <div class="candidate-head">
+            <h3>איהאב שליאן</h3>
+            <div class="arabic">إيهاب شليان</div>
+            <span class="tag">שירות, שייכות והכרה</span>
+          </div>
+          <div class="candidate-body">
+            <p class="message">מי שמשרת, תורם ונושא באחריות זכאי למעמד ולהשפעה שווים.</p>
+            <p>
+              שליאן פונה במיוחד לציבור הנוצרי ולמי שמאמינים בהשתלבות עמוקה במדינה.
+              הוא מדגיש שירות ביטחוני ממושך, אחריות, מנהיגות ושילוב מיעוטים.
+            </p>
+            <div class="audience">
+              <div><b>לציבור הערבי והנוצרי</b>השייכות למדינה אינה מבטלת זהות; היא בסיס לדרישת שוויון.</div>
+              <div><b>לתומכיו</b>הרקע הביטחוני והניהולי שלי מאפשר לי להשפיע גם מול הציבור היהודי.</div>
+            </div>
+            <div class="confidence">רמת ביטחון בניתוח: גבוהה — שירות והשתלבות הם לב המיתוג הציבורי שלו.</div>
+          </div>
+        </section>
+
+        <section class="candidate">
+          <div class="candidate-head">
+            <h3>עלי סלאלחה</h3>
+            <div class="arabic">علي صلالحة</div>
+            <span class="tag">חינוך וייצוג דרוזי</span>
+          </div>
+          <div class="candidate-body">
+            <p class="message">הציבור הדרוזי זקוק לנציג בעל הישגים ועצמאות, לא לנציגות סמלית.</p>
+            <p>
+              סלאלחה נשען על הישגיו כמנהל בית ספר וכחבר כנסת. במסריו מתקיימים זה לצד זה
+              הרצון להשתלב במחנה משותף והדגש על עצמאות ההחלטה והייצוג של העדה הדרוזית.
+            </p>
+            <div class="audience">
+              <div><b>לציבור הדרוזי</b>דרוש ייצוג מנוסה שמסוגל להביא תוצאות ולא רק נראות.</div>
+              <div><b>לתומכיו</b>הוכחתי בחינוך ובכנסת שאני יודע להפוך אחריות ציבורית להישגים.</div>
+            </div>
+            <div class="confidence">רמת ביטחון בניתוח: גבוהה, אך קיים מתח בין קו דרוזי עצמאי להשתלבות במפלגה יהודית־ערבית.</div>
+          </div>
+        </section>
+
+        <section class="candidate">
+          <div class="candidate-head">
+            <h3>ד״ר אמיר ח׳ניפס</h3>
+            <div class="arabic">د. أمير خنيفس</div>
+            <span class="tag">מנהיגות וגשר אזורי</span>
+          </div>
+          <div class="candidate-body">
+            <p class="message">הציבור הדרוזי יכול להיות גורם מדיני ואזרחי מחבר — לא רק קבוצת מיעוט.</p>
+            <p>
+              ח׳ניפס מציג עומק אקדמי, פעילות אזרחית והיכרות עם הזירה הדרוזית והאזורית.
+              המסר שלו רחב יותר מפוליטיקה מקומית וכולל דמוקרטיה, סוריה ומעמד הדרוזים.
+            </p>
+            <div class="audience">
+              <div><b>לציבור הדרוזי והערבי</b>אפשר להפוך זהות וקשרים אזוריים לנכס פוליטי ומדיני.</div>
+              <div><b>לתומכיו</b>אני מביא עומק, קשרים וראייה רחבה מעבר לניהול המוניציפלי.</div>
+            </div>
+            <div class="confidence">רמת ביטחון בניתוח: בינונית־גבוהה — החומר עשיר, אך חלקו פרשני ולא קמפייני.</div>
+          </div>
+        </section>
+
+        <section class="candidate">
+          <div class="candidate-head">
+            <h3>עו״ד מאלכ בדר</h3>
+            <div class="arabic">المحامي مالك بدر</div>
+            <span class="tag">ניסיון וממלכתיות</span>
+          </div>
+          <div class="candidate-body">
+            <p class="message">ייצוג אמין דורש היכרות עם מנגנוני המדינה וניסיון בניהול בפועל.</p>
+            <p>
+              מן החומר הזמין הוא מצטייר כמועמד המבסס את עצמו על ניסיון כראש מועצה,
+              משפטן ואיש ציבור, יותר מאשר על קמפיין זהותי או מחאתי.
+            </p>
+            <div class="audience">
+              <div><b>לציבור הערבי והדרוזי</b>כדי להשיג תוצאות צריך להכיר את המערכת ולדעת לעבוד בתוכה.</div>
+              <div><b>לתומכיו</b>אני מביא ניסיון ביצועי ומוניציפלי, לא רק נוכחות תקשורתית.</div>
+            </div>
+            <div class="confidence">רמת ביטחון בניתוח: בינונית־נמוכה — נמצא פחות תוכן קמפיין ישיר ומעודכן בערבית.</div>
+          </div>
+        </section>
+
+        <section class="candidate">
+          <div class="candidate-head">
+            <h3>עו״ד גאלב סלאמנה</h3>
+            <div class="arabic">المحامي غالب سلامنة</div>
+            <span class="tag">שייכות ושותפות ליברלית</span>
+          </div>
+          <div class="candidate-body">
+            <p class="message">אין סתירה הכרחית בין זהות ערבית־בדואית לבין שייכות אזרחית מלאה.</p>
+            <p>
+              סלאמנה מדגיש זהות ערבית, מוסלמית ובדואית לצד שירות, הגנה על זכויות אדם
+              והשתייכות למחנה הדמוקרטי־ליברלי.
+            </p>
+            <div class="audience">
+              <div><b>לציבור הערבי והבדואי</b>אפשר להיכנס לזירה הישראלית בלי למחוק את הזהות האישית והקהילתית.</div>
+              <div><b>לתומכיו</b>אני יכול להביא למחנה ציבור צעיר וחדש ולחבר בין קבוצות.</div>
+            </div>
+            <div class="confidence">רמת ביטחון בניתוח: בינונית — נדרש עוד חומר ישיר מחשבונותיו בערבית.</div>
+          </div>
+        </section>
+
+      </div>
+    </section>
+
+    <section class="section conclusion">
+      <h2>המסקנה</h2>
+      <p>
+        המועמדים אינם מדברים בקול אחד. חלקם מבטיחים כוח אלקטורלי, אחרים הכרה באמצעות
+        שירות והשתלבות, ואחרים מבקשים לבסס ייצוג דרוזי עצמאי ובעל ניסיון. עם זאת,
+        מתחת להבדלים מסתתרת הנחת יסוד משותפת:
+      </p>
+      <blockquote>
+        הפוליטיקה הערבית הקיימת אינה מספיקה לבדה; דרוש גם מסלול השפעה בתוך המחנה
+        הציוני־דמוקרטי.
+      </blockquote>
+      <p>
+        זו טענה נועזת, אך גם מוגבלת: היא עשויה לשכנע ערבים שכבר פתוחים לשותפות פוליטית
+        יהודית־ערבית, ופחות את מי שרואים במפלגות הציוניות חלק מן הבעיה.
+      </p>
+    </section>
+
+    <aside class="note">
+      <strong>הערת מתודולוגיה:</strong>
+      המאמר מנתח מסרים מתוך חומר ציבורי שפורסם בעברית ובערבית ברשת ובתקשורת.
+      הוא אינו קובע מהן כוונותיהם הפרטיות של המועמדים, ואינו מהווה דירוג או המלצת הצבעה.
+      כאשר נמצא מעט חומר ישיר, הדבר מצוין במפורש ברמת הביטחון של הניתוח.
+    </aside>
+  </main>
+
+  <footer>
+    <div>ד.ב.ר — דמוקרטים בוחרים רציונלית | משחק הבחירה לפריימריז 2026</div>
+    <div>המשחק אינו מחליף את שיקול הדעת של המשתמש. להפך: הוא נועד לעורר אותו.</div>
+  </footer>
+</body>
+</html>
