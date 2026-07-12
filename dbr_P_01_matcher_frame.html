@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<script>if(localStorage.getItem('dbr_disclaimer_accepted')!=='yes'&&sessionStorage.getItem('dbr_session_accepted')!=='yes'){window.location.href='dbr_P_01_index.html?redirect='+encodeURIComponent(location.pathname.split('/').pop()+location.search)}</script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>אפליקציית ההתאמה · בוחרים בדמוקרטים | ד.ב.ר</title>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TJNJTZQF1F"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-TJNJTZQF1F');
+</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, "Noto Sans Hebrew", sans-serif; background: #f4f8ff; display: flex; flex-direction: column; height: 100dvh; }
+
+  /* ── סרגל עליון קבוע ── */
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 7px 16px;
+    background: white;
+    border-bottom: 1px solid #d7e3f3;
+    flex-shrink: 0;
+    gap: 12px;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 800;
+    color: #12355b;
+    font-size: 1rem;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+
+  .brand-mark {
+    height: 26px;
+    padding: 0 8px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #3730a3, #1e1b4b);
+    display: grid;
+    place-items: center;
+    color: white;
+    font-size: .8rem;
+    font-weight: 900;
+    letter-spacing: .06em;
+  }
+
+  .source-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: .8rem;
+    color: #5f6b7a;
+    font-weight: 600;
+    flex: 1;
+    justify-content: center;
+  }
+
+  .source-badge a {
+    color: #1d5fa7;
+    font-weight: 700;
+    text-decoration: underline;
+  }
+
+  .close-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 14px;
+    background: #eaf3ff;
+    color: #1d5fa7;
+    border: 1.5px solid #1d5fa7;
+    border-radius: 10px;
+    font-weight: 800;
+    font-size: .88rem;
+    text-decoration: none;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* ── iframe ── */
+  .frame-wrap {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+  }
+
+  iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+  }
+
+  /* ── סרגל תחתון קבוע ── */
+  .bottombar {
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 16px;
+    background: white;
+    border-top: 1px solid #d7e3f3;
+    flex-shrink: 0;
+    gap: 12px;
+  }
+
+  .bottom-close-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 11px 32px;
+    background: #2e7d4f;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 900;
+    font-size: 1rem;
+    text-decoration: none;
+    cursor: pointer;
+    width: 100%;
+    max-width: 400px;
+  }
+
+  /* ── שגיאת iframe ── */
+  .frame-error {
+    display: none;
+    position: absolute;
+    inset: 0;
+    background: #f4f8ff;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 32px;
+    text-align: center;
+  }
+
+  .frame-error p { color: #5f6b7a; font-size: .95rem; line-height: 1.7; }
+  .frame-error a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 22px;
+    background: #1d5fa7;
+    color: white;
+    border-radius: 12px;
+    font-weight: 800;
+    text-decoration: none;
+    font-size: .95rem;
+  }
+
+  /* ── מובייל: הסתר טקסט המותג ── */
+  @media (max-width: 480px) {
+    .brand span:last-child { display: none; }
+    .source-badge { font-size: .75rem; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- סרגל עליון -->
+  <div class="topbar">
+    <a class="brand" href="dbr_P_01_process.html">
+      <span class="brand-mark">ד.ב.ר</span>
+      <span>דמוקרטים בוחרים רציונלית</span>
+    </a>
+    <div class="source-badge">
+      כלי חיצוני:&nbsp;<a href="https://demprimes2026.netlify.app/" target="_blank" rel="noopener noreferrer">demprimes2026.netlify.app ↗</a>
+    </div>
+    <a class="close-btn" href="dbr_P_01_process.html">✕ סגור</a>
+  </div>
+
+  <!-- iframe -->
+  <div class="frame-wrap">
+    <iframe
+      id="matcher-frame"
+      src="https://demprimes2026.netlify.app/"
+      title="אפליקציית ההתאמה · בוחרים בדמוקרטים · פריימריז הדמוקרטים 2026"
+      loading="lazy"
+    ></iframe>
+
+    <div class="frame-error" id="frame-error">
+      <p>הכלי החיצוני אינו נטען בתצוגה מוטמעת.<br>ניתן לפתוח אותו ישירות בלשונית חדשה.</p>
+      <a href="https://demprimes2026.netlify.app/" target="_blank" rel="noopener noreferrer">פתח את אפליקציית ההתאמה ↗</a>
+      <a href="dbr_P_01_process.html" style="background:#eaf3ff;color:#1d5fa7;border:1.5px solid #1d5fa7;margin-top:4px;">⬅ חזרה לד.ב.ר</a>
+    </div>
+  </div>
+
+  <!-- סרגל תחתון קבוע -->
+  <div class="bottombar">
+    <a class="bottom-close-btn" href="dbr_P_01_process.html">⬅ חזרה למשחק ד.ב.ר</a>
+  </div>
+
+  <script>
+    function showError() {
+      document.getElementById('frame-error').style.display = 'flex';
+    }
+
+    const iframe = document.getElementById('matcher-frame');
+    iframe.addEventListener('load', function() {
+      try {
+        if (!iframe.contentDocument && !iframe.contentWindow) showError();
+      } catch(e) {
+        showError();
+      }
+    });
+  </script>
+
+</body>
+</html>
