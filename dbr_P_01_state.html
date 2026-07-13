@@ -1984,6 +1984,11 @@
           <div class="team-card-desc">נוכחות ומנהיגות במחאה נגד ההפיכה המשפטית, הגנה על זכות המחאה ופעילות פרלמנטרית וציבורית</div>
           <div class="team-card-status active">✓ זמינה</div>
         </div>
+        <div class="team-card team-card--special" data-rec-type="special_topics" onclick="selectTeam('arab_society_crime')">
+          <div class="team-card-name">הפשיעה בחברה הערבית</div>
+          <div class="team-card-desc">מאבק במיגור הרצח, האלימות והנשק הבלתי-חוקי וארגוני הפשיעה בחברה הערבית</div>
+          <div class="team-card-status active">✓ זמינה</div>
+        </div>
       </div>
     </div>
 
@@ -2055,6 +2060,7 @@
                 <option value="gender_equality">שוויון מגדרי</option>
                 <option value="health_and_welfare">בריאות ורווחה</option>
                 <option value="democratic_protest">המחאה הדמוקרטית</option>
+                <option value="arab_society_crime">הפשיעה בחברה הערבית</option>
               </select>
             </div>
           </div>
@@ -2713,7 +2719,8 @@
       gender_equality: 'active',
       health_and_welfare: 'active',
       democratic_protest: 'active',
-      education: 'active'
+      education: 'active',
+      arab_society_crime: 'active'
     };
     // מיפוי נבחרת → suffix בעמודות ה-CSV. נבחרת שאינה כאן משתמשת ב-'' (דבר1).
     const TEAM_SUFFIX = { dbr1: '', meretz: 'm', north: 'north' };
@@ -2743,7 +2750,8 @@
       human_rights_territories: 'זכויות אדם בשטחים',
       health_and_welfare: 'בריאות ורווחה',
       democratic_protest: 'המחאה הדמוקרטית',
-      gender_equality: 'שוויון מגדרי'
+      gender_equality: 'שוויון מגדרי',
+      arab_society_crime: 'הפשיעה בחברה הערבית'
     };
 
     // ── נבחרות נושאיות — קונפיג + נתונים נטענים מ-main_teams ──
@@ -3024,7 +3032,7 @@
       else if (recType === 'imitation') rs.classList.add('rank-section--imitation');
     }
     // נבחרות "העמקה בנושאים ייחודיים" — מופרדות בתוך קבוצת הנושאיות בקו מקווקו
-    const SPECIAL_SQUADS = new Set(['human_rights_territories', 'gender_equality', 'health_and_welfare', 'democratic_protest']);
+    const SPECIAL_SQUADS = new Set(['human_rights_territories', 'gender_equality', 'health_and_welfare', 'democratic_protest', 'arab_society_crime']);
     function isSpecialSquad(val) { return SPECIAL_SQUADS.has(val); }
 
     // סדר מחדש את הדרופדאון: ליבה → קו מקווקו → העמקה → קו מלא → סימולציות
