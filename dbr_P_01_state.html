@@ -3822,9 +3822,20 @@
       if (filterPicked && !expanded) return;
       state = loadState();
       console.log('[DBR togglePick]', name, '| vadai:', JSON.stringify(state.vadai));
-      // ודאי — חסום להסרה בשלב 2
+      // ודאי — לחיצה ראשונה מורידה לרגיל (בהירה, לא חוסמת), בדיוק כמו toggleSquadPick.
+      // לחיצה שנייה (על מועמד/ת רגיל/ה, בהמשך הפונקציה) תסיר בפועל.
       if ((state.vadai || []).includes(name)) {
-        showStateToast('סומן/ה כ-ודאי — הסרה רק דרך שלב 1');
+        state.vadai = state.vadai.filter(x => x !== name);
+        const inBallot = Array.isArray(state.ballot) && state.ballot.includes(name);
+        showStateToast(
+          inBallot
+            ? 'הוסר סימון ודאי — ' + name + ' כבר בפתק הבחירה שלך, לחצו שוב כדי להסיר לגמרי'
+            : 'הוסר סימון ודאי — לחצו שוב כדי להסיר לגמרי'
+        );
+        autoLog(name, 'הוסר מ-ודאי');
+        saveState(state);
+        updateStatusBar();
+        if (expanded) renderRankingSingleCol(); else renderRanking();
         return;
       }
       state.selected = state.selected || [];
