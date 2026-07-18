@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>48 שעות לפני הפריימריז: דילמת הבחירה של כ־100 אלף בוחרים</title>
+  <title>שעות לפני הפריימריז: דילמת הבחירה של כ־100 אלף בוחרים</title>
   <meta name="description" content="שש דרכים דיגיטליות להתמודד עם הבחירה של עד שמונה מתוך 51 מועמדי הפריימריז של הדמוקרטים.">
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-TJNJTZQF1F"></script>
@@ -602,7 +602,9 @@
       var deadline = new Date('2026-07-20T19:00:00+03:00');
       var diffHours = Math.round((deadline - new Date()) / 3600000);
       var hoursLeft = Math.max(0, diffHours);
-      document.title = document.title.replace(/^\d+/, hoursLeft);
+      // הכותרת הסטטית ב-HTML (לתצוגות שיתוף שלא מריצות JS) אינה כוללת מספר —
+      // כאן, בדפדפן בפועל, מוסיפים אותו בתחילת כותרת הלשונית.
+      document.title = hoursLeft + ' ' + document.title;
       document.querySelectorAll('.hours-left').forEach(function (el) {
         el.textContent = hoursLeft;
       });
