@@ -275,24 +275,28 @@
 
     .secondary-list {
       margin: 24px 0;
-      border-top: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
 
+    /* בסיס אחיד — כל השורות "מוסגרות" באותה מידה, כדי שההדגשה הצהובה
+       תהיה שינוי גוון עדין (כמו tool-card.featured) ולא הבדל של "יש מסגרת / אין" */
     .secondary-item {
       display: grid;
       grid-template-columns: minmax(150px, 0.9fr) 1.5fr;
       gap: 20px;
-      padding: 18px 0;
-      border-bottom: 1px solid var(--line);
+      padding: 18px 20px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fbfcfe;
     }
 
     .secondary-item strong { color: var(--accent-deep); }
     .secondary-item a { color: var(--accent); text-underline-offset: 3px; }
 
     .secondary-item.spotlight {
-      border: 1.5px solid rgba(216,162,75,0.55);
-      border-radius: 14px;
-      padding: 18px 20px;
+      border-color: rgba(216,162,75,0.55);
       background: rgba(216,162,75,0.09);
     }
 
