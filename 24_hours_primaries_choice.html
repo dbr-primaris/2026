@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>24 שעות לפני הפריימריז: דילמת הבחירה של כ־100 אלף בוחרים</title>
+  <meta name="description" content="שש דרכים דיגיטליות להתמודד עם הבחירה של עד שמונה מתוך 51 מועמדי הפריימריז של הדמוקרטים.">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TJNJTZQF1F"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-TJNJTZQF1F');
+  </script>
+  <style>
+    :root {
+      --bg: #f4f6f9;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #5e6878;
+      --line: #dbe1e8;
+      --accent: #264f9e;
+      --accent-deep: #17366f;
+      --accent-soft: #edf3ff;
+      --warm: #fff7e8;
+      --warm-line: #d8a24b;
+      --shadow: 0 16px 45px rgba(25,42,74,0.10);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top right, rgba(38,79,158,0.10), transparent 30rem),
+        linear-gradient(180deg, #f8fafc 0%, var(--bg) 100%);
+      font-family: Arial, "Noto Sans Hebrew", "Segoe UI", sans-serif;
+      line-height: 1.82;
+    }
+
+    a { color: inherit; }
+
+    .page {
+      width: min(1040px, calc(100% - 28px));
+      margin: 26px auto 54px;
+    }
+
+    .hero {
+      overflow: hidden;
+      color: #fff;
+      background: linear-gradient(135deg, #17366f 0%, #264f9e 62%, #3e6dc4 100%);
+      border-radius: 30px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-copy {
+      padding: 38px 48px 26px;
+    }
+
+    .kicker {
+      display: inline-block;
+      margin-bottom: 12px;
+      padding: 5px 11px;
+      border: 1px solid rgba(255,255,255,0.24);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.13);
+      font-size: 0.86rem;
+      font-weight: 700;
+    }
+
+    h1 {
+      max-width: 900px;
+      margin: 0;
+      font-size: clamp(2rem, 5vw, 4.25rem);
+      line-height: 1.08;
+      letter-spacing: -0.035em;
+    }
+
+    .hero-lead {
+      max-width: 860px;
+      margin: 17px 0 0;
+      color: rgba(255,255,255,0.92);
+      font-size: 1.08rem;
+      line-height: 1.62;
+    }
+
+    .approaches {
+      margin: 13px 0 0;
+      color: rgba(255,255,255,0.82);
+      font-size: 0.94rem;
+      font-weight: 700;
+    }
+
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 9px;
+      padding: 12px;
+      background: rgba(7,25,60,0.22);
+    }
+
+    .tool-card {
+      position: relative;
+      display: flex;
+      min-height: 112px;
+      flex-direction: column;
+      justify-content: center;
+      padding: 14px 38px 13px 16px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 15px;
+      color: #fff;
+      background: rgba(255,255,255,0.11);
+      text-decoration: none;
+      transition: transform 0.18s ease, background 0.18s ease;
+    }
+
+    .tool-card:hover,
+    .tool-card:focus-visible {
+      transform: translateY(-2px);
+      background: rgba(255,255,255,0.18);
+      outline: none;
+    }
+
+    .tool-card.featured {
+      border-color: rgba(255,225,151,0.72);
+      background: linear-gradient(135deg, rgba(255,225,151,0.22), rgba(255,255,255,0.13));
+    }
+
+    .tool-card::after {
+      content: "↗";
+      position: absolute;
+      top: 12px;
+      left: 13px;
+      color: rgba(255,255,255,0.75);
+      font-weight: 800;
+    }
+
+    .tool-card h2 {
+      margin: 0 0 2px;
+      color: #fff;
+      font-size: 1rem;
+      line-height: 1.25;
+    }
+
+    .tool-card p {
+      margin: 0;
+      color: rgba(255,255,255,0.87);
+      font-size: 0.83rem;
+      line-height: 1.3;
+    }
+
+    .tool-card .hint {
+      margin-top: 5px;
+      color: #ffe4a7;
+      font-size: 0.76rem;
+      font-weight: 700;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding: 12px 48px 16px;
+      color: rgba(255,255,255,0.76);
+      background: rgba(7,25,60,0.18);
+      font-size: 0.88rem;
+    }
+
+    .article {
+      margin-top: 24px;
+      overflow: hidden;
+      border: 1px solid rgba(219,225,232,0.8);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+
+    .content {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 54px 44px 62px;
+    }
+
+    .lead { font-size: 1.14rem; color: #273349; }
+
+    .political-call {
+      display: inline-block;
+      padding: 0 0.15em 0.05em;
+      color: #7a1f1f;
+      font-weight: 900;
+      text-decoration: underline;
+      text-decoration-thickness: 0.14em;
+      text-decoration-color: var(--warm-line);
+      text-underline-offset: 0.15em;
+      background: linear-gradient(transparent 60%, rgba(216,162,75,0.22) 60%);
+    }
+
+    p { margin: 0 0 18px; }
+
+    h2.section-title {
+      margin: 48px 0 18px;
+      color: var(--accent-deep);
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      line-height: 1.3;
+      letter-spacing: -0.02em;
+    }
+
+    h3 {
+      margin: 30px 0 9px;
+      color: var(--accent-deep);
+      font-size: 1.18rem;
+    }
+
+    .problem-grid,
+    .major-tools {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin: 25px 0 32px;
+    }
+
+    .box {
+      padding: 21px 22px;
+      border: 1px solid var(--line);
+      border-radius: 17px;
+      background: #fbfcfe;
+    }
+
+    .box strong {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--accent-deep);
+    }
+
+    .box p:last-child { margin-bottom: 0; }
+
+    .method-note {
+      margin: 30px 0;
+      padding: 23px 25px;
+      border-right: 5px solid var(--accent);
+      border-radius: 17px;
+      background: var(--accent-soft);
+    }
+
+    .major-card {
+      padding: 24px;
+      border: 1px solid #c7d5ef;
+      border-radius: 18px;
+      background: linear-gradient(160deg, #f7faff, #eef4ff);
+    }
+
+    .major-card h3 { margin-top: 0; }
+
+    .inline-link {
+      display: inline-block;
+      margin-top: 4px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      color: #fff;
+      background: var(--accent);
+      font-size: 0.88rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .secondary-list {
+      margin: 24px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .secondary-item {
+      display: grid;
+      grid-template-columns: minmax(150px, 0.9fr) 1.5fr;
+      gap: 20px;
+      padding: 18px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .secondary-item strong { color: var(--accent-deep); }
+    .secondary-item a { color: var(--accent); text-underline-offset: 3px; }
+
+    .disclosure {
+      margin: 32px 0;
+      padding: 22px 24px;
+      border-right: 5px solid #ad6d2c;
+      border-radius: 17px;
+      background: var(--warm);
+    }
+
+    .conclusion {
+      margin-top: 34px;
+      padding: 26px;
+      border-radius: 18px;
+      color: #fff;
+      background: linear-gradient(135deg, #17366f 0%, #264f9e 100%);
+    }
+
+    .conclusion p:last-child { margin-bottom: 0; }
+
+    footer {
+      padding: 23px 30px 27px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      background: #fbfcfe;
+      text-align: center;
+      font-size: 0.88rem;
+    }
+
+    @media (max-width: 760px) {
+      .page {
+        width: min(100% - 12px, 1040px);
+        margin: 6px auto 34px;
+      }
+
+      .hero { border-radius: 20px; }
+
+      .hero-copy { padding: 18px 16px 11px; }
+
+      .kicker {
+        margin-bottom: 7px;
+        padding: 3px 8px;
+        font-size: 0.72rem;
+      }
+
+      h1 {
+        font-size: clamp(1.56rem, 7.1vw, 2.15rem);
+        line-height: 1.1;
+      }
+
+      .hero-lead {
+        margin-top: 8px;
+        font-size: 0.88rem;
+        line-height: 1.38;
+      }
+
+      .approaches {
+        margin-top: 7px;
+        font-size: 0.75rem;
+        line-height: 1.35;
+      }
+
+      .tools-grid {
+        gap: 6px;
+        padding: 7px;
+      }
+
+      .tool-card {
+        min-height: 87px;
+        padding: 9px 25px 8px 8px;
+        border-radius: 11px;
+      }
+
+      .tool-card::after {
+        top: 7px;
+        left: 8px;
+        font-size: 0.78rem;
+      }
+
+      .tool-card h2 { font-size: 0.86rem; }
+      .tool-card p { font-size: 0.72rem; line-height: 1.23; }
+      .tool-card .hint { margin-top: 3px; font-size: 0.67rem; }
+
+      .meta {
+        padding: 7px 16px 9px;
+        font-size: 0.72rem;
+      }
+
+      .content { padding: 36px 20px 46px; }
+      .problem-grid, .major-tools { grid-template-columns: 1fr; }
+      .secondary-item { grid-template-columns: 1fr; gap: 4px; }
+    }
+
+    @media (max-width: 350px) {
+      .hero-lead { font-size: 0.82rem; }
+      .tool-card { min-height: 82px; }
+      .tool-card h2 { font-size: 0.79rem; }
+      .tool-card p { font-size: 0.68rem; }
+      .tool-card .hint { font-size: 0.63rem; }
+    }
+
+    @media print {
+      body { background: #fff; }
+      .page { width: 100%; margin: 0; }
+      .hero, .article { box-shadow: none; }
+      .hero { border-radius: 0; }
+      .article { border: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="hero">
+      <div class="hero-copy">
+        <div class="kicker">פריימריז הדמוקרטים 2026</div>
+        <h1>24 שעות לפני הפריימריז: דילמת הבחירה של כ־100 אלף בוחרים</h1>
+        <p class="hero-lead">
+          51 מועמדים ורק שמונה בחירות. לצד כמה שמות בטוחים, רבים מתלבטים בין מועמדים נוספים —
+          וגם מבקשים להכיר את מי שטרם נחשפו אליו.
+        </p>
+        <p class="approaches">שישה כלים, ארבע גישות: מפת ידע · התאמה אישית · הגרלה · בניית נבחרת</p>
+      </div>
+
+      <nav class="tools-grid" aria-label="שישה כלים לבוחרי הפריימריז">
+        <a class="tool-card featured" href="https://candidates-compare-2026.netlify.app/" target="_blank" rel="noopener noreferrer">
+          <h2>משווים בדמוקרטים</h2>
+          <p>השוואה אישית בין מועמדים</p>
+          <span class="hint">💡 לפי הקריטריונים שלך</span>
+        </a>
+
+        <a class="tool-card featured" href="https://dbr-primaris.github.io/2026/dbr_P_01_index.html" target="_blank" rel="noopener noreferrer">
+          <h2>ד.ב.ר — משחקי הפריימריז</h2>
+          <p>בניית השמינייה כנבחרת</p>
+          <span class="hint">💡 לבחינת ההרכב השלם</span>
+        </a>
+
+        <a class="tool-card" href="https://democrats.org.il/candidates/" target="_blank" rel="noopener noreferrer">
+          <h2>אתר המפלגה</h2>
+          <p>המידע הרשמי על המועמדים</p>
+          <span class="hint">💡 נקודת הפתיחה</span>
+        </a>
+
+        <a class="tool-card" href="https://hagush.org.il/candidates.html" target="_blank" rel="noopener noreferrer">
+          <h2>עכשיו באות</h2>
+          <p>ראיונות והיכרות אישית</p>
+          <span class="hint">💡 לראות ולשמוע</span>
+        </a>
+
+        <a class="tool-card" href="https://dbr-primaris.github.io/2026/dbr_P_01_matcher_frame.html" target="_blank" rel="noopener noreferrer">
+          <h2>הכלי של נהדי לזר</h2>
+          <p>התאמה לפי נושאים</p>
+          <span class="hint">💡 מתחילים מהעדפות</span>
+        </a>
+
+        <a class="tool-card" href="https://urikinrot.org/RandomWeightedSortDemocratsIL.html" target="_blank" rel="noopener noreferrer">
+          <h2>הכלי של אורי כנרות</h2>
+          <p>הגרלה משוקללת</p>
+          <span class="hint">💡 להכרעה האחרונה</span>
+        </a>
+      </nav>
+
+      <div class="meta">
+        <span>מאת אמנון זוסמן</span>
+        <span>19 ביולי 2026</span>
+      </div>
+    </header>
+
+    <article class="article">
+      <div class="content">
+        <section class="lead">
+          <p>
+            הפריימריז של הדמוקרטים מתקיימים ברגע גורלי למפלגה ולמדינה. מצב החירום משך
+            להתמודדות קבוצה יוצאת דופן של מועמדות ומועמדים איכותיים — מעין
+            <span class="political-call">צו שמונה פוליטי</span> של אנשים המבקשים להתגייס
+            למאבק על עתיד ישראל.
+          </p>
+
+          <p>
+            ההיצע המרשים יוצר דילמה: כיצד בוחרים עד שמונה מתוך 51 מועמדים? לרבים מהבוחרים
+            יש כמה שמות בטוחים, אך גם מעגל רחב יותר של מתלבטים. לעיתים הם מכירים יותר
+            משמונה מועמדים ראויים; ולעיתים הם מבקשים להיחשף גם למועמדים שאינם מכירים.
+          </p>
+        </section>
+
+        <div class="problem-grid">
+          <div class="box">
+            <strong>בעיית העודף</strong>
+            <p>מספר המועמדים המוכרים והרצויים גדול ממספר המקומות בפתק.</p>
+          </div>
+          <div class="box">
+            <strong>בעיית החסר</strong>
+            <p>בין 51 המתמודדים עשויים להיות מועמדים מתאימים שהבוחר עדיין אינו מכיר.</p>
+          </div>
+        </div>
+
+        <h2 class="section-title">ארבע תפיסות של סיוע לבוחר</h2>
+
+        <p>
+          הכלים הדיגיטליים שהופיעו לקראת הפריימריז אינם מציעים רק ממשקים שונים. הם מגלמים
+          ארבע תפיסות שונות של הבעיה: מפת ידע בלבד; מפת ידע והתאמה לדעות הבוחר; מפת ידע,
+          התאמה והגרלה; ומפת ידע המובילה לבניית נבחרת ולהכוונה אישית.
+        </p>
+
+        <div class="method-note">
+          <strong>נקודת המוצא המשותפת:</strong>
+          אין כלי היכול להחליף את שיקול דעתו של הבוחר. תפקידו לצמצם את פערי המידע,
+          לארגן את ההתלבטות ולהרחיב את מעגל המועמדים שביניהם מתקיימת בחירה ממשית.
+        </div>
+
+        <h2 class="section-title">שני כלים מקיפים — שתי תפיסות משלימות</h2>
+
+        <p>
+          מבין ששת הכלים, שניים מלווים את הבוחר לאורך חלק גדול במיוחד מתהליך ההכרעה.
+          שניהם מרכזים מידע ומציעים התאמה אישית, אך הם נבדלים בשאלה העיקרית שהם מציבים:
+          האחד משווה בין מועמדים יחידים; האחר בוחן את הפתק כהרכב שלם.
+        </p>
+
+        <div class="major-tools">
+          <section class="major-card">
+            <h3>„משווים בדמוקרטים” — מי מתאים לקריטריונים שלי?</h3>
+            <p>
+              היישום שפיתחה אדוה לוטן מציג את כל 51 המועמדים ומאפשר לסנן אותם, לסמן
+              מתלבטים ולהציב כמה מועמדים זה לצד זה. המשתמש בוחר קריטריונים — ניסיון,
+              תחומי פעילות וייצוג — וקובע את משקלם.
+            </p>
+            <p>
+              לכל מועמד מחושב „ציון התאמה אישי”, שאינו דירוג קבוע של מפעילת האתר אלא
+              תוצאה הנגזרת מהעדפות המשתמש. אפשר לראות כיצד נבנה הציון ומהו כיסוי הנתונים
+              שעליו הוא נשען. הכלי מטפל היטב בעיקר בבעיית העודף: כיצד להכריע בין מועמדים
+              שכבר נכנסו למעגל ההתלבטות.
+            </p>
+            <a class="inline-link" href="https://candidates-compare-2026.netlify.app/" target="_blank" rel="noopener noreferrer">ל„משווים בדמוקרטים”</a>
+          </section>
+
+          <section class="major-card">
+            <h3>ד.ב.ר — מי משלים את הנבחרת שלי?</h3>
+            <p>
+              „ד.ב.ר — משחקי הפריימריז” מתחיל מן המועמדים שהבוחר כבר מכיר, אך מזמין אותו
+              לעבור בין נושאים, פרופילים וסימולציות שנבנו בעזרת כלי בינה מלאכותית. כך הוא
+              יכול להיחשף למועמדים נוספים ולהוסיף או להסיר שמות מן הפתק.
+            </p>
+            <p>
+              נקודת המוצא היא שהפתק אינו רק אוסף של שמונה מועמדים בעלי ציונים אישיים
+              גבוהים, אלא נבחרת הזקוקה לשילוב של ניסיון, תחומי עיסוק, יכולות וקולות שונים.
+              הכלי מטפל גם בבעיית החסר וגם בבעיית העודף: את מי טרם הכרתי, ומי ישלים בצורה
+              הטובה ביותר את ההרכב שכבר בניתי.
+            </p>
+            <a class="inline-link" href="https://dbr-primaris.github.io/2026/dbr_P_01_index.html" target="_blank" rel="noopener noreferrer">לד.ב.ר — משחקי הפריימריז</a>
+          </section>
+        </div>
+
+        <p>
+          ההבדל בין הכלים אינו שאלה של נכון או לא נכון, אלא של יחידת הניתוח. „משווים
+          בדמוקרטים” שואל מי מן המתלבטים מתאים יותר למערכת ההעדפות של הבוחר; ד.ב.ר שואל
+          איזה מועמד עשוי להשלים ולחזק את השמינייה כולה.
+        </p>
+
+        <h2 class="section-title">ארבעה כלים משלימים</h2>
+
+        <p>
+          ארבעת הכלים הנוספים מטפלים בשלבים ממוקדים יותר: איסוף מידע, היכרות אישית,
+          התאמה לפי נושאים או הכרעה סופית בין אפשרויות שנותרו שקולות.
+        </p>
+
+        <div class="secondary-list">
+          <div class="secondary-item">
+            <strong>אתר המפלגה</strong>
+            <span>מפת הידע הרשמית והשלמה של 51 המתמודדים, ללא דירוג או ניסיון להכריע ביניהם. <a href="https://democrats.org.il/candidates/" target="_blank" rel="noopener noreferrer">לאתר המועמדים</a></span>
+          </div>
+          <div class="secondary-item">
+            <strong>„עכשיו באות”</strong>
+            <span>היכרות אישית יותר עם מועמדים באמצעות ראיונות ומפגשים, לצד מידע וקישורים. <a href="https://hagush.org.il/candidates.html" target="_blank" rel="noopener noreferrer">לאתר „עכשיו באות”</a></span>
+          </div>
+          <div class="secondary-item">
+            <strong>הכלי של נהדי לזר</strong>
+            <span>מעביר את נקודת הפתיחה מן השמות אל הנושאים החשובים לבוחר ומציג מועמדים בהתאם. <a href="https://dbr-primaris.github.io/2026/dbr_P_01_matcher_frame.html" target="_blank" rel="noopener noreferrer">לכלי ההתאמה</a></span>
+          </div>
+          <div class="secondary-item">
+            <strong>הכלי של אורי כנרות</strong>
+            <span>מאפשר להעניק משקלים למועמדים ולבצע הגרלה משוקללת כאשר נותרו יותר אפשרויות ממספר המקומות. <a href="https://urikinrot.org/RandomWeightedSortDemocratsIL.html" target="_blank" rel="noopener noreferrer">להגרלה המשוקללת</a></span>
+          </div>
+        </div>
+
+        <h2 class="section-title">אין מפת ידע ניטרלית לחלוטין</h2>
+
+        <p>
+          כל כלי מבטא החלטות מתודולוגיות: אילו מקורות נאספו, מה נחשב ניסיון, כיצד הוגדרו
+          תחומי הפעילות ואיך מידע מילולי תורגם לתגיות, השוואות או ציונים. מועמד בעל נוכחות
+          ציבורית משמעותית אך תיעוד מקוון מצומצם עלול להיראות חלש מכפי שהוא בפועל.
+        </p>
+
+        <p>
+          לכן יש לראות בכלים אמצעי להרחבת שיקול הדעת ולא תחליף לו. יתרונם אינו ביצירת
+          אובייקטיביות מוחלטת, אלא בהפיכת הנחות הבחירה לגלויות יותר ובהזמנת הבוחר לבדוק
+          מועמדים שמעבר למעגל ההיכרות הראשוני שלו.
+        </p>
+
+        <div class="disclosure">
+          <strong>גילוי נאות:</strong> כותב שורות אלה הוא ממפתחי „ד.ב.ר — משחקי הפריימריז”.
+          המאמר מבקש להציג את ששת הכלים על פי תפקידם בתהליך הבחירה, ולא לטעון כי כלי אחד
+          יכול או צריך להחליט עבור הבוחר.
+        </div>
+
+        <div class="conclusion">
+          <p>
+            24 שעות לפני הפריימריז, השאלה אינה רק מי הם שמונת המועמדים הטובים ביותר בעיני
+            כל בוחר. השאלה היא גם אילו מועמדים כלל הגיעו לתודעתו, כיצד הוא מכריע בין
+            האפשרויות הרצויות — ואיזו נבחרת הוא מבקש לסייע למפלגה להעמיד בפני הציבור.
+          </p>
+        </div>
+      </div>
+
+      <footer>
+        המאמר נכתב לקראת הפריימריז של מפלגת הדמוקרטים, 20 ביולי 2026.
+      </footer>
+    </article>
+  </main>
+</body>
+</html>
