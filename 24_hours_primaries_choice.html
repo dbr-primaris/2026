@@ -397,7 +397,7 @@
     <header class="hero">
       <div class="hero-copy">
         <div class="kicker">פריימריז הדמוקרטים 2026</div>
-        <h1>48 שעות לפני הפריימריז: דילמת הבחירה של כ־100 אלף בוחרים</h1>
+        <h1><span class="hours-left">48</span> שעות לפני הפריימריז: דילמת הבחירה של כ־100 אלף בוחרים</h1>
         <p class="hero-lead">
           51 מועמדים ורק שמונה בחירות. לצד כמה שמות בטוחים, רבים מתלבטים בין מועמדים נוספים —
           וגם מבקשים להכיר את מי שטרם נחשפו אליו.
@@ -582,7 +582,7 @@
 
         <div class="conclusion">
           <p>
-            48 שעות לפני הפריימריז, השאלה אינה רק מי הם שמונת המועמדים הטובים ביותר בעיני
+            <span class="hours-left">48</span> שעות לפני הפריימריז, השאלה אינה רק מי הם שמונת המועמדים הטובים ביותר בעיני
             כל בוחר. השאלה היא גם אילו מועמדים כלל הגיעו לתודעתו, כיצד הוא מכריע בין
             האפשרויות הרצויות — ואיזו נבחרת הוא מבקש לסייע למפלגה להעמיד בפני הציבור.
           </p>
@@ -594,5 +594,19 @@
       </footer>
     </article>
   </main>
+
+  <script>
+    // ספירה דינמית — עד סיום ההצבעה ב-20.7.2026 19:00 שעון ישראל (IDT, +03:00).
+    // מתעדכן בכל כניסה לדף (לא טיקר חי), מעוגל למספר שעות שלם.
+    (function () {
+      var deadline = new Date('2026-07-20T19:00:00+03:00');
+      var diffHours = Math.round((deadline - new Date()) / 3600000);
+      var hoursLeft = Math.max(0, diffHours);
+      document.title = document.title.replace(/^\d+/, hoursLeft);
+      document.querySelectorAll('.hours-left').forEach(function (el) {
+        el.textContent = hoursLeft;
+      });
+    })();
+  </script>
 </body>
 </html>
