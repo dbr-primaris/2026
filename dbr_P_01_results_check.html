@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>הרשימה שנבחרה במבחן הנבחרות | פריימריז הדמוקרטים 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blue-dark:#12355b; --blue-main:#1d5fa7; --blue-soft:#eaf3ff; --blue-card:#f7fbff;
+    --green:#2e7d4f; --green-soft:#e6f4eb; --green-border:#b8dcc5;
+    --red:#a23a2a; --red-soft:#fef2f0; --red-border:#e0bfb9;
+    --amber:#b5751a; --amber-soft:#fdf3e2; --amber-border:#ecd0a4;
+    --text-main:#1f2933; --text-muted:#5f6b7a; --border-soft:#d7e3f3; --white:#fff;
+    --shadow:0 16px 38px rgba(18,53,91,.13); --shadow-soft:0 4px 16px rgba(18,53,91,.07);
+    --radius-large:24px; --radius-medium:18px; --radius-small:12px;
+  }
+  *{box-sizing:border-box}
+  html{overflow-y:scroll; scroll-behavior:smooth}
+  body{margin:0;font-family:'Heebo',Arial,sans-serif;background:#f4f8ff;color:var(--text-main);line-height:1.65}
+  a{color:inherit;text-decoration:none}
+
+  .topbar{position:fixed;top:0;left:0;right:0;z-index:100;background:#0D2B5E;color:#fff}
+  .topbar-row{display:flex;justify-content:space-between;align-items:center;gap:20px;
+    width:100%;max-width:1140px;margin-inline:auto;padding:12px 24px}
+  .brand{font-weight:800;font-size:15px;letter-spacing:.2px}
+  .brand span{opacity:.62;font-weight:400}
+  .backlink{font-size:13.5px;opacity:.8;border:1px solid rgba(255,255,255,.28);
+    border-radius:999px;padding:5px 14px;transition:.18s}
+  .backlink:hover{opacity:1;background:rgba(255,255,255,.1)}
+
+  .page{max-width:1140px;margin:0 auto;padding:88px 24px 72px}
+
+  /* ── Hero ── */
+  .hero{background:linear-gradient(140deg,#12355b 0%,#1d5fa7 100%);color:#fff;
+    border-radius:var(--radius-large);padding:42px 40px 38px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .hero::after{content:'';position:absolute;inset-inline-start:-70px;bottom:-110px;width:300px;height:300px;
+    border-radius:50%;background:rgba(255,255,255,.055)}
+  .hero .kicker{font-size:13px;letter-spacing:2.4px;opacity:.72;font-weight:500}
+  .hero h1{margin:.28em 0 .32em;font-size:clamp(27px,4.4vw,40px);font-weight:900;line-height:1.22}
+  .hero p{margin:0;max-width:62ch;opacity:.9;font-size:16.5px;font-weight:300}
+  .hero .lede{margin-top:24px;padding-top:20px;border-top:1px solid rgba(255,255,255,.2);
+    font-size:16px;font-weight:500;position:relative;z-index:1;max-width:62ch}
+  .hero .lede b{font-weight:800;border-bottom:2px solid rgba(255,255,255,.45);padding-bottom:1px}
+
+
+  /* ── Sections ── */
+  section{margin-top:52px}
+  .sec-head{margin-bottom:18px}
+  .sec-head h2{margin:0;font-size:24px;font-weight:800;letter-spacing:-.2px}
+  .sec-head h2::before{content:'';display:inline-block;width:5px;height:20px;background:var(--blue-main);
+    border-radius:3px;margin-inline-end:11px;vertical-align:-2px}
+  .sec-head p{margin:8px 0 0 ;color:var(--text-muted);font-size:15px;max-width:74ch}
+  .card{background:var(--white);border:1px solid var(--border-soft);border-radius:var(--radius-large);
+    padding:26px;box-shadow:var(--shadow-soft)}
+
+  /* ── Matrix ── */
+  .matrix-wrap{overflow-x:auto;padding-bottom:6px}
+  table.mx{border-collapse:separate;border-spacing:3px;margin:0 auto}
+  table.mx th.corner{background:transparent}
+  table.mx th.sq{vertical-align:bottom;padding:0 0 10px;height:172px}
+  table.mx th.sq .rot{writing-mode:vertical-rl;transform:rotate(180deg);font-size:12.5px;font-weight:600;
+    color:var(--text-muted);white-space:nowrap;letter-spacing:.1px}
+  table.mx th.sq .fam{display:block;width:12px;height:4px;border-radius:2px;margin:0 auto 8px}
+  table.mx th.nm{position:sticky;right:0;background:#f4f8ff;text-align:start;font-weight:600;font-size:13.5px;
+    padding:0 12px 0 16px;white-space:nowrap;z-index:2}
+  table.mx th.nm .p{display:inline-block;min-width:22px;font-size:11.5px;font-weight:800;color:#fff;
+    background:var(--blue-dark);border-radius:6px;text-align:center;margin-inline-end:9px;padding:1px 4px}
+  table.mx td{width:34px;height:30px;padding:0}
+  .cell{width:34px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;
+    font-size:12px;font-weight:800;background:#eef2f7;color:transparent;transition:transform .12s}
+  .cell.on{cursor:default}
+  .cell.on:hover{transform:scale(1.18);box-shadow:0 3px 10px rgba(18,53,91,.25)}
+  .cell.top3{box-shadow:inset 0 0 0 2px rgba(18,53,91,.55)}
+  tr.nodata th.nm{opacity:.55;font-style:italic}
+  .nodata-note{font-size:12.5px;color:var(--text-muted);padding-inline-start:8px;white-space:nowrap}
+
+  .legend{display:flex;gap:26px;flex-wrap:wrap;margin-top:22px;padding-top:20px;border-top:1px dashed var(--border-soft);
+    font-size:13px;color:var(--text-muted)}
+  .legend .grp{display:flex;align-items:center;gap:9px}
+  .legend .sw{width:22px;height:20px;border-radius:6px;display:inline-block}
+  .legend b{color:var(--text-main);font-weight:700}
+
+  /* ── Coverage bars ── */
+  .cov-list{display:flex;flex-direction:column;gap:3px}
+  .cov{display:grid;grid-template-columns:252px 1fr;gap:16px;align-items:center;
+    padding:9px 10px;border-radius:11px;transition:background .15s}
+  .cov:hover{background:var(--blue-card)}
+  .cov .t{font-size:14px;font-weight:600;display:flex;align-items:center;gap:9px;min-width:0;line-height:1.35}
+  .cov .t i{width:9px;height:9px;border-radius:50%;flex:none}
+  .cov .t em{font-style:normal;font-size:11.5px;font-weight:500;color:var(--text-muted);white-space:nowrap}
+  .track{height:22px;background:#eef3fa;border-radius:7px;overflow:hidden}
+  .fill{height:100%;border-radius:7px;transition:width .3s cubic-bezier(.4,0,.2,1);min-width:2px}
+
+  .flags{margin-top:22px;display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:14px}
+  .flag{background:var(--red-soft);border:1px solid var(--red-border);border-radius:var(--radius-small);padding:14px 16px}
+  .flag h4{margin:0 0 5px;font-size:14.5px;font-weight:800;color:var(--red)}
+  .flag p{margin:0;font-size:13.5px;color:#7a4638;line-height:1.55}
+
+  /* ── Breadth ── */
+  .br-list{display:flex;flex-direction:column;gap:2px}
+  .br{display:grid;grid-template-columns:34px 150px 1fr 118px;gap:12px;align-items:center;
+    padding:7px 10px;border-radius:10px}
+  .br:hover{background:var(--blue-card)}
+  .br .pos{font-size:11.5px;font-weight:800;color:#fff;background:var(--blue-dark);border-radius:6px;
+    text-align:center;padding:2px 0}
+  .br .nm{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .br .bar{display:flex;gap:2.5px;align-items:center;height:20px}
+  .br .seg{width:14px;height:20px;border-radius:4px;flex:none}
+  .br .seg.empty{background:#eef2f7}
+  .br .tail{font-size:12.5px;color:var(--text-muted);white-space:nowrap;font-weight:500}
+  .br .tail b{color:var(--blue-main);font-weight:800}
+  .br.nodata{opacity:.5}
+
+  /* ── פרשנות ── */
+  .disclaim{background:var(--blue-soft);border:1px solid var(--border-soft);border-radius:var(--radius-small);
+    padding:13px 16px;font-size:13.5px;color:var(--text-muted);margin-bottom:22px;line-height:1.6}
+  .disclaim b{color:var(--blue-dark);font-weight:700}
+
+  .surp{display:grid;grid-template-columns:repeat(auto-fit,minmax(292px,1fr));gap:16px}
+  .sc{background:var(--white);border:1px solid var(--border-soft);border-radius:var(--radius-medium);
+    padding:20px 20px 17px;box-shadow:var(--shadow-soft);display:flex;flex-direction:column}
+  .sc h3{margin:0 0 3px;font-size:17px;font-weight:800}
+  .sc .sub{font-size:12.5px;color:var(--text-muted);margin-bottom:15px}
+  .sc .sub b{color:var(--green);font-weight:800}
+  .sc p{margin:14px 0 0;font-size:14px;line-height:1.62;color:#3c4753}
+
+  .jump{position:relative;height:30px;margin:2px 0 4px}
+  .jump .jline{position:absolute;top:13px;inset-inline:4px;height:3px;background:#e8eef6;border-radius:2px}
+  .jump .jspan{position:absolute;top:13px;height:3px;border-radius:2px;
+    background:linear-gradient(90deg,#b8dcc5,var(--green))}
+  .jump .jdot{position:absolute;top:7px;width:15px;height:15px;border-radius:50%;
+    margin-inline-start:-7px;border:2.5px solid var(--white);box-shadow:0 1px 4px rgba(18,53,91,.3)}
+  .jump .jdot.model{background:#a9b6c6}
+  .jump .jdot.ballot{background:var(--green)}
+  .jump .jcap{position:absolute;top:0;font-size:10.5px;color:var(--text-muted);font-weight:700}
+  .jkey{display:flex;justify-content:space-between;font-size:12px;color:var(--text-muted);font-weight:600}
+  .jkey i{font-style:normal;display:inline-flex;align-items:center;gap:6px}
+  .jkey i::before{content:'';width:9px;height:9px;border-radius:50%;background:#a9b6c6}
+  .jkey i.b::before{background:var(--green)}
+
+  .topics{display:flex;flex-direction:column;gap:12px}
+  .tp{display:grid;grid-template-columns:270px 1fr;gap:20px;align-items:start;
+    padding:16px 16px;border-radius:var(--radius-small);background:#fafcff;border:1px solid #e8eff8}
+  .tp.hot{background:var(--green-soft);border-color:var(--green-border)}
+  .tp h4{margin:0 0 9px;font-size:15px;font-weight:800}
+  .tp .chip{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--text-muted);margin-bottom:6px}
+  .tp .chip i{width:8px;height:8px;border-radius:50%;flex:none}
+  .tp .chip .mini{flex:1;height:6px;background:#e9eff7;border-radius:3px;overflow:hidden;min-width:40px}
+  .tp .chip .mini span{display:block;height:100%;border-radius:3px}
+  .tp .chip b{font-weight:700;color:var(--text-main);white-space:nowrap}
+  .tp p{margin:0;font-size:14px;line-height:1.62;color:#3c4753}
+
+  footer{margin-top:56px;padding-top:22px;border-top:1px solid var(--border-soft);
+    font-size:12.5px;color:var(--text-muted);line-height:1.75}
+  footer code{background:var(--blue-soft);padding:1px 6px;border-radius:5px;font-size:11.5px;direction:ltr;display:inline-block}
+
+  @media(max-width:760px){
+    .page{padding:80px 14px 56px}
+    .hero{padding:30px 22px 26px;border-radius:var(--radius-medium)}
+    .card{padding:18px 14px}
+    .cov{grid-template-columns:1fr;gap:5px;padding:8px 6px}
+    .cov .t{font-size:13px}
+    .br{grid-template-columns:30px 106px 1fr;gap:8px}
+    .br .tail{display:none}
+    .tp{grid-template-columns:1fr;gap:12px;padding:14px}
+    .surp{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-row">
+    <div class="brand">פריימריז הדמוקרטים 2026 <span>· בדיקת התוצאות</span></div>
+    <a class="backlink" href="dbr_P_01_index.html">חזרה לאתר →</a>
+  </div>
+</div>
+
+<div class="page">
+
+  <div class="hero">
+    <div class="kicker">ניתוח תוצאות</div>
+    <h1>הרשימה שנבחרה במבחן הנבחרות</h1>
+    <p>הפריימריז הסתיימו. הצלבנו את מקומות 2–15 ברשימה לכנסת ה-26 — הטווח הריאלי — מול כל 15 הנבחרות
+       המקצועיות שבנינו, כדי לבדוק שאלה אחת: האם הרשימה שיצאה מהקלפי מכסה את כל תחומי הליבה, ואיפה נפערו חורים.</p>
+    <div class="lede">התשובה הקצרה: <b>כל 15 הנבחרות קיבלו ייצוג.</b> הפערים אינם בכיסוי — הם בעומק.</div>
+  </div>
+
+  <!-- ══ מפת ההתאמות ══ -->
+  <section>
+    <div class="sec-head">
+      <h2>מפת ההתאמות</h2>
+      <p>כל תא הוא מיקומו של נבחר בתוך נבחרת. עוצמת הצבע מבטאת את רמת הזיקה לנושא;
+         המספר הוא המיקום בנבחרת. מסגרת כהה = מיקום בשלישייה הראשונה. תא אפור = אינו חבר בנבחרת.</p>
+    </div>
+
+    <div class="card">
+      <div class="matrix-wrap"><table class="mx" id="mx"></table></div>
+      <div class="legend" id="legend"></div>
+    </div>
+  </section>
+
+  <!-- ══ עומק הכיסוי ══ -->
+  <section>
+    <div class="sec-head">
+      <h2>עומק הכיסוי בכל נבחרת</h2>
+      <p>כמה מתוך מקומות הנבחרת מוחזקים בידי נבחרים בטווח הריאלי.
+         מסודר מהחלש לחזק — השורות העליונות הן נקודות התורפה.</p>
+    </div>
+    <div class="card">
+      <div class="cov-list" id="cov"></div>
+      <div class="flags" id="flags"></div>
+    </div>
+  </section>
+
+  <!-- ══ רוחב מול עומק ══ -->
+  <section>
+    <div class="sec-head">
+      <h2>רוחב מול עומק — פרופיל כל נבחר</h2>
+      <p>כל ריבוע הוא נבחרת שהמועמד חבר בה, צבוע בצבע הנבחרת. שורה ארוכה = מועמד רב-תחומי;
+         שורה קצרה עם עוגנים גבוהים = מומחה נישה.</p>
+    </div>
+    <div class="card"><div class="br-list" id="br"></div></div>
+  </section>
+
+  <!-- ══ פרשנות ══ -->
+  <section>
+    <div class="sec-head">
+      <h2>קריאה של התוצאות</h2>
+      <p>עד כאן הנתונים. מכאן והלאה — ניסיון להסביר אותם.</p>
+    </div>
+
+    <div class="disclaim">
+      <b>הבהרה:</b> הפרשנות שלהלן אינה נגזרת מהנתונים ואינה פלט של המודל. אלה השערות פוליטיות
+      של מחבר האתר בדבר מה שהניע את המצביעים — הן מובאות כהצעה לקריאה, לא כממצא.
+    </div>
+
+    <h3 style="font-size:18px;font-weight:800;margin:0 0 14px">המפתיעים לטוב</h3>
+    <div class="surp" id="surp"></div>
+
+    <h3 style="font-size:18px;font-weight:800;margin:34px 0 14px">הנושאים שלא זכו לתשומת לב</h3>
+    <div class="topics" id="topics"></div>
+  </section>
+
+  <footer>
+    הניתוח מבוסס על ציוני הזיקה והנבחרות כפי שנבנו בתהליך, לאחר החלת רשימת הפורשים
+    (<code>dropped.json</code>) כדי שהמיקומים יתאימו לאתר החי.
+    הניתוח מוגבל למקומות 2–15 — הטווח הריאלי. מקום 1 (יאיר גולן) אינו נכלל: הוא יושב-ראש המפלגה,
+    לא התמודד בפריימריז, ואין לו רשומה בבסיס הנתונים. מקומות 16 ומטה נותרו מחוץ לתמונה.
+    המיקומים המוצגים הם מיקומים בתוך נבחרת מקצועית, ואינם המלצת הצבעה.
+  </footer>
+
+</div>
+
+<script>
+const DATA = {"squads":[{"id":"law_democracy","title":"דמוקרטיה ושלטון החוק","desc":"שמירה על מערכת המשפט, איזונים ובלמים וטוהר השלטון","family":"blue","size":24,"labels":["תחום ליבה","זיקה חזקה","זיקה משמעותית","נגיעה בנושא"],"nHit":12,"best":1,"lostTop3":[{"rank":3,"name":"איתי לשם"}]},{"id":"religion_state","title":"הפרדת הדת מהמדינה","desc":"חופש דת ומצפון והפרדה הוגנת בין דת למדינה","family":"purple","size":24,"labels":["תחום ליבה","זיקה חזקה","זיקה משמעותית","נגיעה בנושא"],"nHit":11,"best":1,"lostTop3":[{"rank":2,"name":"נאור נרקיס"}]},{"id":"directors","title":"ניהול ציבורי בכיר","desc":"הנהגה, ניסיון ניהולי ויכולת ביצוע מוכחים","family":"gray","size":24,"labels":["תחום ליבה","זיקה חזקה","זיקה משמעותית","נגיעה בנושא"],"nHit":9,"best":1,"lostTop3":[{"rank":2,"name":"קטי פיאסצקי"},{"rank":3,"name":"ירון ניב"}]},{"id":"green_social","title":"סביבה וחברה","desc":"משבר האקלים, צדק סביבתי, צדק חברתי בנושאים הללו","family":"green","size":24,"labels":["תחום ליבה","זיקה חזקה","זיקה משמעותית","נגיעה בנושא"],"nHit":9,"best":2,"lostTop3":[{"rank":1,"name":"יעל כהן-פארן"}]},{"id":"jewish_arab","title":"שותפות יהודית-ערבית","desc":"שוויון ושותפות בין יהודים לערבים בחברה ובפוליטיקה","family":"teal","size":24,"labels":["תחום ליבה","זיקה חזקה","זיקה משמעותית","נגיעה בנושא"],"nHit":10,"best":2,"lostTop3":[{"rank":1,"name":"גאלב סלאמנה"}]},{"id":"cost_of_living","title":"יוקר המחיה ובטחון כלכלי","desc":"הורדת יוקר המחיה, חיזוק מעמד הביניים וביטחון כלכלי","family":"amber","size":24,"labels":["תחום ליבה","זיקה חזקה","זיקה משמעותית","נגיעה בנושא"],"nHit":10,"best":1,"lostTop3":[{"rank":3,"name":"ענבר בזק"}]},{"id":"peace_security","title":"שלום וביטחון לאומי","desc":"אחריות, חזון מעשי לטוח קרוב ורחוק לצד שמירה על כוחו ועליונותו של צה\"ל","family":"red","size":24,"labels":["תחום ליבה","זיקה חזקה","זיקה משמעותית","נגיעה בנושא"],"nHit":10,"best":1,"lostTop3":[{"rank":2,"name":"ערן עציון"}]},{"id":"negev_galil","title":"פיתוח הנגב והגליל","desc":"צמצום פערים, פיתוח הפריפריה במיוחד בנגב ובגליל וחיזוק השלטון המקומי שם","family":"coral","size":24,"labels":["תחום ליבה","זיקה חזקה","זיקה משמעותית","נגיעה בנושא"],"nHit":4,"best":3,"lostTop3":[{"rank":1,"name":"ענבל וורטמן שהם"},{"rank":2,"name":"ענבר בזק"}]},{"id":"next_generation","title":"הדור הבא והצעירים","desc":"חינוך, דיור והזדמנויות לדור הצעיר ולמשפחות צעירות וקשב לשינויים הטכנולוגים","family":"pink","size":24,"labels":["תחום ליבה","זיקה חזקה","זיקה משמעותית","נגיעה בנושא"],"nHit":8,"best":1,"lostTop3":[]},{"id":"human_rights_territories","title":"זכויות אדם בשטחים","desc":"נוכחות מגינה, הגנה משפטית וציבורית על זכויות האדם של הפלסטינים","family":"teal","size":10,"labels":["עוגן פעולה ליבה","פעולה עקבית ומתועדת","פעולה ממשית בשטח","מעורבות עקיפה בלבד"],"nHit":4,"best":1,"lostTop3":[{"rank":2,"name":"מוסי רז"},{"rank":3,"name":"ערן עציון"}]},{"id":"education","title":"חינוך ואזרחות","desc":"מדיניות חינוך, ליבה משותפת ווחינוך לאזרחות ודמוקרטיה לכלל האוכלוסיה","family":"indigo","size":24,"labels":["תחום ליבה","זיקה חזקה","זיקה משמעותית","נגיעה בנושא"],"nHit":6,"best":3,"lostTop3":[{"rank":1,"name":"רם שפע"},{"rank":2,"name":"עלי סלאלחה"}]},{"id":"gender_equality","title":"שוויון מגדרי","desc":"חקיקה, מאבק ציבורי, הגברת המודעות לנושא לכל המגזרים","family":"pink","size":16,"labels":["עוגן פעולה ליבה","פעולה עקבית ומתועדת","פעולה ממשית בשטח","מעורבות עקיפה בלבד"],"nHit":9,"best":1,"lostTop3":[{"rank":3,"name":"חן אריאלי"}]},{"id":"democratic_protest","title":"המחאה הדמוקרטית","desc":"נוכחות ומנהיגות במחאה נגד ההפיכה המשפטית, בעד זכות המחאה ופעילות ציבורית","family":"purple","size":25,"labels":["עוגן פעולה ליבה","פעולה עקבית ומתועדת","פעולה ממשית בשטח","מעורבות עקיפה בלבד"],"nHit":13,"best":1,"lostTop3":[{"rank":3,"name":"ערן עציון"}]},{"id":"health_and_welfare","title":"בריאות ורווחה","desc":"בריאות הציבור, מדינת רווחה, צמצום פערים, שירותים ציבוריים וביטחון חברתי כללי","family":"green","size":15,"labels":["עוגן פעולה ליבה","פעולה עקבית ומתועדת","פעולה ממשית בשטח","מעורבות עקיפה בלבד"],"nHit":7,"best":1,"lostTop3":[{"rank":2,"name":"מהרטה ברוך רון"},{"rank":3,"name":"רותם סיון הופמן"}]},{"id":"arab_society_crime","title":"הפשיעה בחברה הערבית","desc":"","family":"amber","size":12,"labels":["עוגן פעולה ליבה","פעולה עקבית ומתועדת","פעולה ממשית בשטח","מעורבות עקיפה בלבד"],"nHit":8,"best":1,"lostTop3":[]}],"elected":[{"pos":2,"name":"נעמה לזימי","cells":{"law_democracy":{"rank":12,"aff":80.0,"band":1,"comb":81.2},"religion_state":{"rank":4,"aff":80.0,"band":1,"comb":81.2},"green_social":{"rank":10,"aff":60.0,"band":2,"comb":60.0},"jewish_arab":{"rank":2,"aff":80.0,"band":1,"comb":82.0},"cost_of_living":{"rank":1,"aff":100.0,"band":0,"comb":100.0},"peace_security":{"rank":9,"aff":80.0,"band":1,"comb":80.0},"negev_galil":{"rank":5,"aff":80.0,"band":1,"comb":80.0},"next_generation":{"rank":1,"aff":100.0,"band":0,"comb":100.0},"education":{"rank":3,"aff":80.0,"band":1,"comb":81.2},"gender_equality":{"rank":5,"aff":90.0,"band":1,"comb":90.0},"democratic_protest":{"rank":5,"aff":100.0,"band":0,"comb":100.0},"health_and_welfare":{"rank":5,"aff":80.0,"band":1,"comb":80.0},"arab_society_crime":{"rank":2,"aff":70.0,"band":2,"comb":70.0}}},{"pos":3,"name":"גלעד קריב","cells":{"law_democracy":{"rank":1,"aff":100.0,"band":0,"comb":96.4},"religion_state":{"rank":1,"aff":100.0,"band":0,"comb":96.4},"directors":{"rank":4,"aff":80.0,"band":1,"comb":82.4},"green_social":{"rank":2,"aff":80.0,"band":1,"comb":80.0},"jewish_arab":{"rank":8,"aff":60.0,"band":2,"comb":74.0},"cost_of_living":{"rank":7,"aff":60.0,"band":2,"comb":60.0},"negev_galil":{"rank":9,"aff":40.0,"band":3,"comb":40.0},"next_generation":{"rank":20,"aff":40.0,"band":3,"comb":40.0},"human_rights_territories":{"rank":6,"aff":60.0,"band":2,"comb":60.0},"education":{"rank":20,"aff":20.0,"band":3,"comb":40.4},"gender_equality":{"rank":7,"aff":80.0,"band":1,"comb":80.0},"democratic_protest":{"rank":1,"aff":100.0,"band":0,"comb":100.0},"health_and_welfare":{"rank":8,"aff":60.0,"band":2,"comb":60.0},"arab_society_crime":{"rank":3,"aff":60.0,"band":2,"comb":60.0}}},{"pos":4,"name":"אפרת רייטן","cells":{"law_democracy":{"rank":2,"aff":100.0,"band":0,"comb":96.4},"religion_state":{"rank":3,"aff":80.0,"band":1,"comb":82.4},"directors":{"rank":6,"aff":80.0,"band":1,"comb":82.4},"green_social":{"rank":8,"aff":60.0,"band":2,"comb":60.0},"jewish_arab":{"rank":9,"aff":60.0,"band":2,"comb":74.0},"cost_of_living":{"rank":4,"aff":80.0,"band":1,"comb":80.0},"peace_security":{"rank":14,"aff":60.0,"band":2,"comb":60.0},"negev_galil":{"rank":3,"aff":80.0,"band":1,"comb":80.0},"next_generation":{"rank":2,"aff":80.0,"band":1,"comb":80.0},"gender_equality":{"rank":8,"aff":80.0,"band":1,"comb":80.0},"democratic_protest":{"rank":14,"aff":80.0,"band":1,"comb":80.0},"health_and_welfare":{"rank":1,"aff":100.0,"band":0,"comb":100.0},"arab_society_crime":{"rank":4,"aff":40.0,"band":3,"comb":40.0}}},{"pos":5,"name":"יאיא פינק","cells":{"law_democracy":{"rank":13,"aff":80.0,"band":1,"comb":81.2},"religion_state":{"rank":18,"aff":60.0,"band":2,"comb":67.2},"directors":{"rank":1,"aff":100.0,"band":0,"comb":95.2},"jewish_arab":{"rank":10,"aff":60.0,"band":2,"comb":72.0},"cost_of_living":{"rank":6,"aff":80.0,"band":1,"comb":80.0},"peace_security":{"rank":15,"aff":60.0,"band":2,"comb":60.0},"next_generation":{"rank":8,"aff":60.0,"band":2,"comb":60.0},"human_rights_territories":{"rank":7,"aff":60.0,"band":2,"comb":60.0},"gender_equality":{"rank":15,"aff":60.0,"band":2,"comb":60.0},"democratic_protest":{"rank":17,"aff":80.0,"band":1,"comb":80.0},"arab_society_crime":{"rank":8,"aff":30.0,"band":3,"comb":30.0}}},{"pos":6,"name":"גבי לסקי","cells":{"law_democracy":{"rank":5,"aff":100.0,"band":0,"comb":94.6},"religion_state":{"rank":5,"aff":80.0,"band":1,"comb":80.6},"green_social":{"rank":7,"aff":60.0,"band":2,"comb":60.0},"jewish_arab":{"rank":11,"aff":60.0,"band":2,"comb":71.0},"cost_of_living":{"rank":8,"aff":60.0,"band":2,"comb":60.0},"peace_security":{"rank":1,"aff":100.0,"band":0,"comb":100.0},"next_generation":{"rank":7,"aff":60.0,"band":2,"comb":60.0},"human_rights_territories":{"rank":1,"aff":90.0,"band":1,"comb":90.0},"gender_equality":{"rank":12,"aff":70.0,"band":2,"comb":70.0},"democratic_protest":{"rank":2,"aff":100.0,"band":0,"comb":100.0},"health_and_welfare":{"rank":9,"aff":60.0,"band":2,"comb":60.0},"arab_society_crime":{"rank":1,"aff":70.0,"band":2,"comb":70.0}}},{"pos":7,"name":"עמרי רונן","cells":{"law_democracy":{"rank":9,"aff":100.0,"band":0,"comb":91.6},"education":{"rank":15,"aff":40.0,"band":3,"comb":49.6},"democratic_protest":{"rank":11,"aff":100.0,"band":0,"comb":100.0}}},{"pos":8,"name":"מיכל רוזין","cells":{"law_democracy":{"rank":7,"aff":100.0,"band":0,"comb":94.6},"directors":{"rank":11,"aff":80.0,"band":1,"comb":80.6},"green_social":{"rank":11,"aff":60.0,"band":2,"comb":60.0},"cost_of_living":{"rank":16,"aff":40.0,"band":3,"comb":40.0},"education":{"rank":10,"aff":40.0,"band":3,"comb":52.6},"gender_equality":{"rank":2,"aff":100.0,"band":0,"comb":100.0},"democratic_protest":{"rank":18,"aff":80.0,"band":1,"comb":80.0},"health_and_welfare":{"rank":12,"aff":60.0,"band":2,"comb":60.0},"arab_society_crime":{"rank":5,"aff":40.0,"band":3,"comb":40.0}}},{"pos":9,"name":"משה רדמן","cells":{"law_democracy":{"rank":6,"aff":100.0,"band":0,"comb":94.6},"religion_state":{"rank":19,"aff":60.0,"band":2,"comb":66.6},"green_social":{"rank":15,"aff":40.0,"band":3,"comb":40.0},"jewish_arab":{"rank":3,"aff":80.0,"band":1,"comb":81.0},"cost_of_living":{"rank":5,"aff":80.0,"band":1,"comb":80.0},"peace_security":{"rank":7,"aff":80.0,"band":1,"comb":80.0},"next_generation":{"rank":3,"aff":80.0,"band":1,"comb":80.0},"education":{"rank":21,"aff":20.0,"band":3,"comb":38.6},"democratic_protest":{"rank":4,"aff":100.0,"band":0,"comb":100.0},"arab_society_crime":{"rank":12,"aff":20.0,"band":3,"comb":20.0}}},{"pos":10,"name":"סומיה בשיר","cells":{"religion_state":{"rank":23,"aff":60.0,"band":2,"comb":63.6},"jewish_arab":{"rank":7,"aff":80.0,"band":1,"comb":76.0},"peace_security":{"rank":10,"aff":80.0,"band":1,"comb":80.0},"gender_equality":{"rank":1,"aff":100.0,"band":0,"comb":100.0},"democratic_protest":{"rank":16,"aff":80.0,"band":1,"comb":80.0},"arab_society_crime":{"rank":7,"aff":30.0,"band":3,"comb":30.0}}},{"pos":11,"name":"נמרוד שפר","cells":{"law_democracy":{"rank":11,"aff":80.0,"band":1,"comb":82.4},"religion_state":{"rank":16,"aff":60.0,"band":2,"comb":68.4},"directors":{"rank":7,"aff":80.0,"band":1,"comb":82.4},"jewish_arab":{"rank":22,"aff":20.0,"band":3,"comb":54.0},"peace_security":{"rank":3,"aff":100.0,"band":0,"comb":100.0},"democratic_protest":{"rank":6,"aff":100.0,"band":0,"comb":100.0}}},{"pos":12,"name":"מורן זר קצנשטיין","cells":{"law_democracy":{"rank":17,"aff":80.0,"band":1,"comb":80.6},"religion_state":{"rank":7,"aff":80.0,"band":1,"comb":80.6},"directors":{"rank":14,"aff":80.0,"band":1,"comb":80.6},"green_social":{"rank":19,"aff":40.0,"band":3,"comb":40.0},"cost_of_living":{"rank":12,"aff":60.0,"band":2,"comb":60.0},"peace_security":{"rank":20,"aff":60.0,"band":2,"comb":60.0},"education":{"rank":22,"aff":20.0,"band":3,"comb":38.6},"gender_equality":{"rank":4,"aff":100.0,"band":0,"comb":100.0},"democratic_protest":{"rank":22,"aff":80.0,"band":1,"comb":80.0},"health_and_welfare":{"rank":14,"aff":60.0,"band":2,"comb":60.0}}},{"pos":13,"name":"אבי דבוש","cells":{"law_democracy":{"rank":14,"aff":80.0,"band":1,"comb":80.6},"religion_state":{"rank":6,"aff":80.0,"band":1,"comb":80.6},"directors":{"rank":10,"aff":80.0,"band":1,"comb":80.6},"green_social":{"rank":9,"aff":60.0,"band":2,"comb":60.0},"jewish_arab":{"rank":4,"aff":80.0,"band":1,"comb":81.0},"cost_of_living":{"rank":9,"aff":60.0,"band":2,"comb":60.0},"peace_security":{"rank":8,"aff":80.0,"band":1,"comb":80.0},"negev_galil":{"rank":4,"aff":80.0,"band":1,"comb":80.0},"next_generation":{"rank":21,"aff":40.0,"band":3,"comb":40.0},"human_rights_territories":{"rank":4,"aff":70.0,"band":2,"comb":70.0},"democratic_protest":{"rank":15,"aff":80.0,"band":1,"comb":80.0},"health_and_welfare":{"rank":11,"aff":60.0,"band":2,"comb":60.0}}},{"pos":14,"name":"אמילי מואטי","cells":{"directors":{"rank":23,"aff":80.0,"band":1,"comb":76.4},"jewish_arab":{"rank":23,"aff":40.0,"band":3,"comb":54.0},"peace_security":{"rank":11,"aff":80.0,"band":1,"comb":80.0},"gender_equality":{"rank":9,"aff":80.0,"band":1,"comb":80.0}}},{"pos":15,"name":"תומר אביטל","cells":{"law_democracy":{"rank":4,"aff":100.0,"band":0,"comb":96.1},"religion_state":{"rank":17,"aff":60.0,"band":2,"comb":68.1},"directors":{"rank":8,"aff":80.0,"band":1,"comb":82.1},"green_social":{"rank":3,"aff":80.0,"band":1,"comb":80.0},"cost_of_living":{"rank":2,"aff":80.0,"band":1,"comb":80.0},"next_generation":{"rank":6,"aff":60.0,"band":2,"comb":60.0},"democratic_protest":{"rank":12,"aff":80.0,"band":1,"comb":80.0}}}]};
+
+const RAMPS = {
+  blue:  ["#185FA5","#85B7EB","#B5D4F4","#E6F1FB"],
+  purple:["#534AB7","#AFA9EC","#CECBF6","#EEEDFE"],
+  gray:  ["#5F5E5A","#B4B2A9","#D3D1C7","#F1EFE8"],
+  green: ["#639922","#97C459","#C0DD97","#EAF3DE"],
+  teal:  ["#1D9E75","#5DCAA5","#9FE1CB","#E1F5EE"],
+  amber: ["#BA7517","#EF9F27","#FAC775","#FAEEDA"],
+  red:   ["#A32D2D","#F09595","#F7C1C1","#FCEBEB"],
+  coral: ["#993C1D","#F0997B","#F5C4B3","#FAECE7"],
+  pink:  ["#993556","#ED93B1","#F4C0D1","#FBEAF0"],
+  indigo:["#3F4BA8","#9AA2E0","#C3C8EF","#EDEEFB"]
+};
+const SHORT = {
+  law_democracy:"שלטון החוק", religion_state:"דת ומדינה", directors:"ניהול ציבורי",
+  green_social:"סביבה וחברה", jewish_arab:"שותפות יהודית-ערבית", cost_of_living:"יוקר המחיה",
+  peace_security:"שלום וביטחון", negev_galil:"נגב וגליל", next_generation:"הדור הבא",
+  human_rights_territories:"זכויות אדם בשטחים", education:"חינוך ואזרחות",
+  gender_equality:"שוויון מגדרי", democratic_protest:"המחאה הדמוקרטית",
+  health_and_welfare:"בריאות ורווחה", arab_society_crime:"פשיעה בחברה הערבית"
+};
+const ramp = f => RAMPS[f] || RAMPS.blue;
+const esc  = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+
+/* ── מפת ההתאמות ── */
+function buildMatrix(){
+  const t = document.getElementById('mx');
+  let h = '<thead><tr><th class="corner"></th>';
+  DATA.squads.forEach(s=>{
+    h += '<th class="sq"><span class="fam" style="background:'+ramp(s.family)[0]+'"></span>'+
+         '<span class="rot">'+esc(SHORT[s.id]||s.title)+'</span></th>';
+  });
+  h += '</tr></thead><tbody>';
+  DATA.elected.forEach(e=>{
+    h += '<tr data-pos="'+e.pos+'"><th class="nm"><span class="p">'+e.pos+'</span>'+esc(e.name)+'</th>';
+    DATA.squads.forEach(s=>{
+      const c = e.cells[s.id];
+      if(!c){ h += '<td><div class="cell"></div></td>'; return; }
+      const col = ramp(s.family)[c.band];
+      const txt = c.band<=1 ? '#fff' : 'rgba(0,0,0,.68)';
+      const tip = e.name+' · '+s.title+'\nמיקום '+c.rank+' מתוך '+s.size+'\n'+s.labels[c.band]+' · ציון משולב '+c.comb;
+      h += '<td><div class="cell on'+(c.rank<=3?' top3':'')+'" style="background:'+col+';color:'+txt+'" title="'+esc(tip)+'">'+c.rank+'</div></td>';
+    });
+    h += '</tr>';
+  });
+  t.innerHTML = h + '</tbody>';
+
+  const lg = document.getElementById('legend');
+  const smp = RAMPS.blue;
+  lg.innerHTML = DATA.squads[0].labels.map((l,i)=>
+      '<div class="grp"><span class="sw" style="background:'+smp[i]+'"></span><b>'+esc(l)+'</b></div>').join('')
+    + '<div class="grp"><span class="sw" style="background:#B5D4F4;box-shadow:inset 0 0 0 2px rgba(18,53,91,.55)"></span>מיקום 1–3 בנבחרת</div>'
+    + '<div class="grp"><span class="sw" style="background:#eef2f7"></span>אינו חבר בנבחרת</div>'
+    + '<div class="grp" style="opacity:.75">הניסוח המדויק של הרצועות משתנה בין הנבחרות — ריחוף על תא מציג את הניסוח שלו</div>';
+}
+
+/* ── חישוב תלוי-סף ── */
+function statsFor(n){
+  const act = DATA.elected.filter(e=>e.pos<=n);
+  return DATA.squads.map(s=>{
+    const rk = act.filter(e=>e.cells[s.id]).map(e=>e.cells[s.id].rank).sort((a,b)=>a-b);
+    return {s:s, n:rk.length, best:rk.length?rk[0]:null};
+  });
+}
+
+/* ── עומק הכיסוי ── */
+function buildCov(n){
+  const st = statsFor(n).slice().sort((a,b)=> (a.n/a.s.size) - (b.n/b.s.size));
+  document.getElementById('cov').innerHTML = st.map(x=>{
+    const r = ramp(x.s.family), pct = Math.round(100*x.n/x.s.size);
+    return '<div class="cov"><div class="t"><i style="background:'+r[0]+'"></i>'+
+      '<span>'+esc(x.s.title)+' <em>('+x.n+' מתוך '+x.s.size+')</em></span></div>'+
+      '<div class="track"><div class="fill" style="width:'+pct+'%;background:linear-gradient(90deg,'+r[1]+','+r[0]+')"></div></div></div>';
+  }).join('');
+}
+
+/* ── התרעות (קבוע — על הרשימה המלאה) ── */
+function buildFlags(){
+  const f = DATA.squads.filter(s=>s.lostTop3.length);
+  document.getElementById('flags').innerHTML = f.map(s=>
+    '<div class="flag"><h4>'+esc(s.title)+'</h4><p>לא נבחרו מהשלישייה הראשונה: '+
+    s.lostTop3.map(x=>'<b>#'+x.rank+' '+esc(x.name)+'</b>').join(' · ')+
+    '. העוגן שנשאר: מקום '+s.best+'.</p></div>').join('');
+}
+
+/* ── רוחב מול עומק ── */
+function buildBreadth(){
+  document.getElementById('br').innerHTML = DATA.elected.map(e=>{
+    const mine = DATA.squads.filter(s=>e.cells[s.id]);
+    const anch = mine.filter(s=>e.cells[s.id].rank<=3).length;
+    const segs = mine.map(s=>{
+      const c=e.cells[s.id];
+      return '<span class="seg" style="background:'+ramp(s.family)[Math.min(c.band,2)]+'" title="'+
+             esc(s.title+' · מיקום '+c.rank)+'"></span>';
+    }).join('') + Array(DATA.squads.length-mine.length).fill('<span class="seg empty"></span>').join('');
+    return '<div class="br"><div class="pos">'+e.pos+'</div><div class="nm">'+esc(e.name)+'</div>'+
+      '<div class="bar">'+segs+'</div>'+
+      '<div class="tail"><b>'+mine.length+'</b> נבחרות · '+anch+' עוגנים</div></div>';
+  }).join('');
+}
+
+/* ── קריאה של התוצאות (פרשנות — לא נגזר מהנתונים) ── */
+const NCAND = 48;   // מתמודדים בדירוג הנבחרות, אחרי הסרת הפורשים
+const SURPRISE = [
+  {name:'עמרי רונן', ballot:7, model:33, squads:3,
+   txt:'ההפתעה הגדולה של הפריימריז. הביקורת הפומבית של ישראל כץ עליו עשתה בדיוק את ההפך ' +
+       'מכוונתה: היא הביאה אותו לאולפנים ביום ראשון, בעיתוי מדויק לפני ההצבעה. חשיפה תקשורתית ' +
+       'בסדר גודל כזה אינה מותירה עקבות בתיק הנושאי — ולכן המודל לא ראה אותה מגיעה.'},
+  {name:'סומיה בשיר', ballot:10, model:21, squads:6,
+   txt:'ההקפצה נובעת ממנגנון השריונים לחברה הערבית, שעשה בדיוק את מה שנועד לעשות. ' +
+       'חשוב לומר: המנגנון מסביר את המיקום, לא את הפרופיל — היא מדורגת #1 בנבחרת שוויון מגדרי ' +
+       'ו-#7 בשותפות יהודית-ערבית.'},
+  {name:'אמילי מואטי', ballot:14, model:39, squads:4,
+   txt:'ההיכרות הציבורית שלה כחברת כנסת לשעבר והניסיון הפרלמנטרי שקלו יותר משהמודל צפה. ' +
+       'חלק מהפער גם טכני: היא אחת מ-17 מועמדים שכלל לא נוקדו בנבחרות המחאה הדמוקרטית ' +
+       'ובריאות ורווחה, כך שהתיק שלה חסר מלכתחילה.'}
+];
+const TOPICS = [
+  {ids:['negev_galil'], head:'הנגב והגליל',
+   txt:'הנבחרת החלשה ביותר ברשימה. ההסבר הפשוט הוא דמוגרפי — מיעוט מצביעים מחבלי הארץ האלה, ' +
+       'ולכן אין קהל שדוחף את הנושא ואת נושאיו.'},
+  {ids:['education','next_generation'], head:'חינוך והדור הבא',
+   txt:'ככל הנראה עניין של גיל המצביעים: קהל הבוחרים בפריימריז מבוגר מקהל היעד של הנושא. ' +
+       'שני עוגני החינוך המובילים נותרו מחוץ לטווח הריאלי.'},
+  {ids:['directors'], head:'ניהול ציבורי בכיר',
+   txt:'הניסיון הפוליטי שקל כאן יותר מהניסיון הניהולי. מנהלים בכירים עם רזומה ביצועי מוכח ' +
+       'התקשו להתחרות במי שכבר מוכר מהזירה הפוליטית.'},
+  {ids:['green_social','human_rights_territories'], head:'סביבה וזכויות אדם בשטחים',
+   txt:'שני התחומים פחות חשובים לכלל מצביעי הדמוקרטים משנדמה. הגישה הביטחונית עדיין שלטת, ' +
+       'והיא דוחקת את שניהם לשוליים של סדר העדיפויות.'}
+];
+const CONTRAST = {ids:['arab_society_crime'], head:'ומנגד — הפשיעה בחברה הערבית',
+  txt:'הנבחרת המכוסה ביותר ברשימה. ההסבר אינו סולידריות אלא חשש: הדאגה מזליגת הפשיעה מהמגזר ' +
+      'אל החצר האחורית של הבוחרים הפכה את הנושא מסוגיה של מיעוט לסוגיה אישית.'};
+
+function buildSurprises(){
+  const p = v => ((v-1)/(NCAND-1))*100;
+  document.getElementById('surp').innerHTML = SURPRISE.map(s=>{
+    const a=p(s.model), b=p(s.ballot), lo=Math.min(a,b), w=Math.abs(a-b);
+    return '<div class="sc"><h3>'+esc(s.name)+'</h3>'+
+      '<div class="sub">קפיצה של <b>'+(s.model-s.ballot)+' מקומות</b> מעל דירוג הנבחרות · '+s.squads+' נבחרות</div>'+
+      '<div class="jump"><div class="jline"></div>'+
+        '<div class="jspan" style="inset-inline-start:'+lo+'%;width:'+w+'%"></div>'+
+        '<div class="jdot model" style="inset-inline-start:'+a+'%"></div>'+
+        '<div class="jdot ballot" style="inset-inline-start:'+b+'%"></div></div>'+
+      '<div class="jkey"><i>דירוג נבחרות: '+s.model+'</i><i class="b">קלפי: '+s.ballot+'</i></div>'+
+      '<p>'+esc(s.txt)+'</p></div>';
+  }).join('');
+}
+
+function buildTopics(){
+  const st = statsFor(15);
+  const chips = ids => ids.map(id=>{
+    const x = st.find(y=>y.s.id===id), r = ramp(x.s.family), pct = Math.round(100*x.n/x.s.size);
+    return '<div class="chip"><i style="background:'+r[0]+'"></i>'+esc(x.s.title)+
+           '<span class="mini"><span style="width:'+pct+'%;background:'+r[0]+'"></span></span>'+
+           '<b>'+x.n+'/'+x.s.size+'</b></div>';
+  }).join('');
+  const row = (t,hot) => '<div class="tp'+(hot?' hot':'')+'"><div><h4>'+esc(t.head)+'</h4>'+chips(t.ids)+
+                         '</div><p>'+esc(t.txt)+'</p></div>';
+  document.getElementById('topics').innerHTML =
+    TOPICS.map(t=>row(t,false)).join('') + row(CONTRAST,true);
+}
+
+buildMatrix(); buildFlags(); buildBreadth(); buildSurprises(); buildTopics();
+buildCov(15);
+
+</script>
+</body>
+</html>
