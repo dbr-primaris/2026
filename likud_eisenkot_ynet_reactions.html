@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TJNJTZQF1F"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-TJNJTZQF1F');
+</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="ניתוח תגובות גולשי YNET והצבעותיהם על סרטון הליכוד נגד גדי איזנקוט">
+  <title>הציבור לא קנה את הסרטון | ניתוח תגובות גולשי YNET</title>
+  <style>
+    :root {
+      --ink: #182239;
+      --muted: #657086;
+      --paper: #fffdf9;
+      --page: #eef2f7;
+      --against: #16796b;
+      --against-soft: #e4f5f0;
+      --for: #b64848;
+      --for-soft: #faeaea;
+      --gold: #e7ad38;
+      --line: #dfe5ec;
+      --navy: #14233f;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 88% 3%, rgba(231, 173, 56, .12), transparent 23rem),
+        linear-gradient(180deg, #f6f8fb 0, var(--page) 38rem);
+      font-family: Arial, "Noto Sans Hebrew", sans-serif;
+      line-height: 1.72;
+    }
+
+    .page {
+      width: min(940px, calc(100% - 28px));
+      margin: 28px auto;
+      overflow: hidden;
+      background: var(--paper);
+      border: 1px solid rgba(20, 35, 63, .09);
+      border-radius: 22px;
+      box-shadow: 0 18px 60px rgba(20, 35, 63, .10);
+    }
+
+    header {
+      position: relative;
+      padding: clamp(34px, 7vw, 74px) clamp(22px, 7vw, 74px) 44px;
+      color: #fff;
+      background: linear-gradient(135deg, #111d35 0%, #17365a 62%, #185f66 100%);
+    }
+
+    header::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--against) 0 82%, var(--gold) 82% 86%, var(--for) 86%);
+    }
+
+    .eyebrow {
+      margin: 0 0 12px;
+      color: #f0c86e;
+      font-size: .88rem;
+      font-weight: 700;
+      letter-spacing: .04em;
+    }
+
+    h1 {
+      max-width: 760px;
+      margin: 0;
+      font-size: clamp(2.15rem, 7vw, 4.5rem);
+      line-height: 1.04;
+      letter-spacing: -.045em;
+    }
+
+    .deck {
+      max-width: 740px;
+      margin: 22px 0 0;
+      color: #e3ebf4;
+      font-size: clamp(1.08rem, 2.4vw, 1.36rem);
+      line-height: 1.55;
+    }
+
+    .byline {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 18px;
+      margin-top: 26px;
+      color: #bfcbd9;
+      font-size: .92rem;
+    }
+
+    main { padding: clamp(26px, 6vw, 64px); }
+
+    .lead {
+      margin: 0 0 28px;
+      font-size: clamp(1.12rem, 2.5vw, 1.34rem);
+      line-height: 1.78;
+    }
+
+    .lead strong { color: var(--navy); }
+
+    .numbers {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin: 32px 0 40px;
+    }
+
+    .stat {
+      min-height: 150px;
+      padding: 22px 18px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-top: 5px solid var(--against);
+      border-radius: 15px;
+      box-shadow: 0 8px 24px rgba(20, 35, 63, .06);
+    }
+
+    .stat b {
+      display: block;
+      color: var(--against);
+      font-size: clamp(2rem, 5.2vw, 3.1rem);
+      line-height: 1.05;
+      letter-spacing: -.035em;
+    }
+
+    .stat span {
+      display: block;
+      margin-top: 9px;
+      color: var(--muted);
+      font-size: .95rem;
+      line-height: 1.45;
+    }
+
+    .pct {
+      color: var(--muted);
+      font-size: .82em;
+      font-weight: 400;
+      white-space: nowrap;
+    }
+
+    h2 {
+      margin: 44px 0 14px;
+      color: var(--navy);
+      font-size: clamp(1.55rem, 3.4vw, 2.15rem);
+      line-height: 1.22;
+      letter-spacing: -.02em;
+    }
+
+    p { margin: 0 0 18px; }
+
+    .comparison {
+      margin: 24px 0 34px;
+      padding: 24px;
+      background: #f7f9fb;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+    }
+
+    .comparison + .comparison { margin-top: -18px; }
+
+    .bar-label {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .bar-label small { color: var(--muted); font-weight: 400; }
+
+    .bar {
+      display: flex;
+      height: 24px;
+      overflow: hidden;
+      background: #e2e7ec;
+      border-radius: 999px;
+    }
+
+    .bar .against { background: linear-gradient(90deg, #136b61, #1b9782); }
+    .bar .for { min-width: 5px; background: var(--for); }
+
+    .bar-key {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 8px 16px;
+      margin-top: 9px;
+      font-size: .92rem;
+    }
+
+    .anti { color: var(--against); font-weight: 700; }
+    .pro { color: var(--for); font-weight: 700; }
+
+    .ratio {
+      margin: 28px 0;
+      padding: 24px;
+      text-align: center;
+      background: var(--against-soft);
+      border-radius: 15px;
+    }
+
+    .ratio b {
+      display: block;
+      color: var(--against);
+      font-size: clamp(2.5rem, 8vw, 5rem);
+      line-height: 1;
+    }
+
+    .ratio span { color: #315f58; }
+
+    .themes {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin: 22px 0 30px;
+    }
+
+    .theme {
+      padding: 20px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+    }
+
+    .theme h3 {
+      margin: 0 0 8px;
+      color: var(--navy);
+      font-size: 1.1rem;
+    }
+
+    .theme p { margin: 0; color: var(--muted); font-size: .96rem; }
+
+    blockquote {
+      margin: 20px 0;
+      padding: 18px 20px;
+      background: #f7f9fb;
+      border-right: 4px solid var(--against);
+      border-radius: 10px 0 0 10px;
+      font-size: 1.05rem;
+    }
+
+    blockquote.pro-quote {
+      background: var(--for-soft);
+      border-right-color: var(--for);
+    }
+
+    blockquote footer {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: .84rem;
+    }
+
+    .conclusion {
+      margin-top: 38px;
+      padding: clamp(24px, 5vw, 38px);
+      color: #fff;
+      background: var(--navy);
+      border-radius: 18px;
+    }
+
+    .conclusion h2 { margin-top: 0; color: #fff; }
+    .conclusion p:last-child { margin-bottom: 0; }
+
+    .method {
+      margin-top: 34px;
+      padding-top: 22px;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      font-size: .84rem;
+      line-height: 1.6;
+    }
+
+    .method strong { color: var(--ink); }
+
+    @media (max-width: 680px) {
+      .page { width: 100%; margin: 0; border: 0; border-radius: 0; }
+      .numbers { grid-template-columns: 1fr; }
+      .stat { min-height: auto; }
+      .themes { grid-template-columns: 1fr; }
+      .comparison { padding: 18px; }
+      .bar-label { align-items: flex-end; }
+    }
+  </style>
+</head>
+<body>
+  <article class="page">
+    <header>
+      <p class="eyebrow">ניתוח תגובות גולשי YNET · 21–22 ביולי 2026</p>
+      <h1>24,357 הצבעות נגד מול 537 בעד לסרטוני נתניהו על אייזנקוט.</h1>
+      <h3>מאות תגובות ועשרות אלפי הצבעות יצרו תמונה שאינה משתמעת לשתי פנים: לא ויכוח שקול, אלא דחייה מוחלטת.</h3>
+      <div class="byline">
+        <span>מאת אמנון זוסמן</span>
+        <span>22 ביולי 2026</span>
+      </div>
+    </header>
+
+    <main>
+      <p class="lead">הליכוד פרסם שני סרטונים שבהם נראה גדי איזנקוט רץ לעבר צעיר או צעירה בחולצה הנושאת את הכיתוב “אחדות ישראל”, חולף על פניהם וממשיך לחיבוק עם מנסור עבאס. אלא שבזירת התגובות לכתבה ב־YNET, <strong>המסר שהתכוון הסרטון להעביר נדחק הצדה</strong>. רוב גדול של המגיבים ראה בו קמפיין נמוך, מפלג ופוגעני — ובפרט קרא את דמות הצעיר כרמז כואב לבנו של איזנקוט, גל ז״ל.</p>
+
+      <section class="numbers" aria-label="המספרים המרכזיים">
+        <div class="stat">
+          <b>555 תגובות</b>
+          <span>נגד הליכוד והסרטון <span class="pct">(92.5% מהתגובות המכריעות)</span></span>
+        </div>
+        <div class="stat">
+          <b>24,357 קליקים</b>
+          <span>ביטאו התנגדות לסרטון <span class="pct">(97.8% מהקליקים המכריעים)</span></span>
+        </div>
+        <div class="stat">
+          <b>23,820 קליקים</b>
+          <span>הפער המוחלט בין ההתנגדות לסרטון לבין התמיכה בו</span>
+        </div>
+      </section>
+
+      <h2>קולות הכותבים: 555 מול 45</h2>
+      <p>בקובץ נמצאו 630 תגובות מלאות. ל־600 מהן היה מאזן לייקים ודיסלייקים מכריע: <strong class="anti">555 תגובות נגד הסרטון</strong>, לעומת <strong class="pro">45 תגובות בעדו</strong>. עוד 30 תגובות הסתיימו בתיקו ולכן לא שויכו לאחד הצדדים.</p>
+
+      <div class="comparison">
+        <div class="bar-label">
+          <span>חלוקת התגובות המכריעות</span>
+          <small>600 תגובות</small>
+        </div>
+        <div class="bar" aria-label="92.5 אחוז נגד, 7.5 אחוז בעד">
+          <span class="against" style="width:92.5%"></span>
+          <span class="for" style="width:7.5%"></span>
+        </div>
+        <div class="bar-key">
+          <span class="anti">נגד: 555 <span class="pct">(92.5%)</span></span>
+          <span class="pro">בעד: 45 <span class="pct">(7.5%)</span></span>
+        </div>
+      </div>
+
+      <div class="ratio">
+        <b>555 מול 45</b>
+        <span>תגובות נגד לעומת תגובות בעד <span class="pct">(92.5% מול 7.5%)</span></span>
+      </div>
+
+      <h2>הקהל השקט היה חד עוד יותר</h2>
+      <p>כתיבת תגובה דורשת זמן ונכונות להיחשף; לחיצה על לייק או דיסלייק היא פעולה קלה ושקטה הרבה יותר. לכן דווקא הקליקים מאפשרים לראות כיצד קהל קוראים רחב יותר קיבל את הדברים.</p>
+      <p>בתגובות בעלות מאזן מכריע נספרו <strong class="anti">24,357 קליקים נגד הסרטון</strong> <span class="pct">(97.8%)</span>, ורק <strong class="pro">537 קליקים שתמכו בו</strong> <span class="pct">(2.2%)</span>. זה אינו רק רוב — זה פער מוחלט של 23,820 קליקים.</p>
+
+      <div class="comparison">
+        <div class="bar-label">
+          <span>חלוקת הקליקים המכריעים</span>
+          <small>24,894 קליקים</small>
+        </div>
+        <div class="bar" aria-label="97.8 אחוז נגד, 2.2 אחוז בעד">
+          <span class="against" style="width:97.8%"></span>
+          <span class="for" style="width:2.2%"></span>
+        </div>
+        <div class="bar-key">
+          <span class="anti">נגד: 24,357 <span class="pct">(97.8%)</span></span>
+          <span class="pro">בעד: 537 <span class="pct">(2.2%)</span></span>
+        </div>
+      </div>
+
+      <h2>מה אמרו המתנגדים?</h2>
+      <p>הביקורת לא התמקדה בעיקר בשותפות אפשרית עם מנסור עבאס. להפך: הסרטון הפעיל אצל המגיבים אסוציאציה אחרת לגמרי — השכול של משפחת איזנקוט והתחושה שנעשה בו שימוש לצורכי תעמולה.</p>
+
+      <div class="themes">
+        <div class="theme">
+          <h3>פגיעה במשפחה שכולה</h3>
+          <p>מגיבים רבים תיארו את הסרטון כחציית גבול מוסרי וכפגיעה באב שאיבד את בנו במלחמה.</p>
+        </div>
+        <div class="theme">
+          <h3>“מכונת רעל” וקמפיין של פילוג</h3>
+          <p>המילים שפל, בושה, רעל וגועל חזרו שוב ושוב, לצד הטענה שהליכוד החליף ויכוח ענייני בהסתה.</p>
+        </div>
+        <div class="theme">
+          <h3>הליכוד שאיבד את דרכו</h3>
+          <p>חלק מהמגיבים השוו בין הליכוד ההיסטורי, שנתפס כמפלגה לאומית, ובין מפלגה שלדבריהם עוסקת כיום בפילוג.</p>
+        </div>
+        <div class="theme">
+          <h3>הפחד מאיזנקוט</h3>
+          <p>נרטיב נוסף היה שהקמפיין האישי נובע מקושי לתקוף את יושרו, ניסיונו ודמותו הציבורית של איזנקוט.</p>
+        </div>
+      </div>
+
+      <blockquote>
+        “פעם המדינה חיבקה הורים שכולים, היום ביבי יורד לשפל כזה, אבל הלב של העם לפחות נשאר עם גדי!”
+        <footer>התגובה הבולטת ביותר: 1,656 לייקים מול 41 דיסלייקים</footer>
+      </blockquote>
+
+      <blockquote>
+        “פעם הליכוד היה מפלגה לאומית, היום הם סטודיו לסרטים מצוירים, מזל שהציבור כבר לא קונה את השטויות האלה.”
+        <footer>965 לייקים מול 13 דיסלייקים</footer>
+      </blockquote>
+
+      <h2>ומה אמר המיעוט שתמך?</h2>
+      <p>תגובות התמיכה בסרטון חזרו בעיקר על שלושה טיעונים: הסרטון “מציג את האמת” על נכונותו של איזנקוט להישען על מפלגות ערביות; הדמות המצוירת כלל אינה דומה לגל איזנקוט; והסערה היא, לטענתם, יצירה של התקשורת ושל השמאל.</p>
+
+      <blockquote class="pro-quote">
+        “סרטון מדויק. זו המציאות העגומה של מפלגות ה‘רק לא ביבי’.”
+        <footer>לייק אחד מול 8 דיסלייקים</footer>
+      </blockquote>
+
+      <blockquote class="pro-quote">
+        “מה לא נכון בסרטון?”
+        <footer>ללא לייקים ומול 10 דיסלייקים</footer>
+      </blockquote>
+
+      <section class="conclusion">
+        <h2>המסקנה: הסרטון חזר אל שולחיו</h2>
+        <p>המטרה הייתה להצמיד לאיזנקוט את מנסור עבאס ולערער את אמינות מסר האחדות שלו. בפועל, לפחות בזירת התגובות שנבדקה, הציבור כמעט שלא עסק בעבאס. הוא עסק בגבולות התעמולה, במשפחה שכולה ובדמותה של מפלגת השלטון.</p>
+        <p><strong>זהו כישלון מסגור מובהק:</strong> הליכוד ביקש להפוך את איזנקוט לחשוד בחוסר נאמנות למחנה, אך הסרטון הפך את הליכוד עצמו לנאשם בחוסר רגישות. 555 תגובות וכ־24.4 אלף קליקים אמרו זאת בקול ברור — והקליקים השקטים אמרו זאת בעוצמה הגדולה מכולן.</p>
+      </section>
+
+      <aside class="method">
+        <strong>על הבדיקה:</strong> הניתוח מבוסס על קובץ תגובות שנאסף מכתבה ב־YNET ב־21 ביולי 2026. תגובה שמאזן הלייקים שלה חיובי הוגדרה כמתנגדת לסרטון, ותגובה שמאזנה שלילי הוגדרה כתומכת בו. בחישוב הקליקים, לייק לתגובה מתנגדת ודיסלייק לתגובה תומכת נספרו כהתנגדות; דיסלייק לתגובה מתנגדת ולייק לתגובה תומכת נספרו כתמיכה. 30 תגובות מאוזנות הוצאו מחלוקת הצדדים. תגובה נוספת נקטעה בקובץ לאחר המספר הראשון ולכן לא נכללה בחישוב. הממצאים מתארים את זירת התגובות שנבדקה, ואינם סקר מייצג של כלל הציבור בישראל.
+      </aside>
+    </main>
+  </article>
+</body>
+</html>
